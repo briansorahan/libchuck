@@ -1,4 +1,5 @@
 libchuck
 ========
 
-Turn chuck into an embeddable audio synthesis library
+Turn chuck into an embeddable audio synthesis library.
+

@@ -1,0 +1,6 @@
+
+CFLAGS+= -D__LINUX_ALSA__ -D__PLATFORM_LINUX__ -O3 -fno-strict-aliasing -D__CK_SNDFILE_NATIVE__
+LDFLAGS+= -lasound -lstdc++ -ldl -lm -lsndfile -lpthread
+
+ugen_clip.o: ugen_clip.h ugen_clip.cpp
+	$(CXX) $(FLAGS) ugen_clip.cpp
