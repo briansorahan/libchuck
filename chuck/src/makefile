@@ -118,8 +118,15 @@ CK_SVN=https://chuck-dev.stanford.edu/svn/chuck/
 # pull in dependency info for *existing* .o files
 -include $(OBJS:.o=.d)
 
+#
+# I have modified this make target to create an archive for
+# easier linking.
+# => bsorahan@gmail.com
+#
+LIBCHUCK_ARCHIVE=libchuck.a
 chuck: $(OBJS)
-	$(LD) -o chuck $(OBJS) $(LDFLAGS) $(ARCHOPTS)
+	$(LD) -o chuck $(OBJS) $(LDFLAGS) $(ARCHOPTS) && \
+	ar -rcs $(LIBCHUCK_ARCHIVE) $(OBJS)
 
 chuck.tab.c chuck.tab.h: chuck.y
 	$(YACC) -dv -b chuck chuck.y
@@ -146,9 +153,15 @@ $(CXXOBJS): %.o: %.cpp
 	$(CXX) $(CFLAGS) $(ARCHOPTS) -c $< -o $@
 	@$(CXX) -MM -MQ "$@" $(CFLAGSDEPEND) $< > $*.d
 
+#
+# I have modified this make target to delete the archive
+# created in the 'chuck' target.
+# => bsorahan@gmail.com
+#
 clean: 
 	@rm -f $(wildcard chuck chuck.exe) *.o *.d $(OBJS) $(patsubst %.o,%.d,$(OBJS)) \
-	*~ chuck.output chuck.tab.h chuck.tab.c chuck.yy.c $(DIST_DIR){,.tgz,.zip}
+	*~ chuck.output chuck.tab.h chuck.tab.c chuck.yy.c $(DIST_DIR){,.tgz,.zip} \
+    $(LIBCHUCK_ARCHIVE)
 
 # ------------------------------------------------------------------------------
 # Distribution meta-targets
