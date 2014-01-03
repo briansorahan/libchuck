@@ -22,7 +22,8 @@ LIBCHUCK_OBJS := $(LIBCHUCK_CXXOBJS)
 
 CXX=g++
 CPPFLAGS := -I$(CHUCK_SRC) -I$(LIBCHUCK_SRC) -I$(GTEST_DIR)/include -D__LINUX_ALSA__ -D__PLATFORM_LINUX__ -O3 -fno-strict-aliasing -D__CK_SNDFILE_NATIVE__
-LDFLAGS := -g -Wall -Wextra -L$(LIBCHUCK_SRC)
+CXXFLAGS := -std=c++11 -g -Wall -Wextra
+LDFLAGS := -L$(LIBCHUCK_SRC)
 LDLIBS := $(GTEST_ARCHIVE) -lchuck -lasound -lsndfile -lstdc++ -lpthread -ldl -lm
 
 libchuck .DEFAULT: $(LIBCHUCK_ARCHIVE)

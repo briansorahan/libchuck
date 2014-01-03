@@ -1,13 +1,19 @@
+#include <cstdlib>
+#include <cstdio>
 #include <list>
 #include <string>
 #include <vector>
 
+// headers from chuck distribution
 #include <chuck_compile.h>
 #include <chuck_def.h>
+#include <chuck_dl.h>
 #include <chuck_errmsg.h>
 #include <chuck_vm.h>
 #include <digiio_rtaudio.h>
+#include <util_string.h>
 
+// libchuck headers
 #include "chuck.hpp"
 
 namespace chuck {
@@ -17,111 +23,114 @@ namespace chuck {
 
     class ChuckImpl : public Chuck {
     private:
-
-        // ==========================================
-        // Begin chuck_main.cpp variable declarations
-        // ==========================================
-
-        Chuck_Compiler * compiler;
+        t_CKUINT m_port;
         Chuck_VM * vm;
+        Chuck_Compiler * compiler;
         Chuck_VM_Code * code;
         Chuck_VM_Shred * shred;
-        t_CKBOOL enable_audio;
-        t_CKBOOL vm_halt;
-        t_CKUINT srate;
-        t_CKBOOL force_srate; // added 1.3.1.2
-        t_CKUINT buffer_size;
-        t_CKUINT num_buffers;
-        t_CKUINT dac;
-        t_CKUINT adc;
         string dac_name; // added 1.3.0.0
         string adc_name; // added 1.3.0.0
-        t_CKUINT dac_chans;
-        t_CKUINT adc_chans;
         t_CKBOOL dump;
         t_CKBOOL probe;
         t_CKBOOL set_priority;
         t_CKBOOL auto_depend;
-        t_CKBOOL block;
         t_CKBOOL enable_shell;
         t_CKBOOL no_vm;
         t_CKBOOL load_hid;
         t_CKBOOL enable_server;
         t_CKBOOL do_watchdog;
-        t_CKINT  adaptive_size;
         t_CKINT  log_level;
         t_CKINT  deprecate_level; // 1 == warn
         t_CKINT  chugin_load; // 1 == auto (variable added 1.3.0.0)
-        string   filename;
-        vector<string> args;
-        // list of search pathes (added 1.3.0.0)
-        list<string> dl_search_path;
-        // initial chug-in path (added 1.3.0.0)
-        string initial_chugin_path;
-        // list of individually named chug-ins (added 1.3.0.0)
-        list<string> named_dls;
-
-        t_CKUINT files;
-        t_CKUINT count;
-        t_CKINT i;
-
-        // ========================================
-        // End chuck_main.cpp variable declarations
-        // ========================================
-
         t_CKINT priority;
-        int m_port;
 
     public:
 
-        ChuckImpl(int port) {
-            m_port = port;
-            Chuck_Compiler * compiler = NULL;
-            Chuck_VM * vm = NULL;
-            Chuck_VM_Code * code = NULL;
-            Chuck_VM_Shred * shred = NULL;
-            t_CKBOOL enable_audio = TRUE;
-            t_CKBOOL vm_halt = TRUE;
-            t_CKUINT srate = SAMPLING_RATE_DEFAULT;
-            t_CKBOOL force_srate = FALSE; // added 1.3.1.2
-            t_CKUINT buffer_size = BUFFER_SIZE_DEFAULT;
-            t_CKUINT num_buffers = NUM_BUFFERS_DEFAULT;
-            t_CKUINT dac = 0;
-            t_CKUINT adc = 0;
-            string dac_name = ""; // added 1.3.0.0
-            string adc_name = ""; // added 1.3.0.0
-            t_CKUINT dac_chans = 2;
-            t_CKUINT adc_chans = 2;
-            t_CKBOOL dump = FALSE;
-            t_CKBOOL probe = FALSE;
-            t_CKBOOL set_priority = FALSE;
-            t_CKBOOL auto_depend = FALSE;
-            t_CKBOOL block = FALSE;
-            t_CKBOOL enable_shell = FALSE;
-            t_CKBOOL no_vm = FALSE;
-            t_CKBOOL load_hid = FALSE;
-            t_CKBOOL enable_server = TRUE;
-            t_CKBOOL do_watchdog = TRUE;
-            t_CKINT  adaptive_size = 0;
-            t_CKINT  log_level = CK_LOG_CORE;
-            t_CKINT  deprecate_level = 1; // 1 == warn
-            t_CKINT  chugin_load = 1; // 1 == auto (variable added 1.3.0.0)
-            string   filename = "";
-            vector<string> args;
-            // list of search pathes (added 1.3.0.0)
-            list<string> dl_search_path;
-            // initial chug-in path (added 1.3.0.0)
-            string initial_chugin_path;
-            // list of individually named chug-ins (added 1.3.0.0)
-            list<string> named_dls;
+        ChuckImpl(t_CKUINT port) {
+            // global variables
+#if defined(__MACOSX_CORE__)
+            t_CKINT g_priority = 80;
+            t_CKINT g_priority_low = 60;
+#elif defined(__PLATFORM_WIN32__) && !defined(__WINDOWS_PTHREAD__)
+            t_CKINT g_priority = THREAD_PRIORITY_HIGHEST;
+            t_CKINT g_priority_low = THREAD_PRIORITY_HIGHEST;
+#else
+            t_CKINT g_priority = 0x7fffffff;
+            t_CKINT g_priority_low = 0x7fffffff;
+#endif
 
-            t_CKUINT files = 0;
-            t_CKUINT count = 1;
-            t_CKINT i;
+            Chuck_VM::our_priority = g_priority;
+            m_port = port;
+            compiler = new Chuck_Compiler;
+            vm = new Chuck_VM;
+            code = NULL;
+            shred = NULL;
+            dac_name = ""; // added 1.3.0.0
+            adc_name = ""; // added 1.3.0.0
+            dump = FALSE;
+            probe = FALSE;
+            set_priority = FALSE;
+            auto_depend = FALSE;
+            enable_shell = FALSE;
+            no_vm = FALSE;
+            load_hid = FALSE;
+            enable_server = TRUE;
+            do_watchdog = TRUE;
+            log_level = CK_LOG_CRAZY;
+            deprecate_level = 1; // 1 == warn
+            chugin_load = 1; // 1 == auto (variable added 1.3.0.0)
+
+            EM_setlog(log_level);
+        }
+
+        t_CKBOOL initializeVM(t_CKBOOL enable_audio,
+                              t_CKBOOL vm_halt,
+                              t_CKUINT srate,
+                              t_CKUINT buffer_size,
+                              t_CKUINT num_buffers,
+                              t_CKUINT dac,
+                              t_CKUINT adc,
+                              t_CKUINT dac_chans,
+                              t_CKUINT adc_chans,
+                              t_CKBOOL block,
+                              t_CKINT  adaptive_size,
+                              t_CKBOOL force_srate) {
+            return FALSE != vm->initialize(enable_audio, vm_halt, srate, buffer_size,
+                                           num_buffers, dac, adc, dac_chans, adc_chans,
+                                           block, adaptive_size, force_srate);
+        }
+
+        t_CKBOOL initializeCompiler(const char * chugins[],
+                                    t_CKUINT nchugins) {
+            t_CKUINT i;
+            list<string> dl_search_path;
+            string initial_chugin_path;
+
+            if(getenv(g_chugin_path_envvar)) {
+                initial_chugin_path = getenv( g_chugin_path_envvar );
+            } else {
+                initial_chugin_path = g_default_chugin_path;
+            }
+
+            parse_path_list(initial_chugin_path, dl_search_path);
+
+            list<string> named_dls;
+            for (i = 0; i < nchugins; i++) {
+                string dl(chugins[i]);
+                named_dls.push_back(dl);
+            }
+
+            fprintf(stderr, "initializing compiler\n");
+            // dl_search_path.clear();
+            // named_dls.clear();
+            return FALSE != compiler->initialize(vm, dl_search_path, named_dls);
+            fprintf(stderr, "done initializing compiler\n");
         }
 
         void Destroy() {
             // destruction code here
+            delete compiler;
+            delete vm;
         }
 
         bool sporkFile(const char ** args) {
@@ -129,7 +138,52 @@ namespace chuck {
         }
     };
 
-    Chuck * Create(int port) {
-        return new ChuckImpl(port);
+    t_CKBOOL Create(Chuck ** chuck,
+                    t_CKUINT port,
+                    const char * chugins[],
+                    t_CKUINT nchugins,
+                    t_CKBOOL enable_audio,
+                    t_CKBOOL vm_halt,
+                    t_CKUINT srate,
+                    t_CKUINT buffer_size,
+                    t_CKUINT num_buffers,
+                    t_CKUINT dac,
+                    t_CKUINT adc,
+                    t_CKUINT dac_chans,
+                    t_CKUINT adc_chans,
+                    t_CKBOOL block,
+                    t_CKINT  adaptive_size,
+                    t_CKBOOL force_srate) {
+
+        // t_CKUINT files = 0;
+        // t_CKUINT count = 1;
+
+        Chuck * ck = new ChuckImpl(port);
+        t_CKBOOL result = TRUE;
+
+        // Initialize the vm
+        if (! ck->initializeVM(enable_audio,
+                               vm_halt,
+                               srate,
+                               buffer_size,
+                               num_buffers,
+                               dac,
+                               adc,
+                               dac_chans,
+                               adc_chans,
+                               block,
+                               adaptive_size,
+                               force_srate)) {
+            result = FALSE;
+        }
+
+        // Initialize the compiler
+        if (! ck->initializeCompiler(chugins, nchugins)) {
+            result = FALSE;
+        }
+
+        *chuck = ck;
+
+        return result;
     }
 }
