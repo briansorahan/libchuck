@@ -1,4 +1,6 @@
-.PHONY: libchuck linux-alsa linux-jack clean chuck-clean test-clean gtest-clean all-clean test
+.PHONY: libchuck linux-alsa linux-jack \
+        clean chuck-clean test-clean gtest-clean all-clean \
+        test chuck-test-all chuck-osc-test
 
 CHUCK_DEFAULT_TARGET_LINUX=linux-alsa
 
@@ -7,6 +9,7 @@ CHUCK_SRC=chuck/src
 # NOTE(bsorahan): This name is used for the archive we build from chuck's source,
 #                 then libchuck just copies it to a new dir and adds more members.
 ARCHIVE_NAME=libchuck.a
+CHUCK_BIN=$(CHUCK_SRC)/chuck
 CHUCK_ARCHIVE=$(CHUCK_SRC)/$(ARCHIVE_NAME)
 LIBCHUCK_ARCHIVE=$(LIBCHUCK_SRC)/$(ARCHIVE_NAME)
 
@@ -14,17 +17,27 @@ TEST_DIR=test
 GTEST_DIR=$(TEST_DIR)/gtest-1.7.0
 GTEST_MAKE=$(GTEST_DIR)/make
 GTEST_ARCHIVE=$(GTEST_MAKE)/gtest_main.a
-TEST_PROG=$(TEST_DIR)/libchuck_test
+TEST_PROGS := $(TEST_DIR)/libchuck_test
+CHUCK_TESTS=test/ck
+CHUCK_OSC_TESTS=$(CHUCK_TESTS)/osc
+OSC_TEST_CLASSES := OscTestRunner OscTest
+OSC_TEST_CLASSES := $(addprefix $(CHUCK_OSC_TESTS)/classes/, $(OSC_TEST_CLASSES))
+OSC_TEST_CLASSES := $(addsuffix .ck, $(OSC_TEST_CLASSES))
+OSC_TEST_SCRIPTS=$(wildcard $(CHUCK_OSC_TESTS)/*.ck)
 
 LIBCHUCK_CXXSRCS := src/chuck.cpp
 LIBCHUCK_CXXOBJS := $(LIBCHUCK_CXXSRCS:.cpp=.o)
 LIBCHUCK_OBJS := $(LIBCHUCK_CXXOBJS)
 
 CXX=g++
-CPPFLAGS := -I$(CHUCK_SRC) -I$(LIBCHUCK_SRC) -I$(GTEST_DIR)/include -D__LINUX_ALSA__ -D__PLATFORM_LINUX__ -O3 -fno-strict-aliasing -D__CK_SNDFILE_NATIVE__
+CPPFLAGS := -I$(CHUCK_SRC) -I$(LIBCHUCK_SRC) \
+            -I$(GTEST_DIR)/include \
+            -D__LINUX_ALSA__ -D__PLATFORM_LINUX__ \
+            -O3 -fno-strict-aliasing -D__CK_SNDFILE_NATIVE__
 CXXFLAGS := -std=c++11 -g -Wall -Wextra
 LDFLAGS := -L$(LIBCHUCK_SRC)
-LDLIBS := $(GTEST_ARCHIVE) -lchuck -lasound -lsndfile -lstdc++ -lpthread -ldl -lm
+LDLIBS := $(GTEST_ARCHIVE) -lchuck -lasound -lsndfile \
+          -lstdc++ -lpthread -ldl -lm
 
 libchuck .DEFAULT: $(LIBCHUCK_ARCHIVE)
 
@@ -34,7 +47,7 @@ $(LIBCHUCK_ARCHIVE): $(CHUCK_ARCHIVE) $(LIBCHUCK_OBJS)
 
 # TODO(bsorahan): Support for mac and windows
 # NOTE(bsorahan): I have modified chuck's makefile to create an archive
-$(CHUCK_ARCHIVE):
+$(CHUCK_ARCHIVE) $(CHUCK_BIN):
 	$(MAKE) -C $(CHUCK_SRC) $(CHUCK_DEFAULT_TARGET_LINUX)
 
 linux-alsa:
@@ -42,6 +55,8 @@ linux-alsa:
 
 linux-jack:
 	$(MAKE) -C chuck linux-jack
+
+# Cleaning tasks
 
 clean:
 	-rm -f $(LIBCHUCK_OBJS) $(LIBCHUCK_ARCHIVE) $(LIBCHUCK_SRC)/*~ *~
@@ -57,8 +72,15 @@ gtest-clean:
 
 all-clean: clean chuck-clean test-clean gtest-clean
 
+# Testing tasks
+
 test: $(GTEST_ARCHIVE) $(TEST_PROG)
 	$(TEST_PROG)
+
+chuck-test-all: $(CHUCK_BIN) chuck-osc-test
+
+chuck-osc-test: $(CHUCK_BIN)
+	$(CHUCK_BIN) $(OSC_TEST_CLASSES) $(OSC_TEST_SCRIPTS)
 
 $(GTEST_ARCHIVE):
 	$(MAKE) -C $(GTEST_MAKE)
