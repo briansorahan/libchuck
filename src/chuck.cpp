@@ -42,6 +42,7 @@ namespace chuck {
         t_CKINT  deprecate_level; // 1 == warn
         t_CKINT  chugin_load; // 1 == auto (variable added 1.3.0.0)
         t_CKINT priority;
+        t_CKBOOL userNamespaceLoaded;
 
     public:
 
@@ -78,7 +79,7 @@ namespace chuck {
             log_level = CK_LOG_CORE;
             deprecate_level = 1; // 1 == warn
             chugin_load = 1; // 1 == auto (variable added 1.3.0.0)
-
+            userNamespaceLoaded = FALSE;
             EM_setlog(log_level);
         }
 
@@ -120,10 +121,77 @@ namespace chuck {
             }
 
             if (compiler->initialize(vm, dl_search_path, named_dls)) {
+                compiler->emitter->dump = dump;
+                compiler->set_auto_depend( auto_depend );
                 return TRUE;
             } else {
                 return FALSE;
             }
+        }
+
+        t_CKBOOL initializeSynthesis() {
+            return vm->initialize_synthesis();
+        }
+
+        t_CKBOOL loadChugins() {
+            t_CKBOOL result;
+            Chuck_VM_Code * code;
+            Chuck_VM_Shred * shred;
+
+            code = NULL;
+            shred = NULL;
+            result = TRUE;
+
+            // whether or not chug should be enabled (added 1.3.0.0)
+            if (chugin_load) {
+                // log
+                EM_log( CK_LOG_SEVERE, "pre-loading ChucK libs..." );
+                EM_pushlog();
+        
+                // iterate over list of ck files that the compiler found
+                list<string>::iterator j;
+                for( j = compiler->m_cklibs_to_preload.begin();
+                     j != compiler->m_cklibs_to_preload.end();
+                     j++) {
+                    // the filename
+                    string filename = *j;
+            
+                    // log
+                    EM_log( CK_LOG_SEVERE, "preloading '%s'...", filename.c_str() );
+                    // push indent
+                    EM_pushlog();
+            
+                    // SPENCERTODO: what to do for full path
+                    string full_path = filename;
+            
+                    // parse, type-check, and emit
+                    if(compiler->go( filename, NULL, NULL, full_path )) {
+                        // TODO: how to compilation handle?
+                        //return 1;
+
+                        // get the code
+                        code = compiler->output();
+                        // name it - TODO?
+                        // code->name += string(argv[i]);
+
+                        // spork it
+                        shred = vm->spork( code, NULL );
+                    } else {
+                        result = FALSE;
+                    }
+            
+                    // pop indent
+                    EM_poplog();
+                }
+        
+                // clear the list of chuck files to preload
+                compiler->m_cklibs_to_preload.clear();
+        
+                // pop log
+                EM_poplog();
+            }
+
+            return result;
         }
 
         void Destroy() {
@@ -132,8 +200,57 @@ namespace chuck {
             delete vm;
         }
 
-        bool sporkFile(const char ** args) {
-            return true;
+        t_CKBOOL sporkFile(const char * s) {
+            t_CKBOOL result;
+            Chuck_VM_Code * code;
+            Chuck_VM_Shred * shred;
+            vector<string> args;
+            string filename;
+
+            code = NULL;
+            shred = NULL;
+            result = FALSE;
+
+            if (userNamespaceLoaded) {
+                compiler->env->load_user_namespace();
+            }
+
+            if (! extract_args(s, filename, args)) {
+                return FALSE;
+            }
+
+            // log
+            EM_log( CK_LOG_FINE, "compiling '%s'...", filename.c_str() );
+            // push indent
+            EM_pushlog();
+
+            // construct full path to be associated with the file so me.sourceDir() works
+            // (added 1.3.0.0)
+            string full_path = get_full_path(filename);
+        
+            // parse, type-check, and emit (full_path added 1.3.0.0)
+            if(! compiler->go( filename, NULL, NULL, full_path )) {
+                return FALSE;
+            }
+
+            // get the code
+            code = compiler->output();
+            // name it
+            code->name += string(s);
+
+            // log
+            // EM_log( CK_LOG_FINE, "sporking %d %s...", count,
+            //         count == 1 ? "instance" : "instances" );
+
+            // spork
+            shred = vm->spork( code, NULL );
+            // add args
+            shred->args = args;
+
+            // pop indent
+            EM_poplog();
+
+            return result;
         }
     };
 

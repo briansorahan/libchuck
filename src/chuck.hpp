@@ -29,13 +29,14 @@ namespace chuck {
         initializeCompiler(const char * chugins[],
                            t_CKUINT nchugins) = 0;
 
+        virtual t_CKBOOL initializeSynthesis() = 0;
+
         /*
-         * Spork a shred from a file.
-         * args[0] should be the filename,
-         * the rest of the args will be command-line args to the file.
+         * Spork a shred from a string.
+         * string must be formatted as filename:arg1:arg2:...
          * Returns true/false if the operation succeeds/fails.
          */
-        virtual bool sporkFile(const char ** args) = 0;
+        virtual t_CKBOOL sporkFile(const char * s) = 0;
 
     };
 
