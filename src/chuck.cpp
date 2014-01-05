@@ -292,7 +292,14 @@ namespace chuck {
             // pop indent
             EM_poplog();
 
+            // reset the parser
+            reset_parse();
+
             return result;
+        }
+
+        t_CKBOOL run() {
+            return vm->run();
         }
     };
 

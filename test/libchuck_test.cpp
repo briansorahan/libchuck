@@ -18,5 +18,7 @@ TEST(ChuckTest, sporkFile) {
     ASSERT_TRUE(created);
     t_CKBOOL sporked = ck->sporkFile("test/sinetone_onesecond.ck");
     ASSERT_TRUE(sporked);
+    t_CKBOOL ran = ck->run();
+    ASSERT_TRUE(ran);
     ck->Destroy();
 }

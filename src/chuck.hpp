@@ -43,6 +43,11 @@ namespace chuck {
          */
         virtual t_CKBOOL sporkFile(const char * s) = 0;
 
+        /*
+         * start the vm
+         */
+        virtual t_CKBOOL run() = 0;
+
     };
 
     /*
