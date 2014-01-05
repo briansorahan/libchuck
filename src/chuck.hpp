@@ -2,6 +2,9 @@
  * libchuck
  * Brian Sorahan 2014
  */
+#ifndef __CHUCK_HPP__
+#define __CHUCK_HPP__
+
 #include <chuck_def.h>
 #include <digiio_rtaudio.h>
 
@@ -30,6 +33,8 @@ namespace chuck {
                            t_CKUINT nchugins) = 0;
 
         virtual t_CKBOOL initializeSynthesis() = 0;
+
+        virtual t_CKBOOL loadChugins() = 0;
 
         /*
          * Spork a shred from a string.
@@ -61,3 +66,5 @@ namespace chuck {
            t_CKINT  adaptive_size = 0,
            t_CKBOOL force_srate = FALSE);
 }
+
+#endif

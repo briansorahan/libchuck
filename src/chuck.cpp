@@ -8,12 +8,21 @@
 #include <chuck_dl.h>
 #include <chuck_errmsg.h>
 #include <chuck_globals.h>
+#include <chuck_lang.h>
 #include <chuck_vm.h>
 #include <digiio_rtaudio.h>
 #include <util_string.h>
 
 // libchuck headers
 #include "chuck.hpp"
+
+// thread id for otf thread
+CHUCK_THREAD g_tid_otf = 0;
+// thread id for shell
+CHUCK_THREAD g_tid_shell = 0;
+
+// default destination host name
+char g_host[256] = "127.0.0.1";
 
 namespace chuck {
     using std::list;
@@ -61,8 +70,9 @@ namespace chuck {
 
             Chuck_VM::our_priority = g_priority;
             m_port = port;
+            // REFACTOR(bsorahan): would be nice to get rid of chuck_globals!!
             compiler = g_compiler = new Chuck_Compiler;
-            vm = new Chuck_VM;
+            vm = g_vm = new Chuck_VM;
             code = NULL;
             shred = NULL;
             dac_name = ""; // added 1.3.0.0
@@ -195,9 +205,41 @@ namespace chuck {
         }
 
         void Destroy() {
-            // destruction code here
-            delete compiler;
-            delete vm;
+            if (g_vm) {
+                // get vm
+                Chuck_VM * vm = g_vm;
+                Chuck_Compiler * compiler = g_compiler;
+                // flag the global one
+                g_vm = NULL;
+                g_compiler = NULL;
+                // if not NULL
+                if (vm) {
+                    // stop
+                    vm->stop();
+                    // detach
+                    all_detach();
+                }
+
+                // things don't work so good on windows...
+#if !defined(__PLATFORM_WIN32__) || defined(__WINDOWS_PTHREAD__)
+                // pthread_kill( g_tid_otf, 2 );
+                if( g_tid_otf ) pthread_cancel( g_tid_otf );
+                if( g_tid_whatever ) pthread_cancel( g_tid_whatever );
+                // if( g_tid_otf ) usleep( 50000 );
+#else
+                // close handle
+                if( g_tid_otf ) CloseHandle( g_tid_otf );
+#endif
+                // will this work for windows?
+                SAFE_DELETE( vm );
+                SAFE_DELETE( compiler );
+
+                // ck_close( g_sock );
+            }
+
+#if !defined(__PLATFORM_WIN32__) || defined(__WINDOWS_PTHREAD__)
+            // pthread_join( g_tid_otf, NULL );
+#endif
         }
 
         t_CKBOOL sporkFile(const char * s) {
@@ -209,7 +251,7 @@ namespace chuck {
 
             code = NULL;
             shred = NULL;
-            result = FALSE;
+            result = TRUE;
 
             if (userNamespaceLoaded) {
                 compiler->env->load_user_namespace();
@@ -277,7 +319,7 @@ namespace chuck {
             Chuck * ck = new ChuckImpl(port);
             t_CKBOOL result = TRUE;
 
-            // Initialize the vm
+            // allocate the vm - needs the type system
             if (! ck->initializeVM(enable_audio,
                                    vm_halt,
                                    srate,
@@ -295,6 +337,16 @@ namespace chuck {
 
             // Initialize the compiler
             if (! ck->initializeCompiler(chugins, nchugins)) {
+                result = FALSE;
+            }
+
+            // vm synthesis subsystem - needs the type system
+            if (! ck->initializeSynthesis()) {
+                result = FALSE;
+            }
+
+            // Load chugins
+            if (! ck->loadChugins()) {
                 result = FALSE;
             }
 
