@@ -36,6 +36,7 @@ CPPFLAGS := -I$(CHUCK_SRC) -I$(LIBCHUCK_SRC) \
             -fno-strict-aliasing -D__CK_SNDFILE_NATIVE__
 ifeq ($(MODE),DEBUG)
 CXXFLAGS := -std=c++11 -g -Wall -Wextra
+CKFLAGS += CHUCK_DEBUG=1
 else
 CXXFLAGS := -std=c++11 -O3 -Wall -Wextra
 endif
@@ -49,7 +50,7 @@ $(LIBCHUCK_ARCHIVE): $(CK_OBJS) $(LIBCHUCK_OBJS)
 	ar -rcs $(LIBCHUCK_ARCHIVE) $(LIBCHUCK_OBJS) $(CK_OBJS)
 
 $(CK_OBJS) $(CHUCK_BIN):
-	$(MAKE) -C $(CHUCK_SRC) $(CHUCK_DEFAULT_TARGET)
+	$(MAKE) -C $(CHUCK_SRC) $(CKFLAGS) $(CHUCK_DEFAULT_TARGET)
 
 linux-alsa:
 	$(MAKE) -C chuck linux-alsa
