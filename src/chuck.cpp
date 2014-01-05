@@ -1,5 +1,3 @@
-#include <cstdlib>
-#include <cstdio>
 #include <list>
 #include <string>
 #include <vector>
@@ -9,6 +7,7 @@
 #include <chuck_def.h>
 #include <chuck_dl.h>
 #include <chuck_errmsg.h>
+#include <chuck_globals.h>
 #include <chuck_vm.h>
 #include <digiio_rtaudio.h>
 #include <util_string.h>
@@ -50,18 +49,18 @@ namespace chuck {
             // global variables
 #if defined(__MACOSX_CORE__)
             t_CKINT g_priority = 80;
-            t_CKINT g_priority_low = 60;
+            // t_CKINT g_priority_low = 60;
 #elif defined(__PLATFORM_WIN32__) && !defined(__WINDOWS_PTHREAD__)
             t_CKINT g_priority = THREAD_PRIORITY_HIGHEST;
-            t_CKINT g_priority_low = THREAD_PRIORITY_HIGHEST;
+            // t_CKINT g_priority_low = THREAD_PRIORITY_HIGHEST;
 #else
             t_CKINT g_priority = 0x7fffffff;
-            t_CKINT g_priority_low = 0x7fffffff;
+            // t_CKINT g_priority_low = 0x7fffffff;
 #endif
 
             Chuck_VM::our_priority = g_priority;
             m_port = port;
-            compiler = new Chuck_Compiler;
+            compiler = g_compiler = new Chuck_Compiler;
             vm = new Chuck_VM;
             code = NULL;
             shred = NULL;
@@ -76,7 +75,7 @@ namespace chuck {
             load_hid = FALSE;
             enable_server = TRUE;
             do_watchdog = TRUE;
-            log_level = CK_LOG_CRAZY;
+            log_level = CK_LOG_CORE;
             deprecate_level = 1; // 1 == warn
             chugin_load = 1; // 1 == auto (variable added 1.3.0.0)
 
@@ -120,11 +119,11 @@ namespace chuck {
                 named_dls.push_back(dl);
             }
 
-            fprintf(stderr, "initializing compiler\n");
-            // dl_search_path.clear();
-            // named_dls.clear();
-            return FALSE != compiler->initialize(vm, dl_search_path, named_dls);
-            fprintf(stderr, "done initializing compiler\n");
+            if (compiler->initialize(vm, dl_search_path, named_dls)) {
+                return TRUE;
+            } else {
+                return FALSE;
+            }
         }
 
         void Destroy() {
@@ -137,6 +136,8 @@ namespace chuck {
             return true;
         }
     };
+
+    static Chuck * chuckInstance = NULL;
 
     t_CKBOOL Create(Chuck ** chuck,
                     t_CKUINT port,
@@ -155,35 +156,37 @@ namespace chuck {
                     t_CKINT  adaptive_size,
                     t_CKBOOL force_srate) {
 
-        // t_CKUINT files = 0;
-        // t_CKUINT count = 1;
+        if (chuckInstance == NULL) {
+            Chuck * ck = new ChuckImpl(port);
+            t_CKBOOL result = TRUE;
 
-        Chuck * ck = new ChuckImpl(port);
-        t_CKBOOL result = TRUE;
+            // Initialize the vm
+            if (! ck->initializeVM(enable_audio,
+                                   vm_halt,
+                                   srate,
+                                   buffer_size,
+                                   num_buffers,
+                                   dac,
+                                   adc,
+                                   dac_chans,
+                                   adc_chans,
+                                   block,
+                                   adaptive_size,
+                                   force_srate)) {
+                result = FALSE;
+            }
 
-        // Initialize the vm
-        if (! ck->initializeVM(enable_audio,
-                               vm_halt,
-                               srate,
-                               buffer_size,
-                               num_buffers,
-                               dac,
-                               adc,
-                               dac_chans,
-                               adc_chans,
-                               block,
-                               adaptive_size,
-                               force_srate)) {
-            result = FALSE;
+            // Initialize the compiler
+            if (! ck->initializeCompiler(chugins, nchugins)) {
+                result = FALSE;
+            }
+
+            *chuck = ck;
+
+            return result;
         }
 
-        // Initialize the compiler
-        if (! ck->initializeCompiler(chugins, nchugins)) {
-            result = FALSE;
-        }
-
-        *chuck = ck;
-
-        return result;
+        *chuck = chuckInstance;
+        return true;
     }
 }
