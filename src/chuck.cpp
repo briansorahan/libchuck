@@ -13,6 +13,8 @@
 #include <digiio_rtaudio.h>
 #include <util_string.h>
 
+#include <iostream>
+
 // libchuck headers
 #include "chuck.hpp"
 
@@ -253,8 +255,9 @@ namespace chuck {
             shred = NULL;
             result = TRUE;
 
-            if (userNamespaceLoaded) {
+            if (! userNamespaceLoaded) {
                 compiler->env->load_user_namespace();
+                userNamespaceLoaded = TRUE;
             }
 
             if (! extract_args(s, filename, args)) {
