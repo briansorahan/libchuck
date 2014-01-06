@@ -26,7 +26,8 @@ OSC_TEST_CLASSES := $(addprefix $(CHUCK_OSC_TESTS)/classes/, $(OSC_TEST_CLASSES)
 OSC_TEST_CLASSES := $(addsuffix .ck, $(OSC_TEST_CLASSES))
 OSC_TEST_SCRIPTS=$(wildcard $(CHUCK_OSC_TESTS)/*.ck)
 
-LIBCHUCK_CXXSRCS := src/chuck.cpp
+LIBCHUCK_CXXSRCS := chuck.cpp RegEvent.cpp
+LIBCHUCK_CXXSRCS := $(addprefix src/, $(LIBCHUCK_CXXSRCS))
 LIBCHUCK_CXXOBJS := $(LIBCHUCK_CXXSRCS:.cpp=.o)
 LIBCHUCK_OBJS := $(LIBCHUCK_CXXOBJS)
 
