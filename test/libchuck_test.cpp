@@ -30,3 +30,10 @@ TEST_F(ChuckTest, sporking_file_that_sporks_again) {
     t_CKBOOL ran = ck->run();
     ASSERT_TRUE(ran);
 }
+
+TEST_F(ChuckTest, sporking_file_that_uses_regevent) {
+    t_CKBOOL sporked = ck->sporkFile("test/regevent.ck");
+    ASSERT_TRUE(sporked);
+    t_CKBOOL ran = ck->run();
+    ASSERT_TRUE(ran);
+}

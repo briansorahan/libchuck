@@ -1,4 +1,4 @@
-.PHONY: libchuck linux-alsa linux-jack \
+.PHONY: libchuck \
         clean chuck-clean test-clean gtest-clean all-clean \
         test chuck-test-all chuck-osc-test
 
@@ -26,10 +26,13 @@ OSC_TEST_CLASSES := $(addprefix $(CHUCK_OSC_TESTS)/classes/, $(OSC_TEST_CLASSES)
 OSC_TEST_CLASSES := $(addsuffix .ck, $(OSC_TEST_CLASSES))
 OSC_TEST_SCRIPTS=$(wildcard $(CHUCK_OSC_TESTS)/*.ck)
 
-LIBCHUCK_CXXSRCS := chuck.cpp RegEvent.cpp
+LIBCHUCK_CXXSRCS := chuck.cpp
 LIBCHUCK_CXXSRCS := $(addprefix src/, $(LIBCHUCK_CXXSRCS))
 LIBCHUCK_CXXOBJS := $(LIBCHUCK_CXXSRCS:.cpp=.o)
 LIBCHUCK_OBJS := $(LIBCHUCK_CXXOBJS)
+
+# Point chuck to the libchuck headers
+# CKFLAGS=LIBCHUCK_INC=../../$(LIBCHUCK_INC)
 
 CXX=g++
 CPPFLAGS := -I$(CHUCK_SRC) -I$(LIBCHUCK_SRC) \
@@ -52,13 +55,7 @@ $(LIBCHUCK_ARCHIVE): $(CK_OBJS) $(LIBCHUCK_OBJS)
 	ar -rcs $(LIBCHUCK_ARCHIVE) $(LIBCHUCK_OBJS) $(CK_OBJS)
 
 $(CK_OBJS) $(CHUCK_BIN):
-	$(MAKE) -C $(CHUCK_SRC) $(CKFLAGS) $(CHUCK_DEFAULT_TARGET)
-
-linux-alsa:
-	$(MAKE) -C chuck linux-alsa
-
-linux-jack:
-	$(MAKE) -C chuck linux-jack
+	$(MAKE) $(CKFLAGS) -C $(CHUCK_SRC) $(CHUCK_DEFAULT_TARGET)
 
 # Cleaning tasks
 
