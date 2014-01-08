@@ -16,4 +16,4 @@ if (me.args() > 1) {
 SinOsc s => dac;
 gain => s.gain;
 freq => s.freq;
-2::second => now;
+250::ms => now;

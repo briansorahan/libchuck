@@ -4,7 +4,7 @@ function void secondtone() {
     SinOsc s2 => dac;
     0.49 => s2.gain;
     448 => s2.freq;
-    2::second => now;
+    250::ms => now;
     done.signal();
 }
 
