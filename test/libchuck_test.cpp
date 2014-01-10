@@ -31,6 +31,13 @@ TEST_F(ChuckTest, sporking_file_that_sporks_again) {
     ASSERT_TRUE(ran);
 }
 
+TEST_F(ChuckTest, sporking_file_that_uses_builtin_event_classes) {
+    t_CKBOOL sporked = ck->sporkFile("test/event-classes.ck");
+    ASSERT_TRUE(sporked);
+    t_CKBOOL ran = ck->run();
+    ASSERT_TRUE(ran);
+}
+
 TEST_F(ChuckTest, sporking_file_that_uses_events) {
     t_CKBOOL sporked = ck->sporkFile("test/events.ck");
     ASSERT_TRUE(sporked);
