@@ -1,4 +1,3 @@
-// time to wait between events
 10::ms => dur t;
 
 IntEvent ie;
@@ -18,7 +17,9 @@ function void and_beans() {
     "foo" => se.val;
     se.broadcast();
 }
+
 spork ~ and_beans();
+
 ie => now;
 fe => now;
 se => now;

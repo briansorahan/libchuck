@@ -1,32 +1,39 @@
-// time to wait between events
-1000::ms => dur t;
+10::ms => dur t;
 
-Events.receiveIntFrom("foo") @=> IntEvent intev;
-Events.receiveFloatFrom("foo") @=> FloatEvent floatev;
-Events.receiveStringFrom("foo") @=> StringEvent stringev;
+666 => int intval;
+3.14 => float floatval;
+"libchuck" => string stringval;
 
 function void tenderloin() {
     t => now;
-    Events.sendIntTo("foo", 2);
-    // 2 => intev.val;
-    // intev.broadcast();
+    Events.sendIntTo("foo", intval);
 
     t => now;
-    Events.sendFloatTo("foo", 3.14);
-    // 3.14 => floatev.val;
-    // floatev.broadcast();
+    Events.sendFloatTo("foo", floatval);
 
     t => now;
-    Events.sendStringTo("foo", "bar");
-    // "bar" => stringev.val;
-    // stringev.broadcast();
+    Events.sendStringTo("foo", stringval);
 }
 
 spork ~ tenderloin();
-intev => now;
-<<< intev.val() >>>;
-floatev => now;
-<<< floatev.val() >>>;
-stringev => now;
-<<< stringev.val() >>>;
 
+Events.receiveIntFrom("foo") @=> IntEvent intev;
+intev => now;
+if (intev.val() != intval) {
+    cherr <= "Failed to send int." <= IO.newline();
+    Machine.crash();
+}
+
+Events.receiveFloatFrom("foo") @=> FloatEvent floatev;
+floatev => now;
+if (floatev.val() != floatval) {
+    cherr <= "Failed to send float." <= IO.newline();
+    Machine.crash();
+}
+
+Events.receiveStringFrom("foo") @=> StringEvent stringev;
+stringev => now;
+if (stringev.val() != stringval) {
+    cherr <= "Failed to send string." <= IO.newline();
+    Machine.crash();
+}
