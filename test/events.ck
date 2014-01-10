@@ -1,5 +1,9 @@
 10::ms => dur t;
 
+// ---------------------------------------------------
+// sending and receiving int, float, and string events
+// ---------------------------------------------------
+
 666 => int intval;
 3.14 => float floatval;
 "libchuck" => string stringval;
@@ -35,5 +39,29 @@ Events.receiveStringFrom("foo") @=> StringEvent stringev;
 stringev => now;
 if (stringev.val() != stringval) {
     cherr <= "Failed to send string." <= IO.newline();
+    Machine.crash();
+}
+
+// ----------------------------
+// make sure channels are typed
+// ----------------------------
+
+function void broadcastNowhere() {
+    t => now;
+    Events.sendStringTo("nowhere", "sville");
+}
+
+function void neverFinish() {
+    Events.receiveIntFrom("nowhere") @=> IntEvent forever;
+    forever => now;
+    cherr <= "Never should make it here!" <= IO.newline();
+}
+
+spork ~ broadcastNowhere() @=> Shred @ sender;
+spork ~ neverFinish() @=> Shred @ receiver;
+
+2 * t => now;
+if (receiver.done()) {
+    cherr <= "Houston, we have a problem." <= IO.newline();
     Machine.crash();
 }
