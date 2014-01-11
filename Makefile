@@ -12,6 +12,8 @@ include $(CHUCK_SRC)/vars.mk
 CK_OBJS := $(addprefix $(CHUCK_SRC)/, $(CK_OBJS))
 CHUCK_BIN=$(CHUCK_SRC)/chuck
 LIBCHUCK_ARCHIVE=$(LIBCHUCK_SRC)/libchuck.a
+LIBCHUCK_EXTENSIONS := util_events.o \
+                       ulib_events.o
 
 TEST_DIR=test
 GTEST_DIR=$(TEST_DIR)/gtest-1.7.0
@@ -60,7 +62,9 @@ $(CK_OBJS) $(CHUCK_BIN):
 # Cleaning tasks
 
 clean:
-	-rm -f $(LIBCHUCK_OBJS) $(LIBCHUCK_ARCHIVE) $(LIBCHUCK_SRC)/*~ *~
+	-rm -f $(LIBCHUCK_OBJS) $(LIBCHUCK_ARCHIVE) \
+           $(LIBCHUCK_SRC)/*~ $(CHUCK_SRC)/*~ *~ \
+           $(addprefix $(CHUCK_SRC)/, $(LIBCHUCK_EXTENSIONS))
 
 chuck-clean:
 	$(MAKE) -C $(CHUCK_SRC) clean

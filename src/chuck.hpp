@@ -7,6 +7,7 @@
 
 #include <chuck_def.h>
 #include <digiio_rtaudio.h>
+#include <unistd.h>
 
 namespace chuck {
     class Chuck {
@@ -44,9 +45,17 @@ namespace chuck {
         virtual t_CKBOOL sporkFile(const char * s) = 0;
 
         /*
-         * start the vm
+         * Start the vm as its own process.
+         * Return the PID of the new vm.
          */
-        virtual t_CKBOOL run() = 0;
+        virtual pid_t run() = 0;
+
+
+        /*
+         * Start the vm and wait for it.
+         * Returns Chuck_VM::run
+         */
+        virtual t_CKBOOL runBlocking() = 0;
 
     };
 
@@ -70,6 +79,13 @@ namespace chuck {
            t_CKBOOL block = FALSE,
            t_CKINT  adaptive_size = 0,
            t_CKBOOL force_srate = FALSE);
+
+    // send an int to chuck
+    void sendTo(const char * channel, t_CKINT val);
+    // send a float to chuck
+    void sendTo(const char * channel, t_CKFLOAT val);
+    // send a string to chuck
+    void sendTo(const char * channel, const char * val);
 }
 
 #endif

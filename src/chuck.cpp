@@ -12,6 +12,7 @@
 #include <chuck_vm.h>
 #include <digiio_rtaudio.h>
 #include <util_string.h>
+#include <util_events.h>
 
 #include <iostream>
 
@@ -54,6 +55,8 @@ namespace chuck {
         t_CKINT  chugin_load; // 1 == auto (variable added 1.3.0.0)
         t_CKINT priority;
         t_CKBOOL userNamespaceLoaded;
+
+        pid_t vm_pid;
 
     public:
 
@@ -301,7 +304,20 @@ namespace chuck {
             return result;
         }
 
-        t_CKBOOL run() {
+        // TODO: kill children
+        pid_t run() {
+            pid_t pid = fork();
+
+            if (pid == 0) {
+                vm->run();
+                return pid;
+            } else {
+                return pid;
+            }
+        }
+
+        // TODO: deprecate
+        t_CKBOOL runBlocking() {
             return vm->run();
         }
     };
@@ -367,5 +383,23 @@ namespace chuck {
 
         *chuck = chuckInstance;
         return true;
+    }
+
+    // send an int to chuck
+    void sendTo(const char * channel, t_CKINT val) {
+        static Events * EVENTS = Events::GetInstance();
+        EVENTS->sendTo(channel, val);
+    }
+
+    // send a float to chuck
+    void sendTo(const char * channel, t_CKFLOAT val) {
+        static Events * EVENTS = Events::GetInstance();
+        EVENTS->sendTo(channel, val);
+    }
+
+    // send a string to chuck
+    void sendTo(const char * channel, const char * val) {
+        static Events * EVENTS = Events::GetInstance();
+        EVENTS->sendTo(channel, val);
     }
 }
