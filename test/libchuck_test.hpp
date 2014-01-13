@@ -8,12 +8,13 @@ class ChuckTest : public testing::Test {
 protected:
     Chuck * ck;
 
-    void SetUp() {
-        t_CKBOOL created = chuck::Create(&ck, 8500);
-        ASSERT_TRUE(created);
+    void Spork(unsigned int files, const char ** filenames) {
+        bool sporked = chuck::Spork(files, filenames);
+        ASSERT_TRUE(sporked);
     }
 
     void TearDown() {
-        ck->Destroy();
+        bool finished = chuck::Yield();
+        ASSERT_TRUE(finished);
     }
 };

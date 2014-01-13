@@ -7,7 +7,6 @@
 
 #include <chuck_def.h>
 #include <digiio_rtaudio.h>
-#include <unistd.h>
 
 namespace chuck {
     class Chuck {
@@ -48,37 +47,15 @@ namespace chuck {
          * Start the vm as its own process.
          * Return the PID of the new vm.
          */
-        virtual pid_t run() = 0;
-
-
-        /*
-         * Start the vm and wait for it.
-         * Returns Chuck_VM::run
-         */
-        virtual t_CKBOOL runBlocking() = 0;
+        virtual t_CKBOOL run() = 0;
 
     };
 
-    /*
-     * Create a new instance of Chuck
-     */
-    t_CKBOOL
-    Create(Chuck ** chuck,
-           t_CKUINT port,
-           const char * chugins[] = {},
-           t_CKUINT nchugins = 0,
-           t_CKBOOL enable_audio = TRUE,
-           t_CKBOOL vm_halt = TRUE,
-           t_CKUINT srate = SAMPLING_RATE_DEFAULT,
-           t_CKUINT buffer_size = BUFFER_SIZE_DEFAULT,
-           t_CKUINT num_buffers = NUM_BUFFERS_DEFAULT,
-           t_CKUINT dac = 0,
-           t_CKUINT adc = 0,
-           t_CKUINT dac_chans = 2,
-           t_CKUINT adc_chans = 2,
-           t_CKBOOL block = FALSE,
-           t_CKINT  adaptive_size = 0,
-           t_CKBOOL force_srate = FALSE);
+    // spork a file
+    bool Spork(unsigned int files, const char ** filenames);
+
+    // yield the current process to the chuck vm
+    bool Yield();
 
     // send an int to chuck
     void sendTo(const char * channel, t_CKINT val);

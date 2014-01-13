@@ -27,6 +27,21 @@ CHUCK_THREAD g_tid_shell = 0;
 // default destination host name
 char g_host[256] = "127.0.0.1";
 
+XThread * vmthread;
+
+struct libchuck_env {
+    chuck::Chuck * chuck;
+};
+
+void * run_chuck(void * arg) {
+    libchuck_env * env = (libchuck_env *) arg;
+    env->chuck->run();
+    env->chuck->Destroy();
+    delete vmthread;
+    vmthread = NULL;
+    return (void *) 1;
+}
+
 namespace chuck {
     using std::list;
     using std::string;
@@ -34,7 +49,6 @@ namespace chuck {
 
     class ChuckImpl : public Chuck {
     private:
-        t_CKUINT m_port;
         Chuck_VM * vm;
         Chuck_Compiler * compiler;
         Chuck_VM_Code * code;
@@ -60,7 +74,7 @@ namespace chuck {
 
     public:
 
-        ChuckImpl(t_CKUINT port) {
+        ChuckImpl() {
             // global variables
 #if defined(__MACOSX_CORE__)
             t_CKINT g_priority = 80;
@@ -74,7 +88,7 @@ namespace chuck {
 #endif
 
             Chuck_VM::our_priority = g_priority;
-            m_port = port;
+
             // REFACTOR(bsorahan): would be nice to get rid of chuck_globals!!
             compiler = g_compiler = new Chuck_Compiler;
             vm = g_vm = new Chuck_VM;
@@ -304,85 +318,90 @@ namespace chuck {
             return result;
         }
 
-        // TODO: kill children
-        pid_t run() {
-            pid_t pid = fork();
-
-            if (pid == 0) {
-                vm->run();
-                return pid;
-            } else {
-                return pid;
-            }
-        }
-
-        // TODO: deprecate
-        t_CKBOOL runBlocking() {
+        t_CKBOOL run() {
             return vm->run();
         }
     };
 
-    static Chuck * chuckInstance = NULL;
+    t_CKBOOL
+    Create(Chuck ** chuck,
+           const char * chugins[] = {},
+           t_CKUINT nchugins = 0,
+           t_CKBOOL enable_audio = TRUE,
+           t_CKBOOL vm_halt = TRUE,
+           t_CKUINT srate = SAMPLING_RATE_DEFAULT,
+           t_CKUINT buffer_size = BUFFER_SIZE_DEFAULT,
+           t_CKUINT num_buffers = NUM_BUFFERS_DEFAULT,
+           t_CKUINT dac = 0,
+           t_CKUINT adc = 0,
+           t_CKUINT dac_chans = 2,
+           t_CKUINT adc_chans = 2,
+           t_CKBOOL block = FALSE,
+           t_CKINT  adaptive_size = 0,
+           t_CKBOOL force_srate = FALSE) {
 
-    t_CKBOOL Create(Chuck ** chuck,
-                    t_CKUINT port,
-                    const char * chugins[],
-                    t_CKUINT nchugins,
-                    t_CKBOOL enable_audio,
-                    t_CKBOOL vm_halt,
-                    t_CKUINT srate,
-                    t_CKUINT buffer_size,
-                    t_CKUINT num_buffers,
-                    t_CKUINT dac,
-                    t_CKUINT adc,
-                    t_CKUINT dac_chans,
-                    t_CKUINT adc_chans,
-                    t_CKBOOL block,
-                    t_CKINT  adaptive_size,
-                    t_CKBOOL force_srate) {
+        Chuck * ck = new ChuckImpl;
+        t_CKBOOL result = TRUE;
 
-        if (chuckInstance == NULL) {
-            Chuck * ck = new ChuckImpl(port);
-            t_CKBOOL result = TRUE;
-
-            // allocate the vm - needs the type system
-            if (! ck->initializeVM(enable_audio,
-                                   vm_halt,
-                                   srate,
-                                   buffer_size,
-                                   num_buffers,
-                                   dac,
-                                   adc,
-                                   dac_chans,
-                                   adc_chans,
-                                   block,
-                                   adaptive_size,
-                                   force_srate)) {
-                result = FALSE;
-            }
-
-            // Initialize the compiler
-            if (! ck->initializeCompiler(chugins, nchugins)) {
-                result = FALSE;
-            }
-
-            // vm synthesis subsystem - needs the type system
-            if (! ck->initializeSynthesis()) {
-                result = FALSE;
-            }
-
-            // Load chugins
-            if (! ck->loadChugins()) {
-                result = FALSE;
-            }
-
-            *chuck = ck;
-
-            return result;
+        // allocate the vm - needs the type system
+        if (! ck->initializeVM(enable_audio,
+                               vm_halt,
+                               srate,
+                               buffer_size,
+                               num_buffers,
+                               dac,
+                               adc,
+                               dac_chans,
+                               adc_chans,
+                               block,
+                               adaptive_size,
+                               force_srate)) {
+            result = FALSE;
         }
 
-        *chuck = chuckInstance;
+        // Initialize the compiler
+        if (! ck->initializeCompiler(chugins, nchugins)) {
+            result = FALSE;
+        }
+
+        // vm synthesis subsystem - needs the type system
+        if (! ck->initializeSynthesis()) {
+            result = FALSE;
+        }
+
+        // Load chugins
+        if (! ck->loadChugins()) {
+            result = FALSE;
+        }
+
+        *chuck = ck;
+
+        return result;
+    }
+
+    bool Spork(unsigned int files, const char ** filenames) {
+        Chuck * chuck;
+        if (! Create(&chuck)) return false;
+        int i;
+        for (i = 0; i < files; i++) {
+            if (! chuck->sporkFile(filenames[i])) return false;
+        }
+
+        libchuck_env * env = new libchuck_env;
+        env->chuck = chuck;
+
+        vmthread = new XThread;
+        vmthread->start( &run_chuck, (void *) env );
         return true;
+    }
+
+    // yield the current process to the chuck vm
+    bool Yield() {
+        // the first arg shouldn't even matter on linux
+        if (vmthread != NULL)
+            return vmthread->wait(-1, false);
+        else
+            return false;
     }
 
     // send an int to chuck
