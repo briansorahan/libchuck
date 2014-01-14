@@ -36,16 +36,14 @@ TEST_F(ChuckTest, sporking_file_that_uses_builtin_event_classes) {
 }
 
 TEST_F(ChuckTest, sporking_file_that_uses_events) {
-    int files = 1;
+    unsigned int files = 1;
     const char * filenames[] = { "test/events.ck" };
     Spork(files, filenames);
 }
 
-// TEST_F(ChuckTest, triggering_events_from_c) {
-//     t_CKBOOL sporked = ck->sporkFile("test/c2chuck.ck");
-//     ASSERT_TRUE(sporked);
-//     pid_t ran = ck->run();
-//     ASSERT_TRUE(ran);
-//     // Never makes it here because ck->run blocks
-//     chuck::sendTo("foo", (t_CKINT) 4);
-// }
+TEST_F(ChuckTest, triggering_events_from_c) {
+    unsigned int files = 1;
+    const char * filenames[] = { "test/c2chuck.ck" };
+    Spork(files, filenames);
+    chuck::sendTo("foo", (t_CKINT) 4);
+}
