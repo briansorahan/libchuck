@@ -1,3 +1,7 @@
+// for usleep
+#define _XOPEN_SOURCE    500
+#include <unistd.h>
+
 #include <list>
 #include <string>
 #include <vector>
@@ -392,6 +396,7 @@ namespace chuck {
 
         vmthread = new XThread;
         vmthread->start( &run_chuck, (void *) env );
+        usleep(100);
         return true;
     }
 
