@@ -431,4 +431,18 @@ namespace chuck {
         static Events * EVENTS = Events::GetInstance();
         EVENTS->sendTo(channel, val);
     }
+
+    // receive an int to chuck
+    t_CKINT ReceiveIntFrom(const char * channel) {
+        return 0;
+    }
+
+    // receive a float to chuck
+    t_CKFLOAT ReceiveFloatFrom(const char * channel) {
+        return 0.0;
+    }
+
+    // receive a string to chuck
+    void ReceiveStringFrom(const char * channel, char ** s) {
+    }
 }

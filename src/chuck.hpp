@@ -63,6 +63,13 @@ namespace chuck {
     void SendTo(const char * channel, t_CKFLOAT val);
     // send a string to chuck
     void SendTo(const char * channel, const char * val);
+
+    // receive an int to chuck
+    t_CKINT ReceiveIntFrom(const char * channel);
+    // receive a float to chuck
+    t_CKFLOAT ReceiveFloatFrom(const char * channel);
+    // receive a string to chuck
+    void ReceiveStringFrom(const char * channel, char ** s);
 }
 
 #endif
