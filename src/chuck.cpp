@@ -39,10 +39,15 @@ struct libchuck_env {
 
 void * run_chuck(void * arg) {
     libchuck_env * env = (libchuck_env *) arg;
+    Events * evs = Events::GetInstance();
+
     env->chuck->run();
     env->chuck->Destroy();
+    evs->Clear();
+
     delete vmthread;
     vmthread = NULL;
+    
     return (void *) 1;
 }
 
@@ -396,7 +401,7 @@ namespace chuck {
 
         vmthread = new XThread;
         vmthread->start( &run_chuck, (void *) env );
-        usleep(100);
+        usleep(500);
         return true;
     }
 
@@ -410,19 +415,19 @@ namespace chuck {
     }
 
     // send an int to chuck
-    void sendTo(const char * channel, t_CKINT val) {
+    void SendTo(const char * channel, t_CKINT val) {
         static Events * EVENTS = Events::GetInstance();
         EVENTS->sendTo(channel, val);
     }
 
     // send a float to chuck
-    void sendTo(const char * channel, t_CKFLOAT val) {
+    void SendTo(const char * channel, t_CKFLOAT val) {
         static Events * EVENTS = Events::GetInstance();
         EVENTS->sendTo(channel, val);
     }
 
     // send a string to chuck
-    void sendTo(const char * channel, const char * val) {
+    void SendTo(const char * channel, const char * val) {
         static Events * EVENTS = Events::GetInstance();
         EVENTS->sendTo(channel, val);
     }

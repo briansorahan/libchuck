@@ -58,11 +58,11 @@ namespace chuck {
     bool Yield();
 
     // send an int to chuck
-    void sendTo(const char * channel, t_CKINT val);
+    void SendTo(const char * channel, t_CKINT val);
     // send a float to chuck
-    void sendTo(const char * channel, t_CKFLOAT val);
+    void SendTo(const char * channel, t_CKFLOAT val);
     // send a string to chuck
-    void sendTo(const char * channel, const char * val);
+    void SendTo(const char * channel, const char * val);
 }
 
 #endif
