@@ -47,3 +47,9 @@ TEST_F(ChuckTest, triggering_events_from_c) {
     Spork(files, filenames);
     chuck::SendTo("foo", (t_CKINT) 4);
 }
+
+TEST_F(ChuckTest, triggering_c_events_from_chuck) {
+    unsigned int files = 1;
+    const char * filenames[] = { "test/chuck2c.ck" };
+    Spork(files, filenames);
+}

@@ -75,7 +75,6 @@ clean:
 	-rm -f $(LIBCHUCK_OBJS) $(LIBCHUCK_ARCHIVE) \
            $(LIBCHUCK_SRC)/*~ $(CHUCK_SRC)/*~ *~ \
            $(addprefix $(CHUCK_SRC)/, $(LIBCHUCK_EXTENSIONS))
-	$(MAKE) -C $(UV_DIR) clean
 
 chuck-clean:
 	$(MAKE) -C $(CHUCK_SRC) clean
@@ -87,7 +86,10 @@ test-clean:
 gtest-clean:
 	$(MAKE) -C $(GTEST_MAKE) clean
 
-all-clean: clean chuck-clean test-clean gtest-clean
+uv-clean:
+	$(MAKE) -C $(UV_DIR) clean
+
+all-clean: clean chuck-clean test-clean gtest-clean uv-clean
 
 # -------------
 # Testing tasks

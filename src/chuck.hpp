@@ -7,7 +7,7 @@
 
 #include <chuck_def.h>
 #include <digiio_rtaudio.h>
-
+#include <libchuck_types.h>
 
 
 namespace chuck {
@@ -78,7 +78,10 @@ namespace chuck {
 
     class BaseReceiver {
     public:
-        virtual void ListenTo(const char * channel) = 0;
+        // subscribe to events on a channel
+        void ListenTo(const char * channel);
+        // run the callback
+        virtual void Signal(libchuck_channel_data cd) = 0;
     };
 
     class IntReceiver : public BaseReceiver {

@@ -5,6 +5,7 @@
 #include <list>
 #include <string>
 #include <vector>
+#include <iostream>
 
 // headers from chuck distribution
 #include <chuck_compile.h>
@@ -33,8 +34,6 @@ CHUCK_THREAD g_tid_shell = 0;
 char g_host[256] = "127.0.0.1";
 
 uv_thread_t chuck_thread_id;
-uv_loop_t * loop;
-uv_async_t async;
 
 struct libchuck_env {
     chuck::Chuck * chuck;
@@ -51,7 +50,6 @@ void run_chuck(uv_work_t * req) {
     // clear all the events
     evs->Clear();
 
-    delete env->chuck;
     delete env;
 }
 
@@ -64,38 +62,42 @@ void async_hook(uv_async_t * handle, int status) {
         (libchuck_channel_data *) handle->data;
 
     switch(data->type) {
-    case LIBCHUCK_INT_CHANNEL:
-        {
-            // send to all listening IntReceivers
-            break;
-        }
-    case LIBCHUCK_FLOAT_CHANNEL:
-        {
-            // send to all listening FloatReceivers
-            break;
-        }
-    case LIBCHUCK_STRING_CHANNEL:
-        {
-            // send to all listening StringReceivers
-            break;
-        }
+    case LIBCHUCK_INT_CHANNEL: {
+        // send to all listening IntReceivers
+        std::cout << "received int event\n";
+        break;
+    }
+    case LIBCHUCK_FLOAT_CHANNEL: {
+        // send to all listening FloatReceivers
+        std::cout << "received float event\n";
+        break;
+    }
+    case LIBCHUCK_STRING_CHANNEL: {
+        // send to all listening StringReceivers
+        std::cout << "received string event\n";
+        break;
+    }
     }
 }
 
 void chuck_done(uv_work_t * req, int status) {
-    uv_close( (uv_handle_t *) &async, NULL );
+    uv_async_t * asyncp = Events::GetAsync();
+    uv_close( (uv_handle_t *) asyncp, NULL );
 }
 
 // This function is run by chuck::Spork
 // arg is a pointer to a libchuck_env struct
 void run_event_loop(void * arg) {
+    uv_loop_t * loop;
     // event loop
     loop = uv_default_loop();
+    // Events async
+    uv_async_t * asyncp = Events::GetAsync();
     // worker thread
     uv_work_t req;
     req.data = arg;
     // initialize async handle
-    uv_async_init(loop, &async, &async_hook);
+    uv_async_init(loop, asyncp, &async_hook);
     // run chuck
     uv_queue_work(loop, &req, run_chuck, chuck_done);
     uv_run(loop, UV_RUN_DEFAULT);
@@ -480,5 +482,8 @@ namespace chuck {
     void SendTo(const char * channel, const char * val) {
         static Events * EVENTS = Events::GetInstance();
         EVENTS->sendTo(channel, val);
+    }
+
+    void BaseReceiver::ListenTo(const char * channel) {
     }
 }
