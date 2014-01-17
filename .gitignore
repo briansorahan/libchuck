@@ -3,3 +3,6 @@ src/*.o
 src/*.a
 test/gtest-1.7.0/make/*.o
 test/gtest-1.7.0/make/*.a
+test/gtest-1.7.0/make/sample1_unittest
+test/chuck_util_string_test
+test/libchuck_test

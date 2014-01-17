@@ -2,11 +2,13 @@
  * libchuck
  * Brian Sorahan 2014
  */
-#ifndef __CHUCK_HPP__
-#define __CHUCK_HPP__
+#ifndef CHUCK_HPP
+#define CHUCK_HPP
 
 #include <chuck_def.h>
 #include <digiio_rtaudio.h>
+
+
 
 namespace chuck {
     class Chuck {
@@ -64,12 +66,35 @@ namespace chuck {
     // send a string to chuck
     void SendTo(const char * channel, const char * val);
 
-    // receive an int to chuck
-    t_CKINT ReceiveIntFrom(const char * channel);
-    // receive a float to chuck
-    t_CKFLOAT ReceiveFloatFrom(const char * channel);
-    // receive a string to chuck
-    void ReceiveStringFrom(const char * channel, char ** s);
+    /*
+     * Event receiver types.
+     * Receiving a chuck event in C++ is asynchronous, so the user
+     * must register callbacks.
+     */
+
+    typedef void (*int_event_cb)(t_CKINT val);
+    typedef void (*float_event_cb)(t_CKFLOAT val);
+    typedef void (*string_event_cb)(const char * s);
+
+    class BaseReceiver {
+    public:
+        virtual void ListenTo(const char * channel) = 0;
+    };
+
+    class IntReceiver : public BaseReceiver {
+    public:
+        static IntReceiver * New(int_event_cb cb);
+    };
+
+    class FloatReceiver : public BaseReceiver {
+    public:
+        static FloatReceiver * New(float_event_cb cb);
+    };
+
+    class StringReceiver : public BaseReceiver {
+    public:
+        static StringReceiver * New(string_event_cb cb);
+    };
 }
 
-#endif
+#endif // CHUCK_HPP

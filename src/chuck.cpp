@@ -18,10 +18,11 @@
 #include <util_string.h>
 #include <util_events.h>
 
-#include <iostream>
+#include <uv.h>
 
 // libchuck headers
 #include "chuck.hpp"
+#include "libchuck_types.h"
 
 // thread id for otf thread
 CHUCK_THREAD g_tid_otf = 0;
@@ -31,24 +32,73 @@ CHUCK_THREAD g_tid_shell = 0;
 // default destination host name
 char g_host[256] = "127.0.0.1";
 
-XThread * vmthread;
+uv_thread_t chuck_thread_id;
+uv_loop_t * loop;
+uv_async_t async;
 
 struct libchuck_env {
     chuck::Chuck * chuck;
 };
 
-void * run_chuck(void * arg) {
-    libchuck_env * env = (libchuck_env *) arg;
+void run_chuck(uv_work_t * req) {
+    libchuck_env * env = (libchuck_env *) req->data;
     Events * evs = Events::GetInstance();
 
+    // let chuck run
     env->chuck->run();
     env->chuck->Destroy();
+
+    // clear all the events
     evs->Clear();
 
-    delete vmthread;
-    vmthread = NULL;
-    
-    return (void *) 1;
+    delete env->chuck;
+    delete env;
+}
+
+//
+// handle->data should point to a
+// libchuck_channel_data struct
+//
+void async_hook(uv_async_t * handle, int status) {
+    libchuck_channel_data * data = \
+        (libchuck_channel_data *) handle->data;
+
+    switch(data->type) {
+    case LIBCHUCK_INT_CHANNEL:
+        {
+            // send to all listening IntReceivers
+            break;
+        }
+    case LIBCHUCK_FLOAT_CHANNEL:
+        {
+            // send to all listening FloatReceivers
+            break;
+        }
+    case LIBCHUCK_STRING_CHANNEL:
+        {
+            // send to all listening StringReceivers
+            break;
+        }
+    }
+}
+
+void chuck_done(uv_work_t * req, int status) {
+    uv_close( (uv_handle_t *) &async, NULL );
+}
+
+// This function is run by chuck::Spork
+// arg is a pointer to a libchuck_env struct
+void run_event_loop(void * arg) {
+    // event loop
+    loop = uv_default_loop();
+    // worker thread
+    uv_work_t req;
+    req.data = arg;
+    // initialize async handle
+    uv_async_init(loop, &async, &async_hook);
+    // run chuck
+    uv_queue_work(loop, &req, run_chuck, chuck_done);
+    uv_run(loop, UV_RUN_DEFAULT);
 }
 
 namespace chuck {
@@ -389,29 +439,29 @@ namespace chuck {
     }
 
     bool Spork(unsigned int files, const char ** filenames) {
+        // Create a new chuck compiler & vm
         Chuck * chuck;
         if (! Create(&chuck)) return false;
+
+        // spork some files
         int i;
         for (i = 0; i < files; i++) {
             if (! chuck->sporkFile(filenames[i])) return false;
         }
 
+        // run an event loop and queue up a running
+        // chuck instance
         libchuck_env * env = new libchuck_env;
         env->chuck = chuck;
+        uv_thread_create(&chuck_thread_id, run_event_loop, (void *) env);
 
-        vmthread = new XThread;
-        vmthread->start( &run_chuck, (void *) env );
         usleep(500);
         return true;
     }
 
     // yield the current process to the chuck vm
     bool Yield() {
-        // the first arg shouldn't even matter on linux
-        if (vmthread != NULL)
-            return vmthread->wait(-1, false);
-        else
-            return false;
+        return (0 == uv_thread_join(&chuck_thread_id));
     }
 
     // send an int to chuck
@@ -430,19 +480,5 @@ namespace chuck {
     void SendTo(const char * channel, const char * val) {
         static Events * EVENTS = Events::GetInstance();
         EVENTS->sendTo(channel, val);
-    }
-
-    // receive an int to chuck
-    t_CKINT ReceiveIntFrom(const char * channel) {
-        return 0;
-    }
-
-    // receive a float to chuck
-    t_CKFLOAT ReceiveFloatFrom(const char * channel) {
-        return 0.0;
-    }
-
-    // receive a string to chuck
-    void ReceiveStringFrom(const char * channel, char ** s) {
     }
 }
