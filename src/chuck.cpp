@@ -16,10 +16,9 @@
 #include <chuck_lang.h>
 #include <chuck_vm.h>
 #include <digiio_rtaudio.h>
-#include <util_string.h>
 #include <util_events.h>
-
-#include <uv.h>
+#include <util_string.h>
+#include <util_thread.h>
 
 // libchuck headers
 #include "chuck.hpp"
@@ -33,14 +32,14 @@ CHUCK_THREAD g_tid_shell = 0;
 // default destination host name
 char g_host[256] = "127.0.0.1";
 
-uv_thread_t chuck_thread_id;
+XThread * chuck_thread = NULL;
 
 struct libchuck_env {
     chuck::Chuck * chuck;
 };
 
-void run_chuck(uv_work_t * req) {
-    libchuck_env * env = (libchuck_env *) req->data;
+void * run_chuck(void * arg) {
+    libchuck_env * env = (libchuck_env *) arg;
     Events * evs = Events::GetInstance();
 
     // let chuck run
@@ -51,56 +50,7 @@ void run_chuck(uv_work_t * req) {
     evs->Clear();
 
     delete env;
-}
-
-//
-// handle->data should point to a
-// libchuck_channel_data struct
-//
-void async_hook(uv_async_t * handle, int status) {
-    libchuck_channel_data * data = \
-        (libchuck_channel_data *) handle->data;
-
-    switch(data->type) {
-    case LIBCHUCK_INT_CHANNEL: {
-        // send to all listening IntReceivers
-        std::cout << "received int event\n";
-        break;
-    }
-    case LIBCHUCK_FLOAT_CHANNEL: {
-        // send to all listening FloatReceivers
-        std::cout << "received float event\n";
-        break;
-    }
-    case LIBCHUCK_STRING_CHANNEL: {
-        // send to all listening StringReceivers
-        std::cout << "received string event\n";
-        break;
-    }
-    }
-}
-
-void chuck_done(uv_work_t * req, int status) {
-    uv_async_t * asyncp = Events::GetAsync();
-    uv_close( (uv_handle_t *) asyncp, NULL );
-}
-
-// This function is run by chuck::Spork
-// arg is a pointer to a libchuck_env struct
-void run_event_loop(void * arg) {
-    uv_loop_t * loop;
-    // event loop
-    loop = uv_default_loop();
-    // Events async
-    uv_async_t * asyncp = Events::GetAsync();
-    // worker thread
-    uv_work_t req;
-    req.data = arg;
-    // initialize async handle
-    uv_async_init(loop, asyncp, &async_hook);
-    // run chuck
-    uv_queue_work(loop, &req, run_chuck, chuck_done);
-    uv_run(loop, UV_RUN_DEFAULT);
+    return (void *) 1;
 }
 
 namespace chuck {
@@ -451,11 +401,16 @@ namespace chuck {
             if (! chuck->sporkFile(filenames[i])) return false;
         }
 
+        if (chuck_thread != NULL) {
+            delete chuck_thread;
+        }
+
         // run an event loop and queue up a running
         // chuck instance
         libchuck_env * env = new libchuck_env;
         env->chuck = chuck;
-        uv_thread_create(&chuck_thread_id, run_event_loop, (void *) env);
+        chuck_thread = new XThread;
+        chuck_thread->start(&run_chuck, (void *) env);
 
         usleep(500);
         return true;
@@ -463,7 +418,7 @@ namespace chuck {
 
     // yield the current process to the chuck vm
     bool Yield() {
-        return (0 == uv_thread_join(&chuck_thread_id));
+        return chuck_thread->wait(-1, false);
     }
 
     // send an int to chuck
@@ -484,6 +439,23 @@ namespace chuck {
         EVENTS->sendTo(channel, val);
     }
 
-    void BaseReceiver::ListenTo(const char * channel) {
+    /*
+     * TODO: associate callbacks with the channel
+     */
+
+    void RegisterIntReceiver(int_event_cb cb) {
+        static Events * EVENTS = Events::GetInstance();
+        EVENTS->RegisterIntListener("foo", cb);
     }
+
+    void RegisterFloatReceiver(float_event_cb cb) {
+        static Events * EVENTS = Events::GetInstance();
+        EVENTS->RegisterFloatListener("foo", cb);
+    }
+
+    void RegisterStringReceiver(string_event_cb cb) {
+        static Events * EVENTS = Events::GetInstance();
+        EVENTS->RegisterStringListener("foo", cb);
+    }
+
 }

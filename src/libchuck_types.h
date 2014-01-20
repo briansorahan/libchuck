@@ -21,7 +21,7 @@ typedef union {
 } libchuck_channel_val_t;
 
 typedef struct _libchuck_channel_data {
-    const char * name;
+    const char * channel;
     libchuck_channel_t type;
     libchuck_channel_val_t value;
 } libchuck_channel_data;

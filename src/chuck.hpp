@@ -10,7 +10,40 @@
 #include <libchuck_types.h>
 
 
+typedef void (*int_event_cb)(t_CKINT val);
+typedef void (*float_event_cb)(t_CKFLOAT val);
+typedef void (*string_event_cb)(const char * s);
+
 namespace chuck {
+    /*
+     * Event receiver types.
+     * Receiving a chuck event in C++ is asynchronous, so the user
+     * must register callbacks.
+     */
+
+    class BaseReceiver {
+    public:
+        // subscribe to events on a channel
+        void ListenTo(const char * channel);
+        // run the callback
+        virtual void Signal(libchuck_channel_data cd) = 0;
+    };
+
+    class IntReceiver : public BaseReceiver {
+    public:
+        static IntReceiver * New(int_event_cb cb);
+    };
+
+    class FloatReceiver : public BaseReceiver {
+    public:
+        static FloatReceiver * New(float_event_cb cb);
+    };
+
+    class StringReceiver : public BaseReceiver {
+    public:
+        static StringReceiver * New(string_event_cb cb);
+    };
+
     class Chuck {
     public:
 
@@ -66,38 +99,10 @@ namespace chuck {
     // send a string to chuck
     void SendTo(const char * channel, const char * val);
 
-    /*
-     * Event receiver types.
-     * Receiving a chuck event in C++ is asynchronous, so the user
-     * must register callbacks.
-     */
+    void RegisterIntReceiver(int_event_cb cb);
+    void RegisterFloatReceiver(float_event_cb cb);
+    void RegisterStringReceiver(string_event_cb cb);
 
-    typedef void (*int_event_cb)(t_CKINT val);
-    typedef void (*float_event_cb)(t_CKFLOAT val);
-    typedef void (*string_event_cb)(const char * s);
-
-    class BaseReceiver {
-    public:
-        // subscribe to events on a channel
-        void ListenTo(const char * channel);
-        // run the callback
-        virtual void Signal(libchuck_channel_data cd) = 0;
-    };
-
-    class IntReceiver : public BaseReceiver {
-    public:
-        static IntReceiver * New(int_event_cb cb);
-    };
-
-    class FloatReceiver : public BaseReceiver {
-    public:
-        static FloatReceiver * New(float_event_cb cb);
-    };
-
-    class StringReceiver : public BaseReceiver {
-    public:
-        static StringReceiver * New(string_event_cb cb);
-    };
 }
 
 #endif // CHUCK_HPP

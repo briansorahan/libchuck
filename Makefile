@@ -15,13 +15,6 @@ LIBCHUCK_ARCHIVE=$(LIBCHUCK_SRC)/libchuck.a
 LIBCHUCK_EXTENSIONS := util_events.o \
                        ulib_events.o
 
-# uv
-UV_DIR=libuv
-UV_INC=$(UV_DIR)/include
-UV_AR=$(UV_DIR)/.libs/uv.a
-UV_CONFIGURE=$(UV_DIR)/configure
-UV_MAKEFILE=$(UV_DIR)/Makefile
-
 # test
 TEST_DIR=test
 GTEST_DIR=$(TEST_DIR)/gtest-1.7.0
@@ -44,7 +37,6 @@ LIBCHUCK_OBJS := $(LIBCHUCK_CXXOBJS)
 CXX=g++
 CPPFLAGS := -I$(CHUCK_SRC) -I$(LIBCHUCK_SRC) \
             -I$(GTEST_DIR)/include \
-            -I$(UV_INC) \
             -D__LINUX_ALSA__ -D__PLATFORM_LINUX__ \
             -fno-strict-aliasing -D__CK_SNDFILE_NATIVE__
 
@@ -55,13 +47,13 @@ else
 CXXFLAGS := -std=c++11 -O3 -Wall -Wextra
 endif
 
-LDFLAGS := -L$(LIBCHUCK_SRC) -L$(UV_DIR)/.libs
+LDFLAGS := -L$(LIBCHUCK_SRC)
 LDLIBS := $(GTEST_ARCHIVE) -lchuck -lasound -lsndfile \
-          -lstdc++ -lpthread -ldl -lm -luv
+          -lstdc++ -lpthread -ldl -lm
 
 libchuck .DEFAULT: $(LIBCHUCK_ARCHIVE)
 
-$(LIBCHUCK_ARCHIVE): $(UV_AR) $(CK_OBJS) $(LIBCHUCK_OBJS)
+$(LIBCHUCK_ARCHIVE): $(CK_OBJS) $(LIBCHUCK_OBJS)
 	ar -rcs $(LIBCHUCK_ARCHIVE) $(LIBCHUCK_OBJS) $(CK_OBJS)
 
 $(CK_OBJS) $(CHUCK_BIN):
@@ -86,10 +78,7 @@ test-clean:
 gtest-clean:
 	$(MAKE) -C $(GTEST_MAKE) clean
 
-uv-clean:
-	$(MAKE) -C $(UV_DIR) clean
-
-all-clean: clean chuck-clean test-clean gtest-clean uv-clean
+all-clean: clean chuck-clean test-clean gtest-clean
 
 # -------------
 # Testing tasks
@@ -109,12 +98,3 @@ $(GTEST_ARCHIVE):
 	$(MAKE) -C $(GTEST_MAKE)
 
 retest: test-clean test
-
-$(UV_AR): $(UV_MAKEFILE)
-	$(MAKE) -C $(UV_DIR)
-
-$(UV_MAKEFILE): $(UV_CONFIGURE)
-	cd $(UV_DIR) && ./configure --disable-shared
-
-$(UV_CONFIGURE):
-	cd $(UV_DIR) && sh autogen.sh
