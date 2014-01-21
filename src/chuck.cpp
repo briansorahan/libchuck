@@ -22,26 +22,25 @@
 
 // libchuck headers
 #include "chuck.hpp"
-#include "libchuck_types.h"
-
-// thread id for otf thread
-CHUCK_THREAD g_tid_otf = 0;
-// thread id for shell
-CHUCK_THREAD g_tid_shell = 0;
-
-// default destination host name
-char g_host[256] = "127.0.0.1";
-
-// Thread off the chuck vm
-XThread * chuck_thread = NULL;
-void * run_chuck(void * arg);
 
 namespace chuck {
     using std::list;
     using std::string;
     using std::vector;
 
-    class Chuck {
+    class VMThread {
+    public:
+        // spawns thread
+        void Run(Chuck * ck);
+        // wait for chuck
+        bool Wait();
+    private:
+        XThread chuck_thread;
+        // thread function
+        static void * RunChuck(void * arg);
+    };
+
+    class ChuckImpl : public Chuck {
     private:
         Chuck_VM * vm;
         Chuck_Compiler * compiler;
@@ -64,11 +63,11 @@ namespace chuck {
         t_CKINT priority;
         t_CKBOOL userNamespaceLoaded;
 
-        pid_t vm_pid;
+        VMThread vmThread;
 
     public:
 
-        Chuck() {
+        ChuckImpl() {
             // global variables
 #if defined(__MACOSX_CORE__)
             t_CKINT g_priority = 80;
@@ -222,9 +221,11 @@ namespace chuck {
                 // get vm
                 Chuck_VM * vm = g_vm;
                 Chuck_Compiler * compiler = g_compiler;
+
                 // flag the global one
                 g_vm = NULL;
                 g_compiler = NULL;
+
                 // if not NULL
                 if (vm) {
                     // stop
@@ -233,26 +234,10 @@ namespace chuck {
                     all_detach();
                 }
 
-                // things don't work so good on windows...
-#if !defined(__PLATFORM_WIN32__) || defined(__WINDOWS_PTHREAD__)
-                // pthread_kill( g_tid_otf, 2 );
-                if( g_tid_otf ) pthread_cancel( g_tid_otf );
-                if( g_tid_whatever ) pthread_cancel( g_tid_whatever );
-                // if( g_tid_otf ) usleep( 50000 );
-#else
-                // close handle
-                if( g_tid_otf ) CloseHandle( g_tid_otf );
-#endif
                 // will this work for windows?
                 SAFE_DELETE( vm );
                 SAFE_DELETE( compiler );
-
-                // ck_close( g_sock );
             }
-
-#if !defined(__PLATFORM_WIN32__) || defined(__WINDOWS_PTHREAD__)
-            // pthread_join( g_tid_otf, NULL );
-#endif
         }
 
         t_CKBOOL sporkFile(const char * s) {
@@ -315,26 +300,44 @@ namespace chuck {
         t_CKBOOL run() {
             return vm->run();
         }
+
+        bool Spork(unsigned int files, const char ** filenames) {
+            // spork some files
+            int i;
+            for (i = 0; i < files; i++) {
+                if (! sporkFile(filenames[i])) return false;
+            }
+
+            vmThread.Run(this);
+
+            usleep(500);
+            return true;
+        }
+
+        // yield the current process to the chuck vm
+        bool Run() {
+            return vmThread.Wait();
+        }
     };
 
-    t_CKBOOL
-    Create(Chuck ** chuck,
-           const char * chugins[] = {},
-           t_CKUINT nchugins = 0,
-           t_CKBOOL enable_audio = TRUE,
-           t_CKBOOL vm_halt = TRUE,
-           t_CKUINT srate = SAMPLING_RATE_DEFAULT,
-           t_CKUINT buffer_size = BUFFER_SIZE_DEFAULT,
-           t_CKUINT num_buffers = NUM_BUFFERS_DEFAULT,
-           t_CKUINT dac = 0,
-           t_CKUINT adc = 0,
-           t_CKUINT dac_chans = 2,
-           t_CKUINT adc_chans = 2,
-           t_CKBOOL block = FALSE,
-           t_CKINT  adaptive_size = 0,
-           t_CKBOOL force_srate = FALSE) {
+    bool
+    Create(Chuck ** chuck) {
+        const char * chugins[] = {};
+        t_CKUINT nchugins = 0;
+        t_CKBOOL enable_audio = TRUE;
+        t_CKBOOL vm_halt = TRUE;
+        t_CKUINT srate = SAMPLING_RATE_DEFAULT;
+        t_CKUINT buffer_size = BUFFER_SIZE_DEFAULT;
+        t_CKUINT num_buffers = NUM_BUFFERS_DEFAULT;
+        t_CKUINT dac = 0;
+        t_CKUINT adc = 0;
+        t_CKUINT dac_chans = 2;
+        t_CKUINT adc_chans = 2;
+        t_CKBOOL block = FALSE;
+        t_CKINT  adaptive_size = 0;
+        t_CKBOOL force_srate = FALSE;
 
-        Chuck * ck = new Chuck;
+        ChuckImpl * ck = new ChuckImpl;
         t_CKBOOL result = TRUE;
 
         // allocate the vm - needs the type system
@@ -368,54 +371,21 @@ namespace chuck {
             result = FALSE;
         }
 
-        *chuck = ck;
+        if (chuck != NULL) {
+            *chuck = ck;
+        }
 
         return result;
     }
 
-    typedef struct libchuck_env {
-        chuck::Chuck * chuck;
-    } libchuck_env;
-
-    bool Spork(unsigned int files, const char ** filenames) {
-        // Create a new chuck compiler & vm
-        Chuck * chuck;
-        if (! Create(&chuck)) return false;
-
-        // spork some files
-        int i;
-        for (i = 0; i < files; i++) {
-            if (! chuck->sporkFile(filenames[i])) return false;
-        }
-
-        if (chuck_thread != NULL) {
-            delete chuck_thread;
-        }
-
-        // run an event loop and queue up a running
-        // chuck instance
-        libchuck_env * env = new libchuck_env;
-        env->chuck = chuck;
-        chuck_thread = new XThread;
-        chuck_thread->start(&run_chuck, (void *) env);
-
-        usleep(500);
-        return true;
-    }
-
-    // yield the current process to the chuck vm
-    bool Yield() {
-        return chuck_thread->wait(-1, false);
-    }
-
     // send an int to chuck
-    void SendTo(const char * channel, t_CKINT val) {
+    void SendTo(const char * channel, long val) {
         static Events * EVENTS = Events::GetInstance();
         EVENTS->sendTo(channel, val);
     }
 
     // send a float to chuck
-    void SendTo(const char * channel, t_CKFLOAT val) {
+    void SendTo(const char * channel, double val) {
         static Events * EVENTS = Events::GetInstance();
         EVENTS->sendTo(channel, val);
     }
@@ -447,21 +417,25 @@ namespace chuck {
         EVENTS->RegisterStringListener("foo", cb);
     }
 
-}
+    void VMThread::Run(Chuck * ck) {
+        chuck_thread.start(&VMThread::RunChuck, (void *) ck);
+    }
 
-void * run_chuck(void * arg) {
-    using chuck::libchuck_env;
+    void * VMThread::RunChuck(void * arg) {
+        ChuckImpl * chuck = (ChuckImpl *) arg;
+        Events * evs = Events::GetInstance();
 
-    libchuck_env * env = (libchuck_env *) arg;
-    Events * evs = Events::GetInstance();
+        // blocking call to run the chuck vm
+        chuck->run();
+        chuck->Destroy();
 
-    // let chuck run
-    env->chuck->run();
-    env->chuck->Destroy();
+        // clear all the events
+        evs->Clear();
 
-    // clear all the events
-    evs->Clear();
+        return (void *) 1;
+    }
 
-    delete env;
-    return (void *) 1;
+    bool VMThread::Wait() {
+        return chuck_thread.wait(-1, false);
+    }
 }

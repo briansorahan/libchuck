@@ -5,57 +5,41 @@
 #ifndef CHUCK_HPP
 #define CHUCK_HPP
 
-#include <chuck_def.h>
-#include <digiio_rtaudio.h>
-#include <libchuck_types.h>
-
 namespace chuck {
 
-    typedef struct libchuck_env libchuck_env;
+    class Chuck {
+    public:
+        virtual bool Spork(unsigned int files, const char ** filenames) = 0;
+        virtual bool Run() = 0;
+        virtual void Destroy() = 0;
+    };
 
-    typedef void (*int_event_cb)(t_CKINT val);
-    typedef void (*float_event_cb)(t_CKFLOAT val);
+    class Channel {
+    public:
+        static const Channel & channel(const char * s);
+        bool IsInt() const;
+        bool IsFloat() const;
+        bool IsString() const;
+    private:
+        Channel(const char * s);
+    };
+
+    typedef void (*int_event_cb)(long val);
+    typedef void (*float_event_cb)(double val);
     typedef void (*string_event_cb)(const char * s);
 
-    /*
-     * Event receiver types.
-     * Receiving a chuck event in C++ is asynchronous, so the user
-     * must register callbacks.
-     */
-
-    class BaseReceiver {
-    public:
-        // subscribe to events on a channel
-        void ListenTo(const char * channel);
-        // run the callback
-        virtual void Signal(libchuck_channel_data cd) = 0;
-    };
-
-    class IntReceiver : public BaseReceiver {
-    public:
-        static IntReceiver * New(int_event_cb cb);
-    };
-
-    class FloatReceiver : public BaseReceiver {
-    public:
-        static FloatReceiver * New(float_event_cb cb);
-    };
-
-    class StringReceiver : public BaseReceiver {
-    public:
-        static StringReceiver * New(string_event_cb cb);
-    };
+    bool Create(Chuck ** ck);
 
     // spork a file
     bool Spork(unsigned int files, const char ** filenames);
 
     // yield the current process to the chuck vm
-    bool Yield();
+    bool Run();
 
     // send an int to chuck
-    void SendTo(const char * channel, t_CKINT val);
+    void SendTo(const char * channel, long val);
     // send a float to chuck
-    void SendTo(const char * channel, t_CKFLOAT val);
+    void SendTo(const char * channel, double val);
     // send a string to chuck
     void SendTo(const char * channel, const char * val);
 

@@ -1,9 +1,11 @@
-500::ms => now;
+1::ms => dur d;
+
+d => now;
 Events.sendIntTo("foo", 4);
 
-500::ms => now;
+d => now;
 Events.sendFloatTo("bar", 2.71);
 
-500::ms => now;
+d => now;
 Events.sendStringTo("bar", "libchuck");
 
