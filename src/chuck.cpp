@@ -32,33 +32,16 @@ CHUCK_THREAD g_tid_shell = 0;
 // default destination host name
 char g_host[256] = "127.0.0.1";
 
+// Thread off the chuck vm
 XThread * chuck_thread = NULL;
-
-struct libchuck_env {
-    chuck::Chuck * chuck;
-};
-
-void * run_chuck(void * arg) {
-    libchuck_env * env = (libchuck_env *) arg;
-    Events * evs = Events::GetInstance();
-
-    // let chuck run
-    env->chuck->run();
-    env->chuck->Destroy();
-
-    // clear all the events
-    evs->Clear();
-
-    delete env;
-    return (void *) 1;
-}
+void * run_chuck(void * arg);
 
 namespace chuck {
     using std::list;
     using std::string;
     using std::vector;
 
-    class ChuckImpl : public Chuck {
+    class Chuck {
     private:
         Chuck_VM * vm;
         Chuck_Compiler * compiler;
@@ -85,7 +68,7 @@ namespace chuck {
 
     public:
 
-        ChuckImpl() {
+        Chuck() {
             // global variables
 #if defined(__MACOSX_CORE__)
             t_CKINT g_priority = 80;
@@ -351,7 +334,7 @@ namespace chuck {
            t_CKINT  adaptive_size = 0,
            t_CKBOOL force_srate = FALSE) {
 
-        Chuck * ck = new ChuckImpl;
+        Chuck * ck = new Chuck;
         t_CKBOOL result = TRUE;
 
         // allocate the vm - needs the type system
@@ -389,6 +372,10 @@ namespace chuck {
 
         return result;
     }
+
+    typedef struct libchuck_env {
+        chuck::Chuck * chuck;
+    } libchuck_env;
 
     bool Spork(unsigned int files, const char ** filenames) {
         // Create a new chuck compiler & vm
@@ -441,6 +428,8 @@ namespace chuck {
 
     /*
      * TODO: associate callbacks with the channel
+     * TODO: prevent infinite loops when a callback listening on a channel triggers
+     *       an event on that channel
      */
 
     void RegisterIntReceiver(int_event_cb cb) {
@@ -458,4 +447,21 @@ namespace chuck {
         EVENTS->RegisterStringListener("foo", cb);
     }
 
+}
+
+void * run_chuck(void * arg) {
+    using chuck::libchuck_env;
+
+    libchuck_env * env = (libchuck_env *) arg;
+    Events * evs = Events::GetInstance();
+
+    // let chuck run
+    env->chuck->run();
+    env->chuck->Destroy();
+
+    // clear all the events
+    evs->Clear();
+
+    delete env;
+    return (void *) 1;
 }

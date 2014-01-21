@@ -1,22 +1,29 @@
 #include <gtest/gtest.h>
 #include "libchuck_test.hpp"
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 
 bool received_int = false;
+t_CKINT intval;
 bool received_float = false;
+t_CKFLOAT floatval;
 bool received_string = false;
+char strval[8192];
 
 void receive_int(t_CKINT val) {
     received_int = true;
+    intval = val;
 }
 
 void receive_float(t_CKFLOAT val) {
     received_float = true;
+    floatval = val;
 }
 
 void receive_string(const char * s) {
     received_string = true;
+    strcpy(strval, s);
 }
 
 TEST_F(ChuckTest, sporking_single_file_no_args) {
@@ -90,6 +97,9 @@ TEST_F(ChuckTest, triggering_c_events_from_chuck) {
     bool finished = chuck::Yield();
     ASSERT_TRUE(finished);
     ASSERT_TRUE(received_int);
+    ASSERT_EQ(4, intval);
     ASSERT_TRUE(received_float);
+    ASSERT_EQ(2.71, floatval);
     ASSERT_TRUE(received_string);
+    ASSERT_EQ(0, strcmp("libchuck", strval));
 }
