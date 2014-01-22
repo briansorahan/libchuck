@@ -2,18 +2,28 @@
         clean chuck-clean test-clean gtest-clean all-clean \
         test chuck-test-all chuck-osc-test
 
-# TODO(bsorahan): Support mac and windows
+# TODO: Support mac and windows
+
+SOLIB_PREFIX=lib
+SOLIB_EXT=so
+CKNATIVE_PLATFORM=linux
+CKNATIVE_ARCH=$(shell $(CC) -dumpmachine | sed -e 's,-.*,,' -e 's,i[3456]86,x86,' -e 's,amd64,x86_64,')
+JAVA_HOME ?= /usr/lib/jvm/default-java
+PLATFORM_CFLAGS = -DHAVE_LIBDL
 CHUCK_DEFAULT_TARGET=linux-alsa
 
 LIBCHUCK_SRC=src
 CHUCK_SRC=chuck/src
+
 # Get the member list for the initial chuck archive
 include $(CHUCK_SRC)/vars.mk
+
 CK_OBJS := $(addprefix $(CHUCK_SRC)/, $(CK_OBJS))
 CHUCK_BIN=$(CHUCK_SRC)/chuck
 LIBCHUCK_ARCHIVE=$(LIBCHUCK_SRC)/libchuck.a
 LIBCHUCK_EXTENSIONS := util_events.o \
                        ulib_events.o
+LIBCHUCK_SHARED=$(LIBCHUCK_SRC)/$(SOLIB_PREFIX)chuck.$(SOLIB_EXT)
 
 # test
 TEST_DIR=test
@@ -21,7 +31,12 @@ GTEST_DIR=$(TEST_DIR)/gtest-1.7.0
 GTEST_MAKE=$(GTEST_DIR)/make
 GTEST_ARCHIVE=$(GTEST_MAKE)/gtest_main.a
 LIBCHUCK_TEST=$(TEST_DIR)/libchuck_test
+LIBCHUCK_TEST_SRC=$(LIBCHUCK_TEST).cpp
+LIBCHUCK_TEST_OBJ=$(LIBCHUCK_TEST).o
 CHUCK_UTIL_STRING_TEST=$(TEST_DIR)/chuck_util_string_test
+CHUCK_UTIL_STRING_TEST_SRC=$(TEST_DIR)/chuck_util_string_test.cpp
+CHUCK_UTIL_STRING_TEST_OBJ=$(TEST_DIR)/chuck_util_string_test.o
+TEST_OBJS := $(LIBCHUCK_TEST_OBJ) $(CHUCK_UTIL_STRING_TEST_OBJ)
 CHUCK_TESTS=$(TEST_DIR)/ck
 CHUCK_OSC_TESTS=$(CHUCK_TESTS)/osc
 OSC_TEST_CLASSES := OscTestRunner OscTest
@@ -36,37 +51,52 @@ LIBCHUCK_OBJS := $(LIBCHUCK_CXXOBJS)
 
 CXX=g++
 CPPFLAGS := -I$(CHUCK_SRC) -I$(LIBCHUCK_SRC) \
-            -I$(GTEST_DIR)/include \
             -D__LINUX_ALSA__ -D__PLATFORM_LINUX__ \
             -fno-strict-aliasing -D__CK_SNDFILE_NATIVE__
 
+# compiler flags
 ifeq ($(MODE),DEBUG)
-CXXFLAGS := -std=c++11 -g -Wall -Wextra
+CXXFLAGS := -std=c++11 -g -Wall -Wextra -shared -fPIC
 CKFLAGS += CHUCK_DEBUG=1
 else
-CXXFLAGS := -std=c++11 -O3 -Wall -Wextra
+CXXFLAGS := -std=c++11 -O3 -Wall -Wextra -shared -fPIC
 endif
 
-LDFLAGS := -L$(LIBCHUCK_SRC)
-LDLIBS := $(GTEST_ARCHIVE) -lchuck -lasound -lsndfile \
-          -lstdc++ -lpthread -ldl -lm
+TEST_CPPFLAGS := -I$(CHUCK_SRC) -I$(LIBCHUCK_SRC) -I$(GTEST_DIR)/include
+TEST_CXXFLAGS := $(CXXFLAGS)
+
+# linker flags
+LDFLAGS := -L$(LIBCHUCK_SRC) -shared -Wl,-Bsymbolic
+LDLIBS := -lchuck -lasound -lsndfile -lstdc++ -lpthread -ldl -lm
+
+TEST_LDFLAGS := -L$(LIBCHUCK_SRC)
+TEST_LDLIBS := $(GTEST_ARCHIVE) -lchuck -lasound -lsndfile \
+               -lpthread -lstdc++ -ldl -lm
+
+JAVA_DIR=java
 
 libchuck .DEFAULT: $(LIBCHUCK_ARCHIVE)
 
 $(LIBCHUCK_ARCHIVE): $(CK_OBJS) $(LIBCHUCK_OBJS)
 	ar -rcs $(LIBCHUCK_ARCHIVE) $(LIBCHUCK_OBJS) $(CK_OBJS)
 
+$(LIBCHUCK_SHARED): $(LIBCHUCK_ARCHIVE)
+	$(CXX) -shared -o $(LIBCHUCK_SHARED) -Wl,--whole-archive $^ -Wl,--no-whole-archive
+
 $(CK_OBJS) $(CHUCK_BIN):
 	$(MAKE) $(CKFLAGS) -C $(CHUCK_SRC) $(CHUCK_DEFAULT_TARGET)
 
-# --------------
-# Cleaning tasks
-# --------------
+java-bindings: $(LIBCHUCK_SHARED)
+
+# ----------------
+# Cleaning targets
+# ----------------
 
 clean:
 	-rm -f $(LIBCHUCK_OBJS) $(LIBCHUCK_ARCHIVE) \
            $(LIBCHUCK_SRC)/*~ $(CHUCK_SRC)/*~ *~ \
-           $(addprefix $(CHUCK_SRC)/, $(LIBCHUCK_EXTENSIONS))
+           $(addprefix $(CHUCK_SRC)/, $(LIBCHUCK_EXTENSIONS)) \
+           $(LIBCHUCK_SHARED) $(TEST_OBJS)
 
 chuck-clean:
 	$(MAKE) -C $(CHUCK_SRC) clean
@@ -80,14 +110,23 @@ gtest-clean:
 
 all-clean: clean chuck-clean test-clean gtest-clean
 
-# -------------
-# Testing tasks
-# -------------
+# ---------------
+# Testing targets
+# ---------------
 
-test: $(GTEST_ARCHIVE) $(LIBCHUCK_TEST) \
-                       $(CHUCK_UTIL_STRING_TEST)
+test: $(GTEST_ARCHIVE) $(LIBCHUCK_TEST) $(CHUCK_UTIL_STRING_TEST)
 	$(LIBCHUCK_TEST)
 	$(CHUCK_UTIL_STRING_TEST)
+
+$(LIBCHUCK_TEST): $(LIBCHUCK_TEST_OBJ) $(GTEST_ARCHIVE)
+
+$(LIBCHUCK_TEST_OBJ): $(LIBCHUCK_TEST_SRC)
+	$(CXX) $(TEST_CPPFLAGS) $(TEST_CXXFLAGS) -o $@ $^ $(TEST_LDFLAGS) $(TEST_LDLIBS)
+
+$(CHUCK_UTIL_STRING_TEST): $(CHUCK_UTIL_STRING_TEST_OBJ) $(GTEST_ARCHIVE)
+
+$(CHUCK_UTIL_STRING_TEST_OBJ): $(CHUCK_UTIL_STRING_TEST_SRC)
+	$(CXX) $(TEST_CPPFLAGS) $(TEST_CXXFLAGS) -o $@ $^ $(TEST_LDFLAGS) $(TEST_LDLIBS)
 
 chuck-test-all: $(CHUCK_BIN) chuck-osc-test
 
