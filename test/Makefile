@@ -15,6 +15,7 @@ OSC_TEST_CLASSES := $(addprefix $(CHUCK_OSC_TESTS)/classes/, $(OSC_TEST_CLASSES)
 OSC_TEST_CLASSES := $(addsuffix .ck, $(OSC_TEST_CLASSES))
 OSC_TEST_SCRIPTS=$(wildcard $(CHUCK_OSC_TESTS)/*.ck)
 
+CXX=g++
 CPPFLAGS := -I$(CHUCK_SRC) -I$(LIBCHUCK_SRC) -I$(GTEST_DIR)/include
 
 ifeq ($(MODE),DEBUG)
