@@ -28,7 +28,7 @@ void receive_string(const char * s) {
 
 TEST_F(ChuckTest, sporking_single_file_no_args) {
     unsigned int files = 1;
-    const char * filenames[] = { "test/sinetone.ck" };
+    const char * filenames[] = { "sinetone.ck" };
     Spork(files, filenames);
     bool finished = Run();
     ASSERT_TRUE(finished);
@@ -36,7 +36,7 @@ TEST_F(ChuckTest, sporking_single_file_no_args) {
 
 TEST_F(ChuckTest, sporking_single_file_one_arg) {
     unsigned int files = 1;
-    const char * filenames[] = { "test/sinetone.ck:220" };
+    const char * filenames[] = { "sinetone.ck:220" };
     Spork(files, filenames);
     bool finished = Run();
     ASSERT_TRUE(finished);
@@ -45,8 +45,8 @@ TEST_F(ChuckTest, sporking_single_file_one_arg) {
 TEST_F(ChuckTest, sporking_two_files_two_args) {
     unsigned int files = 2;
     const char * filenames[] = {
-        "test/sinetone.ck:440:0.49",
-        "test/sinetone.ck:443:0.49"
+        "sinetone.ck:440:0.49",
+        "sinetone.ck:443:0.49"
     };
     Spork(files, filenames);
     bool finished = Run();
@@ -55,7 +55,7 @@ TEST_F(ChuckTest, sporking_two_files_two_args) {
 
 TEST_F(ChuckTest, sporking_file_that_sporks_again) {
     unsigned int files = 1;
-    const char * filenames[] = { "test/willsporkagain.ck" };
+    const char * filenames[] = { "willsporkagain.ck" };
     Spork(files, filenames);
     bool finished = Run();
     ASSERT_TRUE(finished);
@@ -63,7 +63,7 @@ TEST_F(ChuckTest, sporking_file_that_sporks_again) {
 
 TEST_F(ChuckTest, sporking_file_that_uses_builtin_event_classes) {
     unsigned int files = 1;
-    const char * filenames[] = { "test/event-classes.ck" };
+    const char * filenames[] = { "event-classes.ck" };
     Spork(files, filenames);
     bool finished = Run();
     ASSERT_TRUE(finished);
@@ -71,7 +71,7 @@ TEST_F(ChuckTest, sporking_file_that_uses_builtin_event_classes) {
 
 TEST_F(ChuckTest, sporking_file_that_uses_events) {
     unsigned int files = 1;
-    const char * filenames[] = { "test/events.ck" };
+    const char * filenames[] = { "events.ck" };
     Spork(files, filenames);
     bool finished = Run();
     ASSERT_TRUE(finished);
@@ -79,7 +79,7 @@ TEST_F(ChuckTest, sporking_file_that_uses_events) {
 
 TEST_F(ChuckTest, triggering_events_from_c) {
     unsigned int files = 1;
-    const char * filenames[] = { "test/c2chuck.ck" };
+    const char * filenames[] = { "c2chuck.ck" };
     Spork(files, filenames);
     chuck::SendTo("foo", (t_CKINT) 4);
     bool finished = Run();
@@ -89,7 +89,7 @@ TEST_F(ChuckTest, triggering_events_from_c) {
 TEST_F(ChuckTest, triggering_c_events_from_chuck) {
     skipYield = true;
     unsigned int files = 1;
-    const char * filenames[] = { "test/chuck2c.ck" };
+    const char * filenames[] = { "chuck2c.ck" };
     chuck::RegisterIntReceiver(&receive_int);
     chuck::RegisterFloatReceiver(&receive_float);
     chuck::RegisterStringReceiver(&receive_string);

@@ -14,15 +14,15 @@ namespace chuck {
         virtual void Destroy() = 0;
     };
 
-    class Channel {
-    public:
-        static const Channel & channel(const char * s);
-        bool IsInt() const;
-        bool IsFloat() const;
-        bool IsString() const;
-    private:
-        Channel(const char * s);
-    };
+    // class Channel {
+    // public:
+    //     static const Channel & channel(const char * s);
+    //     bool IsInt() const;
+    //     bool IsFloat() const;
+    //     bool IsString() const;
+    // private:
+    //     Channel(const char * s);
+    // };
 
     typedef void (*int_event_cb)(long val);
     typedef void (*float_event_cb)(double val);
