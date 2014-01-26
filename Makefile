@@ -6,10 +6,6 @@
 
 SOLIB_PREFIX=lib
 SOLIB_EXT=so
-CKNATIVE_PLATFORM=linux
-CKNATIVE_ARCH=$(shell $(CC) -dumpmachine | sed -e 's,-.*,,' -e 's,i[3456]86,x86,' -e 's,amd64,x86_64,')
-JAVA_HOME ?= /usr/lib/jvm/default-java
-PLATFORM_CFLAGS = -DHAVE_LIBDL
 CHUCK_DEFAULT_TARGET=linux-alsa
 
 LIBCHUCK_SRC=src
@@ -26,7 +22,6 @@ CHUCK_BIN=$(CHUCK_SRC)/chuck
 LIBCHUCK_ARCHIVE=$(LIBCHUCK_SRC)/libchuck.a
 LIBCHUCK_EXTENSIONS := util_events.o \
                        ulib_events.o
-LIBCHUCK_SHARED=$(LIBCHUCK_SRC)/$(SOLIB_PREFIX)chuck.$(SOLIB_EXT)
 
 # test
 TEST_DIR=test
@@ -49,16 +44,9 @@ else
 CXXFLAGS := -std=c++11 -O3 -Wall -Wextra -shared -fPIC
 endif
 
-TEST_CPPFLAGS := -I$(CHUCK_SRC) -I$(LIBCHUCK_SRC) -I$(GTEST_DIR)/include
-TEST_CXXFLAGS := $(CXXFLAGS)
-
 # linker flags
 LDFLAGS := -L$(LIBCHUCK_SRC) -shared -Wl,-Bsymbolic
 LDLIBS := -lchuck -lasound -lsndfile -lstdc++ -lpthread -ldl -lm
-
-TEST_LDFLAGS := -L$(LIBCHUCK_SRC)
-TEST_LDLIBS := $(GTEST_ARCHIVE) -lchuck -lasound -lsndfile \
-               -lpthread -lstdc++ -ldl -lm
 
 JAVA_DIR=java
 
@@ -67,13 +55,13 @@ libchuck .DEFAULT: $(LIBCHUCK_ARCHIVE)
 $(LIBCHUCK_ARCHIVE): $(CK_OBJS) $(LIBCHUCK_OBJS)
 	ar -rcs $(LIBCHUCK_ARCHIVE) $(LIBCHUCK_OBJS) $(CK_OBJS)
 
-$(LIBCHUCK_SHARED): $(LIBCHUCK_ARCHIVE)
-	$(CXX) -shared -o $(LIBCHUCK_SHARED) -Wl,--whole-archive $^ -Wl,--no-whole-archive
-
 $(CK_OBJS) $(CHUCK_BIN):
 	$(MAKE) $(CKFLAGS) -C $(CHUCK_SRC) $(CHUCK_DEFAULT_TARGET)
 
-java-bindings: $(LIBCHUCK_SHARED)
+find-jvm:
+
+java-bindings:
+	$(MAKE) -C $(JAVA_DIR)
 
 test:
 	$(MAKE) -C test
@@ -87,7 +75,11 @@ clean:
 chuck-clean:
 	$(MAKE) -C $(CHUCK_SRC) clean
 
+java-clean:
+	$(MAKE) -C $(JAVA_DIR) clean
+
 test-clean:
 	$(MAKE) -C $(TEST_DIR) clean
 
-all-clean: clean chuck-clean test-clean gtest-clean
+all-clean: clean chuck-clean test-clean gtest-clean \
+           java-clean

@@ -7,5 +7,5 @@ d => now;
 Events.sendFloatTo("bar", 2.71);
 
 d => now;
-Events.sendStringTo("bar", "libchuck");
+Events.sendStringTo("baz", "libchuck");
 

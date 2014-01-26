@@ -14,16 +14,6 @@ namespace chuck {
         virtual void Destroy() = 0;
     };
 
-    // class Channel {
-    // public:
-    //     static const Channel & channel(const char * s);
-    //     bool IsInt() const;
-    //     bool IsFloat() const;
-    //     bool IsString() const;
-    // private:
-    //     Channel(const char * s);
-    // };
-
     typedef void (*int_event_cb)(long val);
     typedef void (*float_event_cb)(double val);
     typedef void (*string_event_cb)(const char * s);
@@ -44,11 +34,11 @@ namespace chuck {
     void SendTo(const char * channel, const char * val);
 
     // receive ints from a channel
-    void RegisterIntReceiver(int_event_cb cb);
+    void RegisterIntReceiver(const char * s, int_event_cb cb);
     // receive floats from a channel
-    void RegisterFloatReceiver(float_event_cb cb);
+    void RegisterFloatReceiver(const char * s, float_event_cb cb);
     // receive strings from a channel
-    void RegisterStringReceiver(string_event_cb cb);
+    void RegisterStringReceiver(const char * s, string_event_cb cb);
 
 }
 

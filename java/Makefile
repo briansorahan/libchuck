@@ -1,3 +1,7 @@
+#
+# libchuck - java bindings Makefile
+# Brian Sorahan 2014
+#
 .PHONY: all clean
 
 DEPTH=..
@@ -11,13 +15,14 @@ CHUCK_SRC=$(CHUCK).cpp
 CHUCK_H=$(subst .,_,$(CHUCK_FQN)).h
 SO=libjchuck.so
 
-CPPFLAGS := -I$(JAVA_HOME)/include
+CXX=g++
+CPPFLAGS := -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
 CFLAGS := -Wl,-Bsymbolic -fPIC -shared
 
-all: $(SO)
+all .DEFAULT: $(SO)
 
 $(SO): $(CHUCK_H)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -o $(SO) $(CHUCK_SRC)
+	$(CXX) $(CPPFLAGS) $(CFLAGS) -o $(SO) $(CHUCK_SRC)
 
 $(CHUCK_H): $(CHUCK_CLASS)
 	javah $(CHUCK_FQN)

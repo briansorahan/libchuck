@@ -8,11 +8,7 @@ class ChuckTest : public testing::Test {
 protected:
     Chuck * chuck;
 
-    // Set this to true if you wish to call chuck::Yield yourself.
-    bool skipYield;
-
     void SetUp() {
-        skipYield = false;
         bool created = chuck::Create(&chuck);
         ASSERT_TRUE(created);
     }
