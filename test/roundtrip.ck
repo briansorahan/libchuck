@@ -6,8 +6,8 @@
 // Brian Sorahan
 // bsorahan@gmail.com
 //
-Events.sendIntTo("foo" 1);
+Events.sendIntTo("foo", 1);
 // signal string event on channel 'bar'
 Events.receiveStringFrom("bar") @=> StringEvent barStrings;
 // wait for string from 'bar'
-barStrings => now;
+// barStrings => now;

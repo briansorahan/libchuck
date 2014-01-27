@@ -91,30 +91,38 @@ TEST_F(ChuckTest, triggering_events_from_c) {
 TEST_F(ChuckTest, triggering_c_events_from_chuck) {
     unsigned int files = 1;
     const char * filenames[] = { "chuck2c.ck" };
-    chuck::RegisterIntReceiver("foo", &receive_int);
-    chuck::RegisterFloatReceiver("bar", &receive_float);
-    chuck::RegisterStringReceiver("baz", &receive_string);
+
+    TestIntReceiver intrec;
+    TestFloatReceiver floatrec;
+    TestStringReceiver stringrec;
+
+    chuck::RegisterIntReceiver("foo", &intrec);
+    chuck::RegisterFloatReceiver("bar", &floatrec);
+    chuck::RegisterStringReceiver("baz", &stringrec);
+
     Spork(files, filenames);
     bool finished = Run();
     ASSERT_TRUE(finished);
- 
-    ASSERT_TRUE(received_int);
-    ASSERT_EQ(4, intval);
 
-    ASSERT_TRUE(received_float);
-    ASSERT_EQ(2.71, floatval);
-
-    ASSERT_TRUE(received_string);
-    ASSERT_EQ(0, strcmp("libchuck", strval));
+    intrec.assertReceived(4);
+    floatrec.assertReceived(2.71);
+    stringrec.assertReceived("libchuck");
 }
 
-// void receive_foo_int(t_CKINT val) {
-//     intval = val;
-// }
+bool received_foo_int = false;
+t_CKINT foo_intval;
+void receive_foo_int(t_CKINT val) {
+    foo_intval = val;
+    received_foo_int = true;
+}
 
-// TEST_F(ChuckTest, roundtrip_events) {
-//     unsigned int files = 1;
-//     const char * filenames[] = { "roundtrip.ck" };
-//     received_int = false;
-//     chuck::RegisterIntReceiver(&receive_foo_int);
-// }
+TEST_F(ChuckTest, roundtrip_events) {
+    unsigned int files = 1;
+    const char * filenames[] = { "roundtrip.ck" };
+    TestIntReceiver intrec;
+
+    // chuck::RegisterIntReceiver("foo", &intrec);
+    Spork(files, filenames);
+    bool finished = Run();
+    ASSERT_TRUE(finished);
+}

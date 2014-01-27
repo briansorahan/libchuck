@@ -402,19 +402,19 @@ namespace chuck {
      *       an event on that channel
      */
 
-    void RegisterIntReceiver(const char * s, int_event_cb cb) {
+    void RegisterIntReceiver(const char * s, IntReceiver * recvr) {
         static Events * EVENTS = Events::GetInstance();
-        EVENTS->RegisterIntListener(s, cb);
+        EVENTS->RegisterIntListener(s, recvr);
     }
 
-    void RegisterFloatReceiver(const char * s, float_event_cb cb) {
+    void RegisterFloatReceiver(const char * s, FloatReceiver * recvr) {
         static Events * EVENTS = Events::GetInstance();
-        EVENTS->RegisterFloatListener(s, cb);
+        EVENTS->RegisterFloatListener(s, recvr);
     }
 
-    void RegisterStringReceiver(const char * s, string_event_cb cb) {
+    void RegisterStringReceiver(const char * s, StringReceiver * recvr) {
         static Events * EVENTS = Events::GetInstance();
-        EVENTS->RegisterStringListener(s, cb);
+        EVENTS->RegisterStringListener(s, recvr);
     }
 
     void VMThread::Run(Chuck * ck) {
