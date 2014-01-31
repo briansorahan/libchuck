@@ -38,14 +38,14 @@ CPPFLAGS := -I$(CHUCK_SRC) -I$(LIBCHUCK_SRC) \
 
 # compiler flags
 ifeq ($(MODE),DEBUG)
-CXXFLAGS := -std=c++11 -g -Wall -Wextra -shared -fPIC
+CXXFLAGS := -std=c++11 -g -Wall -Wextra
 CKFLAGS += CHUCK_DEBUG=1
 else
-CXXFLAGS := -std=c++11 -O3 -Wall -Wextra -shared -fPIC
+CXXFLAGS := -std=c++11 -O3 -Wall -Wextra
 endif
 
 # linker flags
-LDFLAGS := -L$(LIBCHUCK_SRC) -shared -Wl,-Bsymbolic
+LDFLAGS := -L$(LIBCHUCK_SRC) #-shared -Wl,-Bsymbolic
 LDLIBS := -lchuck -lasound -lsndfile -lstdc++ -lpthread -ldl -lm
 
 JAVA_DIR=java
@@ -69,8 +69,7 @@ test:
 clean:
 	-rm -f $(LIBCHUCK_OBJS) $(LIBCHUCK_ARCHIVE) \
            $(LIBCHUCK_SRC)/*~ $(CHUCK_SRC)/*~ *~ \
-           $(addprefix $(CHUCK_SRC)/, $(LIBCHUCK_EXTENSIONS)) \
-           $(LIBCHUCK_SHARED)
+           $(addprefix $(CHUCK_SRC)/, $(LIBCHUCK_EXTENSIONS))
 
 chuck-clean:
 	$(MAKE) -C $(CHUCK_SRC) clean

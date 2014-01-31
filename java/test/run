@@ -1,0 +1,6 @@
+#!/bin/bash
+CLASSPATH="$1"
+JAVA_OPTIONS="$2"
+for f in *.java; do
+    echo "java $JAVA_OPTIONS -cp $CLASSPATH ${f//.java/}" | /bin/sh -x
+done

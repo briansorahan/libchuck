@@ -2,7 +2,7 @@
 # libchuck - java bindings Makefile
 # Brian Sorahan 2014
 #
-.PHONY: all clean
+.PHONY: all test clean
 
 DEPTH=..
 
@@ -14,6 +14,8 @@ CHUCK_CLASS=$(CHUCK).class
 CHUCK_SRC=$(CHUCK).cpp
 CHUCK_H=$(subst .,_,$(CHUCK_FQN)).h
 SO=libjchuck.so
+
+TEST_DIR=test
 
 CXX=g++
 CPPFLAGS := -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
@@ -30,5 +32,9 @@ $(CHUCK_H): $(CHUCK_CLASS)
 $(CHUCK_CLASS):
 	javac $(subst .,/,$(CHUCK_FQN)).java
 
+test: $(SO)
+	$(MAKE) -C test
+
 clean:
 	-rm -f $(SO) $(CHUCK_H) $(CHUCK_CLASS) *~
+	$(MAKE) -C $(TEST_DIR) clean
