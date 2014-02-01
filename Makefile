@@ -38,10 +38,10 @@ CPPFLAGS := -I$(CHUCK_SRC) -I$(LIBCHUCK_SRC) \
 
 # compiler flags
 ifeq ($(MODE),DEBUG)
-CXXFLAGS := -std=c++11 -g -Wall -Wextra
+CXXFLAGS := -g -Wall -Wextra
 CKFLAGS += CHUCK_DEBUG=1
 else
-CXXFLAGS := -std=c++11 -O3 -Wall -Wextra
+CXXFLAGS := -O3 -Wall -Wextra
 endif
 
 # linker flags
