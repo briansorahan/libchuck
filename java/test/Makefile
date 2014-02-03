@@ -2,7 +2,7 @@
 
 DEPTH=..
 
-CLASSPATH=$(DEPTH):.
+CLASSPATH=$(DEPTH):.:junit-4.11.jar:hamcrest-core-1.3.jar
 
 JAVA_SRCS=$(wildcard *.java)
 JAVA_CLASSES=$(JAVA_SRCS:.java=.class)

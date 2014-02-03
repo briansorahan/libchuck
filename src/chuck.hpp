@@ -9,33 +9,35 @@ namespace chuck {
 
     class Chuck {
     public:
+        // spork some files
         virtual bool Spork(unsigned int files, const char ** filenames) = 0;
+        // yield the current thread to the chuck vm
         virtual bool Run() = 0;
+        // kill the chuck vm and compiler
         virtual void Destroy() = 0;
     };
 
+    // receive ints from chuck
     class IntReceiver {
     public:
         virtual void receive(long val) = 0;
     };
 
+    // receive floats from chuck
     class FloatReceiver {
     public:
         virtual void receive(double val) = 0;
     };
 
+    // receive strings from chuck
     class StringReceiver {
     public:
         virtual void receive(const char * s) = 0;
     };
 
+    // instantiate the chuck vm and compiler,
+    // and initialize the synthesis subsystem
     bool Create(Chuck ** ck);
-
-    // spork a file
-    bool Spork(unsigned int files, const char ** filenames);
-
-    // yield the current process to the chuck vm
-    bool Run();
 
     // send an int to chuck
     void SendTo(const char * channel, long val);

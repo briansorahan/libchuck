@@ -58,8 +58,6 @@ $(LIBCHUCK_ARCHIVE): $(CK_OBJS) $(LIBCHUCK_OBJS)
 $(CK_OBJS) $(CHUCK_BIN):
 	$(MAKE) $(CKFLAGS) -C $(CHUCK_SRC) $(CHUCK_DEFAULT_TARGET)
 
-find-jvm:
-
 java-bindings:
 	$(MAKE) -C $(JAVA_DIR)
 

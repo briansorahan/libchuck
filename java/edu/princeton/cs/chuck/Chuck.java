@@ -1,12 +1,12 @@
 package edu.princeton.cs.chuck;
 
 public class Chuck {
-    public Chuck() {
-    }
-
     static {
         System.loadLibrary("jchuck");
+        initialize();
     }
+
+    private native static void initialize();
 
     /**
      * Spork some chuck files.
