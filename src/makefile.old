@@ -1,0 +1,199 @@
+# -*- makefile -*-
+
+include vars.mk
+
+DESTDIR=/usr/bin
+
+# default target: print usage message and quit
+current: 
+	@echo "[chuck build]: please use one of the following configurations:"
+	@echo "   make linux-alsa, make linux-jack, make linux-pulse,"
+	@echo "   make osx, make osx-ub, or make win32"
+
+install:
+	cp $(wildcard chuck chuck.exe) $(DESTDIR)/
+	chmod 755 $(DESTDIR)/$(wildcard chuck chuck.exe)
+
+ifneq ($(CK_TARGET),)
+.DEFAULT_GOAL:=$(CK_TARGET)
+ifeq ($(MAKECMDGOALS),)
+MAKECMDGOALS:=$(.DEFAULT_GOAL)
+endif
+endif
+
+.PHONY: osx linux-pulse linux-jack linux-alsa win32 osx-rl
+osx linux-pulse linux-jack linux-alsa win32 osx-rl: chuck
+
+LEX=flex
+YACC=bison
+CC=gcc
+CXX=g++
+LD=g++
+
+# Added libchuck
+# <bsorahan@gmail.com>
+CFLAGS+=-I. -Ilo -I../../src
+
+ifneq ($(CHUCK_STAT),)
+CFLAGS+= -D__CHUCK_STAT_TRACK__
+endif
+
+ifneq ($(CHUCK_DEBUG),)
+CFLAGS+= -g
+else
+CFLAGS+= -O3
+endif
+
+ifneq ($(USE_64_BIT_SAMPLE),)
+CFLAGS+= -D__CHUCK_USE_64_BIT_SAMPLE__
+endif
+
+ifneq ($(CHUCK_STRICT),)
+CFLAGS+= -Wall
+endif
+
+ifneq (,$(strip $(filter osx bin-dist-osx,$(MAKECMDGOALS))))
+include makefile.osx
+endif
+
+ifneq (,$(strip $(filter linux-pulse,$(MAKECMDGOALS))))
+include makefile.pulse
+endif
+
+ifneq (,$(strip $(filter linux-jack,$(MAKECMDGOALS))))
+include makefile.jack
+endif
+
+ifneq (,$(strip $(filter linux-alsa,$(MAKECMDGOALS))))
+include makefile.alsa
+endif
+
+ifneq (,$(strip $(filter win32,$(MAKECMDGOALS))))
+include makefile.win32
+endif
+
+ifneq (,$(strip $(filter osx-rl,$(MAKECMDGOALS))))
+include makefile.rl
+endif
+
+LO_CFLAGS=-DHAVE_CONFIG_H -I.
+
+# remove -arch options
+CFLAGSDEPEND=$(CFLAGS)
+
+ifneq (,$(ARCHS))
+ARCHOPTS=$(addprefix -arch ,$(ARCHS))
+else
+ARCHOPTS=
+endif
+
+NOTES=AUTHORS DEVELOPER PROGRAMMER README TODO COPYING INSTALL QUICKSTART \
+ THANKS VERSIONS
+BIN_NOTES=README.txt
+DOC_NOTES=GOTO
+DIST_DIR=chuck-$(CK_VERSION)
+DIST_DIR_EXE=chuck-$(CK_VERSION)-exe
+CK_SVN=https://chuck-dev.stanford.edu/svn/chuck/
+
+# pull in dependency info for *existing* .o files
+-include $(CK_OBJS:.o=.d)
+
+chuck: $(CK_OBJS)
+	$(LD) -o chuck $(CK_OBJS) $(LDFLAGS) $(ARCHOPTS)
+
+chuck.tab.c chuck.tab.h: chuck.y
+	$(YACC) -dv -b chuck chuck.y
+
+chuck.yy.c: chuck.lex
+	$(LEX) -ochuck.yy.c chuck.lex
+
+chuck_win32.c: chuck.yy.c
+	$(LEX) --nounistd -ochuck.yy.c chuck.lex
+	cat chuck.tab.c chuck.yy.c > $@
+
+chuck_win32.h: chuck.tab.h
+	cat chuck.tab.h > $@
+
+$(CK_COBJS): %.o: %.c
+	$(CC) $(CFLAGS) $(ARCHOPTS) -c $< -o $@
+	@$(CC) -MM -MQ "$@" $(CFLAGSDEPEND) $< > $*.d
+
+$(CK_LO_COBJS): %.o: %.c
+	$(CC) $(CFLAGS) $(LO_CFLAGS) $(ARCHOPTS) -c $< -o $@
+	@$(CC) -MM -MQ "$@" $(CFLAGSDEPEND) $(LO_CFLAGS) $< > $*.d
+
+$(CK_CXXOBJS): %.o: %.cpp
+	$(CXX) $(CFLAGS) $(ARCHOPTS) -c $< -o $@
+	@$(CXX) -MM -MQ "$@" $(CFLAGSDEPEND) $< > $*.d
+
+clean: 
+	@rm -f $(wildcard chuck chuck.exe) *.o *.d $(CK_OBJS) $(patsubst %.o,%.d,$(CK_OBJS)) \
+	*~ chuck.output chuck.tab.h chuck.tab.c chuck.yy.c $(DIST_DIR){,.tgz,.zip}
+
+# ------------------------------------------------------------------------------
+# Distribution meta-targets
+# ------------------------------------------------------------------------------
+
+.PHONY: bin-dist-osx
+bin-dist-osx: osx
+# clean out old dists
+	-rm -rf $(DIST_DIR_EXE){,.tgz,.zip}
+# create directories
+	mkdir $(DIST_DIR_EXE) $(DIST_DIR_EXE)/bin $(DIST_DIR_EXE)/doc
+# copy binary + notes
+	cp chuck $(addprefix ../notes/bin/,$(BIN_NOTES)) $(DIST_DIR_EXE)/bin
+# copy manual + notes
+	cp ../doc/manual/ChucK_manual.pdf $(addprefix ../notes/doc/,$(DOC_NOTES)) $(DIST_DIR_EXE)/doc
+# copy examples
+	svn export $(CK_SVN)/trunk/src/examples $(DIST_DIR_EXE)/examples &> /dev/null
+#cp -r examples $(DIST_DIR_EXE)/examples
+# remove .svn directories
+#-find $(DIST_DIR_EXE)/examples/ -name '.svn' -exec rm -rf '{}' \; &> /dev/null
+# copy notes
+	cp $(addprefix ../notes/,$(NOTES)) $(DIST_DIR_EXE)
+# tar/gzip
+	tar czf $(DIST_DIR_EXE).tgz $(DIST_DIR_EXE)
+
+.PHONY: bin-dist-win32
+bin-dist-win32:
+#	make win32
+# clean out old dists
+	-rm -rf $(DIST_DIR_EXE){,.tgz,.zip}
+# create directories
+	mkdir $(DIST_DIR_EXE) $(DIST_DIR_EXE)/bin $(DIST_DIR_EXE)/doc
+# copy binary + notes
+	cp Release/chuck.exe $(addprefix ../notes/bin/,$(BIN_NOTES)) $(DIST_DIR_EXE)/bin
+# copy manual + notes
+	cp ../doc/manual/ChucK_manual.pdf $(addprefix ../notes/doc/,$(DOC_NOTES)) $(DIST_DIR_EXE)/doc
+# copy examples
+	svn export $(CK_SVN)/trunk/src/examples $(DIST_DIR_EXE)/examples &> /dev/null
+#cp -r examples $(DIST_DIR_EXE)/examples
+# remove .svn directories
+#-find $(DIST_DIR_EXE)/examples/ -name '.svn' -exec rm -rf '{}' \; &> /dev/null
+# copy notes
+	cp $(addprefix ../notes/,$(NOTES)) $(DIST_DIR_EXE)
+# tar/gzip
+	zip -q -9 -r -m $(DIST_DIR_EXE).zip $(DIST_DIR_EXE)
+
+.PHONY: src-dist
+src-dist:
+# clean out old dists
+	rm -rf $(DIST_DIR) $(DIST_DIR){.tgz,.zip}
+# create directories
+	mkdir $(DIST_DIR) $(DIST_DIR)/doc
+# copy src
+	svn export $(CK_SVN)/trunk/src $(DIST_DIR)/src 2>&1 > /dev/null
+	rm -rf $(DIST_DIR)/src/{examples,test}
+# copy manual + notes
+	cp ../doc/manual/ChucK_manual.pdf $(addprefix ../notes/doc/,$(DOC_NOTES)) $(DIST_DIR)/doc
+# copy examples
+	svn export $(CK_SVN)/trunk/src/examples $(DIST_DIR)/examples 2>&1 > /dev/null
+#cp -r examples $(DIST_DIR)/examples
+# remove .svn directories
+#-find $(DIST_DIR)/examples/ -name '.svn' -exec rm -rf '{}' \; &> /dev/null
+# copy notes
+	cp $(addprefix ../notes/,$(NOTES)) $(DIST_DIR)
+# tar/gzip
+	tar czf $(DIST_DIR).tgz $(DIST_DIR)
+
+

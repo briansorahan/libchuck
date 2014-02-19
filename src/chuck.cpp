@@ -21,7 +21,7 @@
 #include <util_thread.h>
 
 // libchuck headers
-#include "chuck.hpp"
+#include "chuck.h"
 
 namespace chuck {
     using std::list;
