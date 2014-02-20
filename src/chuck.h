@@ -2,8 +2,8 @@
  * libchuck
  * Brian Sorahan 2014
  */
-#ifndef CHUCK_HPP
-#define CHUCK_HPP
+#ifndef CHUCK_H
+#define CHUCK_H
 
 namespace chuck {
 
@@ -55,4 +55,4 @@ namespace chuck {
 
 }
 
-#endif // CHUCK_HPP
+#endif // CHUCK_H
