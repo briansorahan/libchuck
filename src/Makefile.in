@@ -56,10 +56,7 @@ subdir = src
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
-	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
-	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -95,7 +92,7 @@ am__uninstall_files_from_dir = { \
   }
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libchuck_la_LIBADD =
+libchuck_la_DEPENDENCIES =
 am_libchuck_la_OBJECTS = chuck.tab.lo chuck.yy.lo util_math.lo \
 	util_network.lo util_raw.lo util_xforms.lo chuck_absyn.lo \
 	chuck_parse.lo chuck_errmsg.lo chuck_frame.lo chuck_symbol.lo \
@@ -381,6 +378,7 @@ libchuck_la_SOURCES = util_console.h \
                 lo/pattern_match.c lo/send.c lo/server.c lo/server_thread.c lo/timetag.c \
                 chuck.cpp
 
+libchuck_la_LIBADD = -lasound -lsndfile -lm -lpthread -ldl
 libchuck_la_LDFLAGS = -release @PACKAGE_VERSION@ -version-info 0:0:0
 include_HEADERS = chuck.h
 all: all-am
