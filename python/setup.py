@@ -8,8 +8,6 @@ module1 = Extension('pychuck',
                     include_dirs           = [ '../src' ],
                     library_dirs           = [ '../src/.libs' ],
                     libraries              = [ 'sndfile', 'asound', 'chuck' ],
-                    runtime_library_dirs   = [ '../src/.libs', '/usr/lib', '/usr/local/lib' ],
-                    # runtime_libraries      = [ 'sndfile', 'asound', 'chuck' ],
                     sources                = [ 'chuckmodule.cpp' ])
 
 setup( name          = 'pychuck',

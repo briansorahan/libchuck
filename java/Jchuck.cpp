@@ -2,8 +2,8 @@
 #include <jni.h>
 #include <stdio.h>
 
-#include "../src/chuck.hpp"
-#include "edu_princeton_cs_chuck_Chuck.h"
+#include "../src/chuck.h"
+#include "edu_princeton_cs_chuck_Jchuck.h"
 
 class JChuck {
 public:
@@ -37,12 +37,12 @@ static JChuck * jchuck = NULL;
  * Method:    initialize
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_edu_princeton_cs_chuck_Chuck_initialize(JNIEnv * env, jclass clazz) {
+JNIEXPORT void JNICALL Java_edu_princeton_cs_chuck_Jchuck_initialize(JNIEnv * env, jclass clazz) {
     jchuck = new JChuck();
 }
 
 // JNI methods
-JNIEXPORT jboolean JNICALL Java_edu_princeton_cs_chuck_Chuck_spork(JNIEnv * env,
+JNIEXPORT jboolean JNICALL Java_edu_princeton_cs_chuck_Jchuck_spork(JNIEnv * env,
                                                                    jobject thisobj,
                                                                    jobjectArray files) {
     assert(jchuck);
@@ -66,7 +66,7 @@ JNIEXPORT jboolean JNICALL Java_edu_princeton_cs_chuck_Chuck_spork(JNIEnv * env,
     return jchuck->Spork((unsigned int) numfiles, filenames);
 }
 
-JNIEXPORT jboolean JNICALL Java_edu_princeton_cs_chuck_Chuck_run(JNIEnv * env, jobject thisobj) {
+JNIEXPORT jboolean JNICALL Java_edu_princeton_cs_chuck_Jchuck_run(JNIEnv * env, jobject thisobj) {
     assert(jchuck);
     return jchuck->Run();
 }

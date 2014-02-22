@@ -102,15 +102,13 @@ libchuck_la_SOURCES = util_console.h \
                 util_events.cpp ulib_events.cpp \
                 lo/address.c lo/blob.c lo/bundle.c lo/message.c lo/method.c \
                 lo/pattern_match.c lo/send.c lo/server.c lo/server_thread.c lo/timetag.c \
-                chuck.cpp
+                chuck.cpp # edu_princeton_cs_chuck_jchuck.h jchuck.cpp
 
 libchuck_la_LIBADD = -lasound -lsndfile -lm -lpthread -ldl
 
 libchuck_la_LDFLAGS = -release @PACKAGE_VERSION@ -version-info 0:0:0
 
 include_HEADERS = chuck.h
-
-# chuck_LDADD = -lasound -lstdc++ -ldl -lm -lsndfile -lpthread
 
 chuck.tab.c chuck.tab.h: chuck.y
 	$(YACC) -dv -b chuck chuck.y
@@ -124,4 +122,3 @@ chuck_win32.c: chuck.yy.c
 
 chuck_win32.h: chuck.tab.h
 	cat chuck.tab.h > $@
-

@@ -1,6 +1,6 @@
 package edu.princeton.cs.chuck;
 
-public class Chuck {
+public class Jchuck {
     static {
         System.loadLibrary("jchuck");
         initialize();
