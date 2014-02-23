@@ -1,7 +1,7 @@
 .PHONY: all clean
 
-CHUCK_SRC=../chuck/src
-LIBCHUCK_SRC=../src
+SRC=../src
+LIBS=$(SRC)/.libs
 GTEST_DIR=gtest-1.7.0
 GTEST_MAKE=$(GTEST_DIR)/make
 GTEST_AR=$(GTEST_MAKE)/gtest_main.a
@@ -16,7 +16,7 @@ OSC_TEST_CLASSES := $(addsuffix .ck, $(OSC_TEST_CLASSES))
 OSC_TEST_SCRIPTS=$(wildcard $(CHUCK_OSC_TESTS)/*.ck)
 
 CXX=g++
-CPPFLAGS := -I$(CHUCK_SRC) -I$(LIBCHUCK_SRC) -I$(GTEST_DIR)/include
+CPPFLAGS := -I$(SRC) -I$(GTEST_DIR)/include -I..
 
 ifeq ($(MODE),DEBUG)
 CXXFLAGS := -std=c++11 -g -Wall -Wextra
@@ -25,8 +25,8 @@ CXXFLAGS := -std=c++11 -O3 -Wall -Wextra
 endif
 
 # linker flags
-LDFLAGS := -L$(LIBCHUCK_SRC)
-LDLIBS := $(GTEST_AR) -lchuck -lasound -lsndfile -lpthread -lstdc++ -ldl -lm
+LDFLAGS := -L$(LIBS)
+LDLIBS := $(GTEST_AR) $(LIBS)/libchuck.a -lasound -lsndfile -lpthread -lstdc++ -ldl -lm
 
 TESTS := $(LIBCHUCK_TEST) \
          $(CHUCK_UTIL_STRING_TEST)

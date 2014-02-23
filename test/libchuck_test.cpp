@@ -6,27 +6,27 @@
 #include <chuck.h>
 #include "libchuck_test.hpp"
 
-bool received_int = false;
-t_CKINT intval;
-bool received_float = false;
-t_CKFLOAT floatval;
-bool received_string = false;
-char strval[8192];
+// bool received_int = false;
+// t_CKINT intval;
+// bool received_float = false;
+// t_CKFLOAT floatval;
+// bool received_string = false;
+// char strval[8192];
 
-void receive_int(t_CKINT val) {
-    received_int = true;
-    intval = val;
-}
+// void receive_int(t_CKINT val) {
+//     received_int = true;
+//     intval = val;
+// }
 
-void receive_float(t_CKFLOAT val) {
-    received_float = true;
-    floatval = val;
-}
+// void receive_float(t_CKFLOAT val) {
+//     received_float = true;
+//     floatval = val;
+// }
 
-void receive_string(const char * s) {
-    received_string = true;
-    strcpy(strval, s);
-}
+// void receive_string(const char * s) {
+//     received_string = true;
+//     strcpy(strval, s);
+// }
 
 TEST_F(ChuckTest, sporking_single_file_no_args) {
     unsigned int files = 1;
