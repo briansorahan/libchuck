@@ -2,6 +2,7 @@
 #include <jni.h>
 #include <stdio.h>
 
+#include "handle.h"
 #include "../src/chuck.h"
 #include "edu_princeton_cs_chuck_Jchuck.h"
 

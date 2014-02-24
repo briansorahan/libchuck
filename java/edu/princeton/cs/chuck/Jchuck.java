@@ -1,6 +1,12 @@
 package edu.princeton.cs.chuck;
 
 public class Jchuck {
+    private long nativeHandle;
+
+    private Jchuck(long handle) {
+        nativeHandle = handle;
+    }
+
     static {
         System.loadLibrary("jchuck");
         initialize();
