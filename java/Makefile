@@ -4,21 +4,25 @@
 #
 .PHONY: all test clean
 
-DEPTH=..
-SRC=$(DEPTH)/src
-LIBS=$(SRC)/.libs
+DEPTH = ..
+SRC = $(DEPTH)/src
+LIBS = $(SRC)/.libs
 
-CHUCK=Jchuck
-CHUCK_PKG=edu.princeton.cs.chuck
-CHUCK_FQN=$(CHUCK_PKG).$(CHUCK)
-CHUCK_JSRC=$(CHUCK).java
-CHUCK_CLASS=$(CHUCK).class
-CHUCK_SRC=$(CHUCK).cpp
-CHUCK_OBJ=$(CHUCK_SRC:.cpp=.o)
-CHUCK_LA=$(LIBS)/libchuck.la
-CHUCK_H=$(subst .,_,$(CHUCK_FQN)).h
-JAVA_DIR=$(subst .,/,$(CHUCK_PKG))
-JAVA_SO=libjchuck.so
+JCHUCK_PKG := edu.princeton.cs.chuck
+JCHUCK_PKG_DIR := $(subst .,/,$(JCHUCK_PKG))
+# JCHUCK_CLASSES := Jchuck IntReceiver FloatReceiver StringReceiver
+JCHUCK_CLASSES := Jchuck
+JCHUCK_CLASSES := $(addprefix $(JCHUCK_PKG).,$(JCHUCK_CLASSES))
+JCHUCK_JAVA_SRCS := $(addsuffix .java,$(subst .,/,$(JCHUCK_CLASSES)))
+JCHUCK_HEADERS := $(subst .java,.h,$(subst /,_,$(JCHUCK_JAVA_SRCS)))
+JCHUCK_CXX_SRCS := $(subst .java,.cpp,$(subst /,_,$(JCHUCK_JAVA_SRCS)))
+JCHUCK_OBJS := $(subst .cpp,.o,$(JCHUCK_CXX_SRCS))
+JCHUCK_CLASS_FILES := $(subst .,/,$(JCHUCK_CLASSES))
+JCHUCK_CLASS_FILES := $(addsuffix .class,$(JCHUCK_CLASS_FILES))
+JCHUCK_CLASSES := $(addsuffix .class,$(JCHUCK_CLASSES))
+
+CHUCK_LA = $(LIBS)/libchuck.la
+JAVA_SO = libjchuck.so
 
 TEST_DIR=test
 
@@ -31,9 +35,12 @@ else
 endif
 LDFLAGS := -Bsymbolic
 
+# Don't remove class files
+.SECONDARY: $(JCHUCK_CLASS_FILES)
+
 all .DEFAULT: $(JAVA_SO)
 
-$(JAVA_SO): $(CHUCK_OBJ) $(CHUCK_LA)
+$(JAVA_SO): $(JCHUCK_OBJS) $(CHUCK_LA)
 	$(CXX) -pthread -shared -L$(LIBS) $(CHUCK_OBJ) \
         -Wl,-R$(LIBS) -Wl,-R/usr/local/lib \
         -lchuck -lsndfile -lasound -ldl -lm \
@@ -42,20 +49,17 @@ $(JAVA_SO): $(CHUCK_OBJ) $(CHUCK_LA)
 $(CHUCK_LA):
 	cd .. && ./configure && make
 
-$(CHUCK_OBJ): $(CHUCK_SRC)
-	$(CXX) $(CPPFLAGS) $(CFLAGS) -c -o $(CHUCK_OBJ) $(CHUCK_SRC)
+$(JCHUCK_OBJS): $(JCHUCK_HEADERS) $(JCHUCK_CXX_SRCS)
 
-$(CHUCK_SRC): $(CHUCK_H)
+edu_princeton_cs_chuck_%.h: edu/princeton/cs/chuck/%.class
+	javah $(JCHUCK_PKG).$*
 
-$(CHUCK_H): $(CHUCK_CLASS)
-	javah $(CHUCK_FQN)
-
-$(CHUCK_CLASS):
-	javac $(subst .,/,$(CHUCK_FQN)).java
+%.class: %.java
+	javac $<
 
 test: $(JAVA_SO)
 	$(MAKE) -C test
 
 clean:
-	-rm -f $(JAVA_SO) $(CHUCK_H) $(JAVA_DIR)/$(CHUCK_CLASS) *~ *.o
+	-rm -f $(JAVA_SO) $(JCHUCK_HEADERS) $(JCHUCK_PKG_DIR)/*.class *~ *.o
 	$(MAKE) -C $(TEST_DIR) clean
