@@ -1,0 +1,15 @@
+libchuck - Embed chuck[1] in your C++/Java/Python apps
+
+Installation
+------------
+Read INSTALL, included with the libchuck distribution.
+
+Usage
+-----
+See README.md, or http://github.com/briansorahan/libchuck.
+
+Reporting Bugs
+--------------
+email <bsorahan@gmail.com>
+
+[1] http://chuck.cs.princeton.edu
