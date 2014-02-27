@@ -1,4 +1,7 @@
 import edu.princeton.cs.chuck.Jchuck;
+import edu.princeton.cs.chuck.IntReceiver;
+import edu.princeton.cs.chuck.FloatReceiver;
+import edu.princeton.cs.chuck.StringReceiver;
 import org.junit.Test;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -30,10 +33,6 @@ public class JchuckTest {
         org.junit.Assert.assertTrue("failed to spork files", sporked);
 
         chucky.go(ck);
-        try {
-            Thread.currentThread().sleep(10000);
-        } catch (InterruptedException ie) {
-        }
 
         boolean finished = ck.run();
         org.junit.Assert.assertTrue(finished);
@@ -115,7 +114,6 @@ public class JchuckTest {
     }
 
     @Test
-    @Ignore
     public void ReceiveEventsFromChuck() {
         String[] files = {
             "../../test/chuck2c.ck"
@@ -135,29 +133,28 @@ class SimpleReceive implements Chucky {
     private final AtomicBoolean receivedFloat;
     private final AtomicBoolean receivedString;
 
-    private final Jchuck.IntReceiver intrec;
-    private final Jchuck.FloatReceiver floatrec;
-    private final Jchuck.StringReceiver stringrec;
+    private final IntReceiver intrec;
+    private final FloatReceiver floatrec;
+    private final StringReceiver stringrec;
 
     SimpleReceive() {
         receivedInt = new AtomicBoolean(false);
         receivedFloat = new AtomicBoolean(false);
         receivedString = new AtomicBoolean(false);
 
-        intrec = new Jchuck.IntReceiver() {
+        intrec = new IntReceiver() {
             public void receive(long val) {
-                System.out.println("got int");
                 receivedInt.getAndSet(true);
             }
         };
 
-        floatrec = new Jchuck.FloatReceiver() {
+        floatrec = new FloatReceiver() {
             public void receive(double val) {
                 receivedFloat.getAndSet(true);
             }
         };
 
-        stringrec = new Jchuck.StringReceiver() {
+        stringrec = new StringReceiver() {
             public void receive(String val) {
                 receivedString.getAndSet(true);
             }

@@ -234,6 +234,10 @@ namespace chuck {
                     all_detach();
                 }
 
+                // if (compiler) {
+                //     compiler->shutdown();
+                // }
+
                 // will this work for windows?
                 SAFE_DELETE( vm );
                 SAFE_DELETE( compiler );
@@ -427,6 +431,7 @@ namespace chuck {
 
         // blocking call to run the chuck vm
         chuck->run();
+
         chuck->Destroy();
 
         // clear all the events

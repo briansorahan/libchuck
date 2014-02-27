@@ -10,20 +10,15 @@ protected:
     Chuck * chuck;
 
     void SetUp() {
-        bool created = chuck::Create(&chuck);
-        ASSERT_TRUE(created);
+        ASSERT_TRUE(chuck::Create(&chuck));
     }
 
     void Spork(unsigned int files, const char ** filenames) {
-        bool sporked = chuck->Spork(files, filenames);
-        ASSERT_TRUE(sporked);
+        ASSERT_TRUE(chuck->Spork(files, filenames));
     }
 
     bool Run() {
         return chuck->Run();
-    }
-
-    void TearDown() {
     }
 };
 

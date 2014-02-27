@@ -637,6 +637,7 @@ t_CKBOOL Chuck_VM::run( )
         {
             // start audio
             if( !m_audio_started ) start_audio();
+            EM_log( CK_LOG_SYSTEM, "real-time audio started..." );
 
             // wait
             while( m_running )
@@ -644,8 +645,11 @@ t_CKBOOL Chuck_VM::run( )
                 if( m_main_thread_hook && m_main_thread_quit )
                     m_main_thread_hook( m_main_thread_bindle );
                 else
+                    // EM_log( CK_LOG_FINEST, "virtual machine sleeping..." );
                     usleep( 1000 );
             }
+            // log
+            EM_log( CK_LOG_SYSTEM, "virtual machine done running..." );
         }
     }
 

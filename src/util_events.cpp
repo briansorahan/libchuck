@@ -44,13 +44,13 @@ public:
     void UnlockFloatEvents();
     void UnlockStringEvents();
 
-    void LockIntCbs();
-    void LockFloatCbs();
-    void LockStringCbs();
+    void LockIntEvs();
+    void LockFloatEvs();
+    void LockStringEvs();
 
-    void UnlockIntCbs();
-    void UnlockFloatCbs();
-    void UnlockStringCbs();
+    void UnlockIntEvs();
+    void UnlockFloatEvs();
+    void UnlockStringEvs();
 
     void Clear();
 
@@ -68,14 +68,14 @@ private:
     map< string, StringEvent * > stringevents;
 
     // Callbacks and their associated mutexes
-    map< string, vector< IntReceiver * > > intcbs;
-    XMutex intcbs_mutex;
+    map< string, vector< IntReceiver * > > intevs;
+    XMutex intevs_mutex;
 
-    map< string, vector< FloatReceiver * > > floatcbs;
-    XMutex floatcbs_mutex;
+    map< string, vector< FloatReceiver * > > floatevs;
+    XMutex floatevs_mutex;
 
-    map< string, vector< StringReceiver * > > stringcbs;
-    XMutex stringcbs_mutex;
+    map< string, vector< StringReceiver * > > stringevs;
+    XMutex stringevs_mutex;
 
 };
 
@@ -123,8 +123,6 @@ StringEvent * EventsImpl::receiveStringFrom(const char * channel) {
     return ev;
 }
 
-// TODO: prevent the c callbacks from triggering an infinite loop!!
-
 Events & EventsImpl::sendTo(const char * channel, t_CKINT val) {
     IntEvent * ev = intevents[channel];
 
@@ -137,9 +135,9 @@ Events & EventsImpl::sendTo(const char * channel, t_CKINT val) {
     }
 
     // copy the vector with the mutex acquired
-    this->LockIntCbs();
-    vector< IntReceiver * > copy = intcbs[channel];
-    this->UnlockIntCbs();
+    this->LockIntEvs();
+    vector< IntReceiver * > copy = intevs[channel];
+    this->UnlockIntEvs();
 
     // trigger the callbacks
     for (vector< IntReceiver * >::iterator it = copy.begin();
@@ -163,9 +161,9 @@ Events & EventsImpl::sendTo(const char * channel, t_CKFLOAT val) {
     }
 
     // copy the vector with the mutex acquired
-    this->LockFloatCbs();
-    vector< FloatReceiver * > copy = floatcbs[channel];
-    this->UnlockFloatCbs();
+    this->LockFloatEvs();
+    vector< FloatReceiver * > copy = floatevs[channel];
+    this->UnlockFloatEvs();
 
     // trigger the callbacks
     for (vector< FloatReceiver * >::iterator it = copy.begin();
@@ -189,9 +187,9 @@ Events & EventsImpl::sendTo(const char * channel, const char * val) {
     }
 
     // copy the vector with the mutex acquired
-    this->LockStringCbs();
-    vector< StringReceiver * > copy = stringcbs[channel];
-    this->UnlockStringCbs();
+    this->LockStringEvs();
+    vector< StringReceiver * > copy = stringevs[channel];
+    this->UnlockStringEvs();
 
     // trigger the callbacks
     for (vector< StringReceiver * >::iterator it = copy.begin();
@@ -234,28 +232,28 @@ void EventsImpl::UnlockStringEvents() {
  * callbacks synchronization
  */
 
-void EventsImpl::LockIntCbs() {
-    intcbs_mutex.acquire();
+void EventsImpl::LockIntEvs() {
+    intevs_mutex.acquire();
 }
 
-void EventsImpl::LockFloatCbs() {
-    floatcbs_mutex.acquire();
+void EventsImpl::LockFloatEvs() {
+    floatevs_mutex.acquire();
 }
 
-void EventsImpl::LockStringCbs() {
-    stringcbs_mutex.acquire();
+void EventsImpl::LockStringEvs() {
+    stringevs_mutex.acquire();
 }
 
-void EventsImpl::UnlockIntCbs() {
-    intcbs_mutex.release();
+void EventsImpl::UnlockIntEvs() {
+    intevs_mutex.release();
 }
 
-void EventsImpl::UnlockFloatCbs() {
-    floatcbs_mutex.release();
+void EventsImpl::UnlockFloatEvs() {
+    floatevs_mutex.release();
 }
 
-void EventsImpl::UnlockStringCbs() {
-    stringcbs_mutex.release();
+void EventsImpl::UnlockStringEvs() {
+    stringevs_mutex.release();
 }
 
 void EventsImpl::Clear() {
@@ -271,33 +269,33 @@ void EventsImpl::Clear() {
     stringevents.clear();
     UnlockStringEvents();
 
-    LockIntCbs();
-    intcbs.clear();
-    UnlockIntCbs();
+    LockIntEvs();
+    intevs.clear();
+    UnlockIntEvs();
 
-    LockFloatCbs();
-    floatcbs.clear();
-    UnlockFloatCbs();
+    LockFloatEvs();
+    floatevs.clear();
+    UnlockFloatEvs();
 
-    LockStringCbs();
-    stringcbs.clear();
-    UnlockStringCbs();
+    LockStringEvs();
+    stringevs.clear();
+    UnlockStringEvs();
 }
 
 void EventsImpl::RegisterIntListener(const char * channel, IntReceiver * cb) {
-    LockIntCbs();
-    intcbs[channel].push_back(cb);
-    UnlockIntCbs();
+    LockIntEvs();
+    intevs[channel].push_back(cb);
+    UnlockIntEvs();
 }
 
 void EventsImpl::RegisterFloatListener(const char * channel, FloatReceiver * cb) {
-    LockFloatCbs();
-    floatcbs[channel].push_back(cb);
-    UnlockFloatCbs();
+    LockFloatEvs();
+    floatevs[channel].push_back(cb);
+    UnlockFloatEvs();
 }
 
 void EventsImpl::RegisterStringListener(const char * channel, StringReceiver * cb) {
-    LockStringCbs();
-    stringcbs[channel].push_back(cb);
-    UnlockStringCbs();
+    LockStringEvs();
+    stringevs[channel].push_back(cb);
+    UnlockStringEvs();
 }

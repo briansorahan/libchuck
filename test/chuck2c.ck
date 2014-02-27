@@ -1,4 +1,4 @@
-1::ms => dur d;
+30::ms => dur d;
 
 d => now;
 Events.sendIntTo("foo", 4);

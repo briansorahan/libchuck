@@ -2,8 +2,8 @@
  * libchuck
  * Brian Sorahan 2014
  */
-#ifndef CHUCK_H
-#define CHUCK_H
+#ifndef _CHUCK_H_INCLUDED
+#define _CHUCK_H_INCLUDED
 
 namespace chuck {
 
@@ -47,12 +47,12 @@ namespace chuck {
     void SendTo(const char * channel, const char * val);
 
     // receive ints from a channel
-    void RegisterIntReceiver(const char * s, IntReceiver * cb);
+    void RegisterIntReceiver(const char * s, IntReceiver * rec);
     // receive floats from a channel
-    void RegisterFloatReceiver(const char * s, FloatReceiver * cb);
+    void RegisterFloatReceiver(const char * s, FloatReceiver * rec);
     // receive strings from a channel
-    void RegisterStringReceiver(const char * s, StringReceiver * cb);
+    void RegisterStringReceiver(const char * s, StringReceiver * rec);
 
 }
 
-#endif // CHUCK_H
+#endif // _CHUCK_H_INCLUDED

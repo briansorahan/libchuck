@@ -41,7 +41,7 @@ LDFLAGS := -Bsymbolic
 all .DEFAULT: $(JAVA_SO)
 
 $(JAVA_SO): $(JCHUCK_OBJS) $(CHUCK_LA)
-	$(CXX) -pthread -shared -L$(LIBS) $(CHUCK_OBJ) \
+	$(CXX) -pthread -shared -L$(LIBS) $(JCHUCK_OBJS) \
         -Wl,-R$(LIBS) -Wl,-R/usr/local/lib \
         -lchuck -lsndfile -lasound -ldl -lm \
         -o $(JAVA_SO)
@@ -50,6 +50,9 @@ $(CHUCK_LA):
 	cd .. && ./configure && make
 
 $(JCHUCK_OBJS): $(JCHUCK_HEADERS) $(JCHUCK_CXX_SRCS)
+
+%.o: %.cpp
+	$(CXX) $(CPPFLAGS) $(CFLAGS) -c -o $@ $< $(LDFLAGS)
 
 edu_princeton_cs_chuck_%.h: edu/princeton/cs/chuck/%.class
 	javah $(JCHUCK_PKG).$*
