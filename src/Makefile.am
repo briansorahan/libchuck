@@ -104,6 +104,8 @@ libchuck_la_SOURCES = util_console.h \
                 lo/pattern_match.c lo/send.c lo/server.c lo/server_thread.c lo/timetag.c \
                 chuck.cpp # edu_princeton_cs_chuck_jchuck.h jchuck.cpp
 
+libchuck_la_CPPFLAGS = -I$(JAVA_HOME)/include
+
 libchuck_la_LIBADD = -lasound -lsndfile -lm -lpthread -ldl
 
 libchuck_la_LDFLAGS = -release @PACKAGE_VERSION@ -version-info 0:0:0

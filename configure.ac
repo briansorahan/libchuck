@@ -50,11 +50,27 @@ AC_TYPE_UINT64_T
 AC_TYPE_UINT8_T
 
 #
-# cribbed from liblo -- bps
+# Java
+#
+AC_ARG_ENABLE(java,
+  [  --enable-java           Enable java bindings],
+  [want_java=$enableval],
+  [want_java=no])
+
+#
+# TODO: check for java system libraries and headers
+#
+if test "x$want_java" = "xyes"; then
+   AC_DEFINE(ENABLE_JAVA, 1, [Define this to enable java])
+fi
+
+#
+# cribbed from liblo [bps]
 #
 # Since we don't require C99, format code for long long int can vary
 # in some compilers.  (In particular, MingW seems to require "I64"
 # instead of "ll")
+#
 AC_MSG_CHECKING([how to print long long int])
 AC_COMPILE_IFELSE(
   [AC_LANG_PROGRAM([#include <stdio.h>],[printf("%lld", (long long int)0);])],
@@ -67,11 +83,11 @@ AC_MSG_RESULT([$printf_ll])
 AC_DEFINE_UNQUOTED([PRINTF_LL],[$printf_ll],[printf code for type long long int])
 
 #
-# cribbed from liblo -- bps
+# cribbed from liblo [bps]
 #
 # Check if threads are wanted
 AC_ARG_ENABLE(threads,
-  [  --enable-threads        Enable server threads],
+  [  --enable-threads        Enable server threads (liblo)],
   [want_threads=$enableval],
   [want_threads=yes])
 

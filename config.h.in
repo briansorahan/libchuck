@@ -8,6 +8,9 @@
 /* Define to 1 if using `alloca.c'. */
 #undef C_ALLOCA
 
+/* Define this to enable java */
+#undef ENABLE_JAVA
+
 /* Define this to enable threads. */
 #undef ENABLE_THREADS
 

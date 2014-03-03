@@ -2,6 +2,12 @@
 #define _XOPEN_SOURCE    500
 #include <unistd.h>
 
+#if HAVE_CONFIG_H
+#include "../config.h"
+#endif
+
+#include <stdio.h>
+#include <stdlib.h>
 #include <list>
 #include <string>
 #include <vector>
@@ -23,17 +29,45 @@
 // libchuck headers
 #include "chuck.h"
 
+//
+// Use jni to attach chuck thread to the jvm.
+//
+#if ENABLE_JAVA
+#include <jni.h>
+#endif
+
 namespace chuck {
     using std::list;
     using std::string;
     using std::vector;
 
+    class ThreadArgs {
+    public:
+#if ENABLE_JAVA
+        ThreadArgs(Chuck * ck, JNIEnv * jenv) { m_chuck = ck; m_jenv = jenv; }
+#else
+        ThreadArgs(Chuck * ck) { m_chuck = ck; }
+#endif
+
+        Chuck * m_chuck;
+
+#if ENABLE_JAVA
+        JNIEnv * m_jenv;
+#endif
+    };
+
     class VMThread {
     public:
         // spawns thread
+#if ENABLE_JAVA
+        void Run(Chuck * ck, JNIEnv * jniEnv);
+#else
         void Run(Chuck * ck);
+#endif
+
         // wait for chuck
         bool Wait();
+
     private:
         XThread chuck_thread;
         // thread function
@@ -65,9 +99,17 @@ namespace chuck {
 
         VMThread vmThread;
 
+#if ENABLE_JAVA
+        JNIEnv * m_jniEnv;
+#endif
+
     public:
 
+#if ENABLE_JAVA
+        ChuckImpl(JNIEnv * jniEnv) {
+#else
         ChuckImpl() {
+#endif
             // global variables
 #if defined(__MACOSX_CORE__)
             t_CKINT g_priority = 80;
@@ -103,6 +145,10 @@ namespace chuck {
             chugin_load = 1; // 1 == auto (variable added 1.3.0.0)
             userNamespaceLoaded = FALSE;
             EM_setlog(log_level);
+
+#if ENABLE_JAVA
+            m_jniEnv = jniEnv;
+#endif
         }
 
         t_CKBOOL initializeVM(t_CKBOOL enable_audio,
@@ -312,7 +358,11 @@ namespace chuck {
                 if (! sporkFile(filenames[i])) return false;
             }
 
+#if ENABLE_JAVA
+            vmThread.Run(this, m_jniEnv);
+#else
             vmThread.Run(this);
+#endif
 
             usleep(500);
             return true;
@@ -324,8 +374,11 @@ namespace chuck {
         }
     };
 
-    bool
-    Create(Chuck ** chuck) {
+#ifdef ENABLE_JAVA
+    bool Create(Chuck ** chuck, JNIEnv * jniEnv) {
+#else
+    bool Create(Chuck ** chuck) {
+#endif
         const char * chugins[] = {};
         t_CKUINT nchugins = 0;
         t_CKBOOL enable_audio = TRUE;
@@ -341,7 +394,11 @@ namespace chuck {
         t_CKINT  adaptive_size = 0;
         t_CKBOOL force_srate = FALSE;
 
+#if ENABLE_JAVA
+        ChuckImpl * ck = new ChuckImpl(jniEnv);
+#else
         ChuckImpl * ck = new ChuckImpl;
+#endif
         t_CKBOOL result = TRUE;
 
         // allocate the vm - needs the type system
@@ -421,13 +478,32 @@ namespace chuck {
         EVENTS->RegisterStringListener(s, recvr);
     }
 
+#if ENABLE_JAVA
+    void VMThread::Run(Chuck * ck, JNIEnv * jenv) {
+        ThreadArgs thrargs(ck, jenv);
+#else
     void VMThread::Run(Chuck * ck) {
-        chuck_thread.start(&VMThread::RunChuck, (void *) ck);
+        ThreadArgs thrargs(ck, NULL);
+#endif
+        chuck_thread.start(&VMThread::RunChuck, (void *) &thrargs);
     }
 
     void * VMThread::RunChuck(void * arg) {
-        ChuckImpl * chuck = (ChuckImpl *) arg;
+        ThreadArgs * thrargs = (ThreadArgs *) arg;
+
+        ChuckImpl * chuck = dynamic_cast< ChuckImpl * >(thrargs->m_chuck);
         Events * evs = Events::GetInstance();
+
+#if ENABLE_JAVA
+        JNIEnv * jenv = thrargs->m_jenv;
+        JavaVM * jvm;
+        jenv->GetJavaVM(&jvm);
+        assert(jvm);
+        if (JNI_OK != jvm->AttachCurrentThread((void **) &jenv, NULL)) {
+            fprintf(stderr, "could not attach chuck thread to jvm\n");
+            exit(EXIT_FAILURE);
+        }
+#endif
 
         // blocking call to run the chuck vm
         chuck->run();
@@ -436,6 +512,13 @@ namespace chuck {
 
         // clear all the events
         evs->Clear();
+
+#if ENABLE_JAVA
+        if (JNI_OK != jvm->DetachCurrentThread()) {
+            fprintf(stderr, "could not detach chuck thread from jvm\n");
+            exit(EXIT_FAILURE);
+        }
+#endif
 
         return (void *) 1;
     }

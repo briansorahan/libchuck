@@ -64,5 +64,5 @@ test: $(JAVA_SO)
 	$(MAKE) -C test
 
 clean:
-	-rm -f $(JAVA_SO) $(JCHUCK_HEADERS) $(JCHUCK_PKG_DIR)/*.class *~ *.o
+	-rm -f $(JAVA_SO) $(JCHUCK_HEADERS) $(JCHUCK_PKG_DIR)/*.class *~ *.o *.class
 	$(MAKE) -C $(TEST_DIR) clean

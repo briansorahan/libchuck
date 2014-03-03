@@ -5,6 +5,14 @@
 #ifndef _CHUCK_H_INCLUDED
 #define _CHUCK_H_INCLUDED
 
+#ifdef HAVE_CONFIG_H
+#include "../config.h"
+#endif
+
+#if ENABLE_JAVA
+#include <jni.h>
+#endif
+
 namespace chuck {
 
     class Chuck {
@@ -37,7 +45,11 @@ namespace chuck {
 
     // instantiate the chuck vm and compiler,
     // and initialize the synthesis subsystem
+#if ENABLE_JAVA
+    bool Create(Chuck ** ck, JNIEnv * jenv);
+#else
     bool Create(Chuck ** ck);
+#endif
 
     // send an int to chuck
     void SendTo(const char * channel, long val);

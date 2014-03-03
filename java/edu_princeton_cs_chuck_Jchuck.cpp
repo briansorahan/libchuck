@@ -17,7 +17,7 @@ using chuck::Chuck;
 JNIEXPORT void JNICALL Java_edu_princeton_cs_chuck_Jchuck_initialize(JNIEnv * env, jobject obj) {
     // jchuck = new JChuck();
     Chuck * ck;
-    chuck::Create(&ck);
+    chuck::Create(&ck, env);
     assert(ck);
     setHandle(env, obj, ck);
 }
@@ -114,18 +114,18 @@ public:
     }
     // receive value from chuck and relay to java
     void receive(long val) {
-        assert(m_jvm);
-        if (JNI_OK != m_jvm->AttachCurrentThread((void **) &m_env, NULL)) {
-            fprintf(stderr, "could not attach chuck thread to jvm\n");
-            exit(EXIT_FAILURE);
-        }
+        // assert(m_jvm);
+        // if (JNI_OK != m_jvm->AttachCurrentThread((void **) &m_env, NULL)) {
+        //     fprintf(stderr, "could not attach chuck thread to jvm\n");
+        //     exit(EXIT_FAILURE);
+        // }
 
         m_env->CallVoidMethod(m_obj, m_receive, (jlong) val);
 
-        if (JNI_OK != m_jvm->DetachCurrentThread()) {
-            fprintf(stderr, "could not detach chuck thread from jvm\n");
-            exit(EXIT_FAILURE);
-        }
+        // if (JNI_OK != m_jvm->DetachCurrentThread()) {
+        //     fprintf(stderr, "could not detach chuck thread from jvm\n");
+        //     exit(EXIT_FAILURE);
+        // }
     }
 };
 
@@ -160,18 +160,18 @@ public:
     }
     // receive value from chuck and relay to java
     void receive(double val) {
-        assert(m_jvm);
-        if (JNI_OK != m_jvm->AttachCurrentThread((void **) &m_env, NULL)) {
-            fprintf(stderr, "could not attach chuck thread to jvm\n");
-            exit(EXIT_FAILURE);
-        }
+        // assert(m_jvm);
+        // if (JNI_OK != m_jvm->AttachCurrentThread((void **) &m_env, NULL)) {
+        //     fprintf(stderr, "could not attach chuck thread to jvm\n");
+        //     exit(EXIT_FAILURE);
+        // }
 
         m_env->CallVoidMethod(m_obj, m_receive, (jdouble) val);
 
-        if (JNI_OK != m_jvm->DetachCurrentThread()) {
-            fprintf(stderr, "could not detach chuck thread from jvm\n");
-            exit(EXIT_FAILURE);
-        }
+        // if (JNI_OK != m_jvm->DetachCurrentThread()) {
+        //     fprintf(stderr, "could not detach chuck thread from jvm\n");
+        //     exit(EXIT_FAILURE);
+        // }
     }
 };
 
@@ -206,19 +206,19 @@ public:
     }
     // receive value from chuck and relay to java
     void receive(const char * val) {
-        assert(m_jvm);
-        if (JNI_OK != m_jvm->AttachCurrentThread((void **) &m_env, NULL)) {
-            fprintf(stderr, "could not attach chuck thread to jvm\n");
-            exit(EXIT_FAILURE);
-        }
+        // assert(m_jvm);
+        // if (JNI_OK != m_jvm->AttachCurrentThread((void **) &m_env, NULL)) {
+        //     fprintf(stderr, "could not attach chuck thread to jvm\n");
+        //     exit(EXIT_FAILURE);
+        // }
 
         jstring str = m_env->NewStringUTF(val);
         m_env->CallVoidMethod(m_obj, m_receive, str);
 
-        if (JNI_OK != m_jvm->DetachCurrentThread()) {
-            fprintf(stderr, "could not detach chuck thread from jvm\n");
-            exit(EXIT_FAILURE);
-        }
+        // if (JNI_OK != m_jvm->DetachCurrentThread()) {
+        //     fprintf(stderr, "could not detach chuck thread from jvm\n");
+        //     exit(EXIT_FAILURE);
+        // }
     }
 };
 

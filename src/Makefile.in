@@ -93,23 +93,40 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libchuck_la_DEPENDENCIES =
-am_libchuck_la_OBJECTS = chuck.tab.lo chuck.yy.lo util_math.lo \
-	util_network.lo util_raw.lo util_xforms.lo chuck_absyn.lo \
-	chuck_parse.lo chuck_errmsg.lo chuck_frame.lo chuck_symbol.lo \
-	chuck_table.lo chuck_utils.lo chuck_vm.lo chuck_instr.lo \
-	chuck_scan.lo chuck_type.lo chuck_emit.lo chuck_compile.lo \
-	chuck_dl.lo chuck_oo.lo chuck_lang.lo chuck_ugen.lo \
-	chuck_main.lo chuck_otf.lo chuck_stats.lo chuck_bbq.lo \
-	chuck_shell.lo chuck_console.lo chuck_globals.lo chuck_io.lo \
-	digiio_rtaudio.lo hidio_sdl.lo midiio_rtmidi.lo RtAudio.lo \
-	rtmidi.lo ugen_osc.lo ugen_filter.lo ugen_stk.lo ugen_xxx.lo \
-	ulib_machine.lo ulib_math.lo ulib_std.lo ulib_opsc.lo \
-	ulib_regex.lo util_buffers.lo util_console.lo util_string.lo \
-	util_thread.lo util_opsc.lo util_serial.lo util_hid.lo \
-	uana_xform.lo uana_extract.lo util_events.lo ulib_events.lo \
-	address.lo blob.lo bundle.lo message.lo method.lo \
-	pattern_match.lo send.lo server.lo server_thread.lo timetag.lo \
-	chuck.lo
+am_libchuck_la_OBJECTS = libchuck_la-chuck.tab.lo \
+	libchuck_la-chuck.yy.lo libchuck_la-util_math.lo \
+	libchuck_la-util_network.lo libchuck_la-util_raw.lo \
+	libchuck_la-util_xforms.lo libchuck_la-chuck_absyn.lo \
+	libchuck_la-chuck_parse.lo libchuck_la-chuck_errmsg.lo \
+	libchuck_la-chuck_frame.lo libchuck_la-chuck_symbol.lo \
+	libchuck_la-chuck_table.lo libchuck_la-chuck_utils.lo \
+	libchuck_la-chuck_vm.lo libchuck_la-chuck_instr.lo \
+	libchuck_la-chuck_scan.lo libchuck_la-chuck_type.lo \
+	libchuck_la-chuck_emit.lo libchuck_la-chuck_compile.lo \
+	libchuck_la-chuck_dl.lo libchuck_la-chuck_oo.lo \
+	libchuck_la-chuck_lang.lo libchuck_la-chuck_ugen.lo \
+	libchuck_la-chuck_main.lo libchuck_la-chuck_otf.lo \
+	libchuck_la-chuck_stats.lo libchuck_la-chuck_bbq.lo \
+	libchuck_la-chuck_shell.lo libchuck_la-chuck_console.lo \
+	libchuck_la-chuck_globals.lo libchuck_la-chuck_io.lo \
+	libchuck_la-digiio_rtaudio.lo libchuck_la-hidio_sdl.lo \
+	libchuck_la-midiio_rtmidi.lo libchuck_la-RtAudio.lo \
+	libchuck_la-rtmidi.lo libchuck_la-ugen_osc.lo \
+	libchuck_la-ugen_filter.lo libchuck_la-ugen_stk.lo \
+	libchuck_la-ugen_xxx.lo libchuck_la-ulib_machine.lo \
+	libchuck_la-ulib_math.lo libchuck_la-ulib_std.lo \
+	libchuck_la-ulib_opsc.lo libchuck_la-ulib_regex.lo \
+	libchuck_la-util_buffers.lo libchuck_la-util_console.lo \
+	libchuck_la-util_string.lo libchuck_la-util_thread.lo \
+	libchuck_la-util_opsc.lo libchuck_la-util_serial.lo \
+	libchuck_la-util_hid.lo libchuck_la-uana_xform.lo \
+	libchuck_la-uana_extract.lo libchuck_la-util_events.lo \
+	libchuck_la-ulib_events.lo libchuck_la-address.lo \
+	libchuck_la-blob.lo libchuck_la-bundle.lo \
+	libchuck_la-message.lo libchuck_la-method.lo \
+	libchuck_la-pattern_match.lo libchuck_la-send.lo \
+	libchuck_la-server.lo libchuck_la-server_thread.lo \
+	libchuck_la-timetag.lo libchuck_la-chuck.lo
 libchuck_la_OBJECTS = $(am_libchuck_la_OBJECTS)
 libchuck_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
@@ -378,6 +395,7 @@ libchuck_la_SOURCES = util_console.h \
                 lo/pattern_match.c lo/send.c lo/server.c lo/server_thread.c lo/timetag.c \
                 chuck.cpp # edu_princeton_cs_chuck_jchuck.h jchuck.cpp
 
+libchuck_la_CPPFLAGS = -I$(JAVA_HOME)/include
 libchuck_la_LIBADD = -lasound -lsndfile -lm -lpthread -ldl
 libchuck_la_LDFLAGS = -release @PACKAGE_VERSION@ -version-info 0:0:0
 include_HEADERS = chuck.h
@@ -456,73 +474,73 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RtAudio.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/address.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/blob.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bundle.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck.tab.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck.yy.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_absyn.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_bbq.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_compile.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_console.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_dl.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_emit.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_errmsg.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_frame.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_globals.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_instr.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_io.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_lang.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_main.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_oo.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_otf.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_parse.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_scan.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_shell.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_stats.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_symbol.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_table.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_type.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_ugen.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_utils.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chuck_vm.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/digiio_rtaudio.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hidio_sdl.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/message.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/method.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/midiio_rtmidi.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pattern_match.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rtmidi.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/send.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/server.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/server_thread.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/timetag.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/uana_extract.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/uana_xform.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ugen_filter.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ugen_osc.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ugen_stk.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ugen_xxx.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulib_events.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulib_machine.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulib_math.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulib_opsc.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulib_regex.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulib_std.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_buffers.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_console.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_events.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_hid.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_math.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_network.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_opsc.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_raw.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_serial.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_string.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_thread.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_xforms.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-RtAudio.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-address.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-blob.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-bundle.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck.tab.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck.yy.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_absyn.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_bbq.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_compile.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_console.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_dl.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_emit.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_errmsg.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_frame.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_globals.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_instr.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_io.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_lang.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_main.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_oo.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_otf.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_parse.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_scan.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_shell.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_stats.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_symbol.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_table.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_type.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_ugen.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_utils.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_vm.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-digiio_rtaudio.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-hidio_sdl.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-message.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-method.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-midiio_rtmidi.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-pattern_match.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-rtmidi.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-send.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-server.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-server_thread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-timetag.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-uana_extract.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-uana_xform.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-ugen_filter.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-ugen_osc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-ugen_stk.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-ugen_xxx.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-ulib_events.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-ulib_machine.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-ulib_math.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-ulib_opsc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-ulib_regex.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-ulib_std.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-util_buffers.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-util_console.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-util_events.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-util_hid.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-util_math.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-util_network.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-util_opsc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-util_raw.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-util_serial.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-util_string.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-util_thread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-util_xforms.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -545,75 +563,117 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
-address.lo: lo/address.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT address.lo -MD -MP -MF $(DEPDIR)/address.Tpo -c -o address.lo `test -f 'lo/address.c' || echo '$(srcdir)/'`lo/address.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/address.Tpo $(DEPDIR)/address.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/address.c' object='address.lo' libtool=yes @AMDEPBACKSLASH@
+libchuck_la-chuck.tab.lo: chuck.tab.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-chuck.tab.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck.tab.Tpo -c -o libchuck_la-chuck.tab.lo `test -f 'chuck.tab.c' || echo '$(srcdir)/'`chuck.tab.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck.tab.Tpo $(DEPDIR)/libchuck_la-chuck.tab.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='chuck.tab.c' object='libchuck_la-chuck.tab.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o address.lo `test -f 'lo/address.c' || echo '$(srcdir)/'`lo/address.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-chuck.tab.lo `test -f 'chuck.tab.c' || echo '$(srcdir)/'`chuck.tab.c
 
-blob.lo: lo/blob.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT blob.lo -MD -MP -MF $(DEPDIR)/blob.Tpo -c -o blob.lo `test -f 'lo/blob.c' || echo '$(srcdir)/'`lo/blob.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/blob.Tpo $(DEPDIR)/blob.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/blob.c' object='blob.lo' libtool=yes @AMDEPBACKSLASH@
+libchuck_la-chuck.yy.lo: chuck.yy.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-chuck.yy.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck.yy.Tpo -c -o libchuck_la-chuck.yy.lo `test -f 'chuck.yy.c' || echo '$(srcdir)/'`chuck.yy.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck.yy.Tpo $(DEPDIR)/libchuck_la-chuck.yy.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='chuck.yy.c' object='libchuck_la-chuck.yy.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o blob.lo `test -f 'lo/blob.c' || echo '$(srcdir)/'`lo/blob.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-chuck.yy.lo `test -f 'chuck.yy.c' || echo '$(srcdir)/'`chuck.yy.c
 
-bundle.lo: lo/bundle.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT bundle.lo -MD -MP -MF $(DEPDIR)/bundle.Tpo -c -o bundle.lo `test -f 'lo/bundle.c' || echo '$(srcdir)/'`lo/bundle.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/bundle.Tpo $(DEPDIR)/bundle.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/bundle.c' object='bundle.lo' libtool=yes @AMDEPBACKSLASH@
+libchuck_la-util_math.lo: util_math.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-util_math.lo -MD -MP -MF $(DEPDIR)/libchuck_la-util_math.Tpo -c -o libchuck_la-util_math.lo `test -f 'util_math.c' || echo '$(srcdir)/'`util_math.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-util_math.Tpo $(DEPDIR)/libchuck_la-util_math.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='util_math.c' object='libchuck_la-util_math.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o bundle.lo `test -f 'lo/bundle.c' || echo '$(srcdir)/'`lo/bundle.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-util_math.lo `test -f 'util_math.c' || echo '$(srcdir)/'`util_math.c
 
-message.lo: lo/message.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT message.lo -MD -MP -MF $(DEPDIR)/message.Tpo -c -o message.lo `test -f 'lo/message.c' || echo '$(srcdir)/'`lo/message.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/message.Tpo $(DEPDIR)/message.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/message.c' object='message.lo' libtool=yes @AMDEPBACKSLASH@
+libchuck_la-util_network.lo: util_network.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-util_network.lo -MD -MP -MF $(DEPDIR)/libchuck_la-util_network.Tpo -c -o libchuck_la-util_network.lo `test -f 'util_network.c' || echo '$(srcdir)/'`util_network.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-util_network.Tpo $(DEPDIR)/libchuck_la-util_network.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='util_network.c' object='libchuck_la-util_network.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o message.lo `test -f 'lo/message.c' || echo '$(srcdir)/'`lo/message.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-util_network.lo `test -f 'util_network.c' || echo '$(srcdir)/'`util_network.c
 
-method.lo: lo/method.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT method.lo -MD -MP -MF $(DEPDIR)/method.Tpo -c -o method.lo `test -f 'lo/method.c' || echo '$(srcdir)/'`lo/method.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/method.Tpo $(DEPDIR)/method.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/method.c' object='method.lo' libtool=yes @AMDEPBACKSLASH@
+libchuck_la-util_raw.lo: util_raw.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-util_raw.lo -MD -MP -MF $(DEPDIR)/libchuck_la-util_raw.Tpo -c -o libchuck_la-util_raw.lo `test -f 'util_raw.c' || echo '$(srcdir)/'`util_raw.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-util_raw.Tpo $(DEPDIR)/libchuck_la-util_raw.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='util_raw.c' object='libchuck_la-util_raw.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o method.lo `test -f 'lo/method.c' || echo '$(srcdir)/'`lo/method.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-util_raw.lo `test -f 'util_raw.c' || echo '$(srcdir)/'`util_raw.c
 
-pattern_match.lo: lo/pattern_match.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT pattern_match.lo -MD -MP -MF $(DEPDIR)/pattern_match.Tpo -c -o pattern_match.lo `test -f 'lo/pattern_match.c' || echo '$(srcdir)/'`lo/pattern_match.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/pattern_match.Tpo $(DEPDIR)/pattern_match.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/pattern_match.c' object='pattern_match.lo' libtool=yes @AMDEPBACKSLASH@
+libchuck_la-util_xforms.lo: util_xforms.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-util_xforms.lo -MD -MP -MF $(DEPDIR)/libchuck_la-util_xforms.Tpo -c -o libchuck_la-util_xforms.lo `test -f 'util_xforms.c' || echo '$(srcdir)/'`util_xforms.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-util_xforms.Tpo $(DEPDIR)/libchuck_la-util_xforms.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='util_xforms.c' object='libchuck_la-util_xforms.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o pattern_match.lo `test -f 'lo/pattern_match.c' || echo '$(srcdir)/'`lo/pattern_match.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-util_xforms.lo `test -f 'util_xforms.c' || echo '$(srcdir)/'`util_xforms.c
 
-send.lo: lo/send.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT send.lo -MD -MP -MF $(DEPDIR)/send.Tpo -c -o send.lo `test -f 'lo/send.c' || echo '$(srcdir)/'`lo/send.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/send.Tpo $(DEPDIR)/send.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/send.c' object='send.lo' libtool=yes @AMDEPBACKSLASH@
+libchuck_la-address.lo: lo/address.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-address.lo -MD -MP -MF $(DEPDIR)/libchuck_la-address.Tpo -c -o libchuck_la-address.lo `test -f 'lo/address.c' || echo '$(srcdir)/'`lo/address.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-address.Tpo $(DEPDIR)/libchuck_la-address.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/address.c' object='libchuck_la-address.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o send.lo `test -f 'lo/send.c' || echo '$(srcdir)/'`lo/send.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-address.lo `test -f 'lo/address.c' || echo '$(srcdir)/'`lo/address.c
 
-server.lo: lo/server.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT server.lo -MD -MP -MF $(DEPDIR)/server.Tpo -c -o server.lo `test -f 'lo/server.c' || echo '$(srcdir)/'`lo/server.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/server.Tpo $(DEPDIR)/server.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/server.c' object='server.lo' libtool=yes @AMDEPBACKSLASH@
+libchuck_la-blob.lo: lo/blob.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-blob.lo -MD -MP -MF $(DEPDIR)/libchuck_la-blob.Tpo -c -o libchuck_la-blob.lo `test -f 'lo/blob.c' || echo '$(srcdir)/'`lo/blob.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-blob.Tpo $(DEPDIR)/libchuck_la-blob.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/blob.c' object='libchuck_la-blob.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o server.lo `test -f 'lo/server.c' || echo '$(srcdir)/'`lo/server.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-blob.lo `test -f 'lo/blob.c' || echo '$(srcdir)/'`lo/blob.c
 
-server_thread.lo: lo/server_thread.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT server_thread.lo -MD -MP -MF $(DEPDIR)/server_thread.Tpo -c -o server_thread.lo `test -f 'lo/server_thread.c' || echo '$(srcdir)/'`lo/server_thread.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/server_thread.Tpo $(DEPDIR)/server_thread.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/server_thread.c' object='server_thread.lo' libtool=yes @AMDEPBACKSLASH@
+libchuck_la-bundle.lo: lo/bundle.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-bundle.lo -MD -MP -MF $(DEPDIR)/libchuck_la-bundle.Tpo -c -o libchuck_la-bundle.lo `test -f 'lo/bundle.c' || echo '$(srcdir)/'`lo/bundle.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-bundle.Tpo $(DEPDIR)/libchuck_la-bundle.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/bundle.c' object='libchuck_la-bundle.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o server_thread.lo `test -f 'lo/server_thread.c' || echo '$(srcdir)/'`lo/server_thread.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-bundle.lo `test -f 'lo/bundle.c' || echo '$(srcdir)/'`lo/bundle.c
 
-timetag.lo: lo/timetag.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT timetag.lo -MD -MP -MF $(DEPDIR)/timetag.Tpo -c -o timetag.lo `test -f 'lo/timetag.c' || echo '$(srcdir)/'`lo/timetag.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/timetag.Tpo $(DEPDIR)/timetag.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/timetag.c' object='timetag.lo' libtool=yes @AMDEPBACKSLASH@
+libchuck_la-message.lo: lo/message.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-message.lo -MD -MP -MF $(DEPDIR)/libchuck_la-message.Tpo -c -o libchuck_la-message.lo `test -f 'lo/message.c' || echo '$(srcdir)/'`lo/message.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-message.Tpo $(DEPDIR)/libchuck_la-message.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/message.c' object='libchuck_la-message.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o timetag.lo `test -f 'lo/timetag.c' || echo '$(srcdir)/'`lo/timetag.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-message.lo `test -f 'lo/message.c' || echo '$(srcdir)/'`lo/message.c
+
+libchuck_la-method.lo: lo/method.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-method.lo -MD -MP -MF $(DEPDIR)/libchuck_la-method.Tpo -c -o libchuck_la-method.lo `test -f 'lo/method.c' || echo '$(srcdir)/'`lo/method.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-method.Tpo $(DEPDIR)/libchuck_la-method.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/method.c' object='libchuck_la-method.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-method.lo `test -f 'lo/method.c' || echo '$(srcdir)/'`lo/method.c
+
+libchuck_la-pattern_match.lo: lo/pattern_match.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-pattern_match.lo -MD -MP -MF $(DEPDIR)/libchuck_la-pattern_match.Tpo -c -o libchuck_la-pattern_match.lo `test -f 'lo/pattern_match.c' || echo '$(srcdir)/'`lo/pattern_match.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-pattern_match.Tpo $(DEPDIR)/libchuck_la-pattern_match.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/pattern_match.c' object='libchuck_la-pattern_match.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-pattern_match.lo `test -f 'lo/pattern_match.c' || echo '$(srcdir)/'`lo/pattern_match.c
+
+libchuck_la-send.lo: lo/send.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-send.lo -MD -MP -MF $(DEPDIR)/libchuck_la-send.Tpo -c -o libchuck_la-send.lo `test -f 'lo/send.c' || echo '$(srcdir)/'`lo/send.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-send.Tpo $(DEPDIR)/libchuck_la-send.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/send.c' object='libchuck_la-send.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-send.lo `test -f 'lo/send.c' || echo '$(srcdir)/'`lo/send.c
+
+libchuck_la-server.lo: lo/server.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-server.lo -MD -MP -MF $(DEPDIR)/libchuck_la-server.Tpo -c -o libchuck_la-server.lo `test -f 'lo/server.c' || echo '$(srcdir)/'`lo/server.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-server.Tpo $(DEPDIR)/libchuck_la-server.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/server.c' object='libchuck_la-server.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-server.lo `test -f 'lo/server.c' || echo '$(srcdir)/'`lo/server.c
+
+libchuck_la-server_thread.lo: lo/server_thread.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-server_thread.lo -MD -MP -MF $(DEPDIR)/libchuck_la-server_thread.Tpo -c -o libchuck_la-server_thread.lo `test -f 'lo/server_thread.c' || echo '$(srcdir)/'`lo/server_thread.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-server_thread.Tpo $(DEPDIR)/libchuck_la-server_thread.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/server_thread.c' object='libchuck_la-server_thread.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-server_thread.lo `test -f 'lo/server_thread.c' || echo '$(srcdir)/'`lo/server_thread.c
+
+libchuck_la-timetag.lo: lo/timetag.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libchuck_la-timetag.lo -MD -MP -MF $(DEPDIR)/libchuck_la-timetag.Tpo -c -o libchuck_la-timetag.lo `test -f 'lo/timetag.c' || echo '$(srcdir)/'`lo/timetag.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-timetag.Tpo $(DEPDIR)/libchuck_la-timetag.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lo/timetag.c' object='libchuck_la-timetag.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libchuck_la-timetag.lo `test -f 'lo/timetag.c' || echo '$(srcdir)/'`lo/timetag.c
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -636,12 +696,362 @@ timetag.lo: lo/timetag.c
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
-RtAudio.lo: RtAudio/RtAudio.cpp
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT RtAudio.lo -MD -MP -MF $(DEPDIR)/RtAudio.Tpo -c -o RtAudio.lo `test -f 'RtAudio/RtAudio.cpp' || echo '$(srcdir)/'`RtAudio/RtAudio.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/RtAudio.Tpo $(DEPDIR)/RtAudio.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='RtAudio/RtAudio.cpp' object='RtAudio.lo' libtool=yes @AMDEPBACKSLASH@
+libchuck_la-chuck_absyn.lo: chuck_absyn.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_absyn.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_absyn.Tpo -c -o libchuck_la-chuck_absyn.lo `test -f 'chuck_absyn.cpp' || echo '$(srcdir)/'`chuck_absyn.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_absyn.Tpo $(DEPDIR)/libchuck_la-chuck_absyn.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_absyn.cpp' object='libchuck_la-chuck_absyn.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o RtAudio.lo `test -f 'RtAudio/RtAudio.cpp' || echo '$(srcdir)/'`RtAudio/RtAudio.cpp
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_absyn.lo `test -f 'chuck_absyn.cpp' || echo '$(srcdir)/'`chuck_absyn.cpp
+
+libchuck_la-chuck_parse.lo: chuck_parse.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_parse.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_parse.Tpo -c -o libchuck_la-chuck_parse.lo `test -f 'chuck_parse.cpp' || echo '$(srcdir)/'`chuck_parse.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_parse.Tpo $(DEPDIR)/libchuck_la-chuck_parse.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_parse.cpp' object='libchuck_la-chuck_parse.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_parse.lo `test -f 'chuck_parse.cpp' || echo '$(srcdir)/'`chuck_parse.cpp
+
+libchuck_la-chuck_errmsg.lo: chuck_errmsg.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_errmsg.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_errmsg.Tpo -c -o libchuck_la-chuck_errmsg.lo `test -f 'chuck_errmsg.cpp' || echo '$(srcdir)/'`chuck_errmsg.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_errmsg.Tpo $(DEPDIR)/libchuck_la-chuck_errmsg.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_errmsg.cpp' object='libchuck_la-chuck_errmsg.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_errmsg.lo `test -f 'chuck_errmsg.cpp' || echo '$(srcdir)/'`chuck_errmsg.cpp
+
+libchuck_la-chuck_frame.lo: chuck_frame.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_frame.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_frame.Tpo -c -o libchuck_la-chuck_frame.lo `test -f 'chuck_frame.cpp' || echo '$(srcdir)/'`chuck_frame.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_frame.Tpo $(DEPDIR)/libchuck_la-chuck_frame.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_frame.cpp' object='libchuck_la-chuck_frame.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_frame.lo `test -f 'chuck_frame.cpp' || echo '$(srcdir)/'`chuck_frame.cpp
+
+libchuck_la-chuck_symbol.lo: chuck_symbol.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_symbol.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_symbol.Tpo -c -o libchuck_la-chuck_symbol.lo `test -f 'chuck_symbol.cpp' || echo '$(srcdir)/'`chuck_symbol.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_symbol.Tpo $(DEPDIR)/libchuck_la-chuck_symbol.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_symbol.cpp' object='libchuck_la-chuck_symbol.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_symbol.lo `test -f 'chuck_symbol.cpp' || echo '$(srcdir)/'`chuck_symbol.cpp
+
+libchuck_la-chuck_table.lo: chuck_table.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_table.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_table.Tpo -c -o libchuck_la-chuck_table.lo `test -f 'chuck_table.cpp' || echo '$(srcdir)/'`chuck_table.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_table.Tpo $(DEPDIR)/libchuck_la-chuck_table.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_table.cpp' object='libchuck_la-chuck_table.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_table.lo `test -f 'chuck_table.cpp' || echo '$(srcdir)/'`chuck_table.cpp
+
+libchuck_la-chuck_utils.lo: chuck_utils.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_utils.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_utils.Tpo -c -o libchuck_la-chuck_utils.lo `test -f 'chuck_utils.cpp' || echo '$(srcdir)/'`chuck_utils.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_utils.Tpo $(DEPDIR)/libchuck_la-chuck_utils.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_utils.cpp' object='libchuck_la-chuck_utils.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_utils.lo `test -f 'chuck_utils.cpp' || echo '$(srcdir)/'`chuck_utils.cpp
+
+libchuck_la-chuck_vm.lo: chuck_vm.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_vm.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_vm.Tpo -c -o libchuck_la-chuck_vm.lo `test -f 'chuck_vm.cpp' || echo '$(srcdir)/'`chuck_vm.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_vm.Tpo $(DEPDIR)/libchuck_la-chuck_vm.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_vm.cpp' object='libchuck_la-chuck_vm.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_vm.lo `test -f 'chuck_vm.cpp' || echo '$(srcdir)/'`chuck_vm.cpp
+
+libchuck_la-chuck_instr.lo: chuck_instr.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_instr.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_instr.Tpo -c -o libchuck_la-chuck_instr.lo `test -f 'chuck_instr.cpp' || echo '$(srcdir)/'`chuck_instr.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_instr.Tpo $(DEPDIR)/libchuck_la-chuck_instr.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_instr.cpp' object='libchuck_la-chuck_instr.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_instr.lo `test -f 'chuck_instr.cpp' || echo '$(srcdir)/'`chuck_instr.cpp
+
+libchuck_la-chuck_scan.lo: chuck_scan.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_scan.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_scan.Tpo -c -o libchuck_la-chuck_scan.lo `test -f 'chuck_scan.cpp' || echo '$(srcdir)/'`chuck_scan.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_scan.Tpo $(DEPDIR)/libchuck_la-chuck_scan.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_scan.cpp' object='libchuck_la-chuck_scan.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_scan.lo `test -f 'chuck_scan.cpp' || echo '$(srcdir)/'`chuck_scan.cpp
+
+libchuck_la-chuck_type.lo: chuck_type.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_type.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_type.Tpo -c -o libchuck_la-chuck_type.lo `test -f 'chuck_type.cpp' || echo '$(srcdir)/'`chuck_type.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_type.Tpo $(DEPDIR)/libchuck_la-chuck_type.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_type.cpp' object='libchuck_la-chuck_type.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_type.lo `test -f 'chuck_type.cpp' || echo '$(srcdir)/'`chuck_type.cpp
+
+libchuck_la-chuck_emit.lo: chuck_emit.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_emit.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_emit.Tpo -c -o libchuck_la-chuck_emit.lo `test -f 'chuck_emit.cpp' || echo '$(srcdir)/'`chuck_emit.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_emit.Tpo $(DEPDIR)/libchuck_la-chuck_emit.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_emit.cpp' object='libchuck_la-chuck_emit.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_emit.lo `test -f 'chuck_emit.cpp' || echo '$(srcdir)/'`chuck_emit.cpp
+
+libchuck_la-chuck_compile.lo: chuck_compile.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_compile.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_compile.Tpo -c -o libchuck_la-chuck_compile.lo `test -f 'chuck_compile.cpp' || echo '$(srcdir)/'`chuck_compile.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_compile.Tpo $(DEPDIR)/libchuck_la-chuck_compile.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_compile.cpp' object='libchuck_la-chuck_compile.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_compile.lo `test -f 'chuck_compile.cpp' || echo '$(srcdir)/'`chuck_compile.cpp
+
+libchuck_la-chuck_dl.lo: chuck_dl.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_dl.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_dl.Tpo -c -o libchuck_la-chuck_dl.lo `test -f 'chuck_dl.cpp' || echo '$(srcdir)/'`chuck_dl.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_dl.Tpo $(DEPDIR)/libchuck_la-chuck_dl.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_dl.cpp' object='libchuck_la-chuck_dl.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_dl.lo `test -f 'chuck_dl.cpp' || echo '$(srcdir)/'`chuck_dl.cpp
+
+libchuck_la-chuck_oo.lo: chuck_oo.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_oo.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_oo.Tpo -c -o libchuck_la-chuck_oo.lo `test -f 'chuck_oo.cpp' || echo '$(srcdir)/'`chuck_oo.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_oo.Tpo $(DEPDIR)/libchuck_la-chuck_oo.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_oo.cpp' object='libchuck_la-chuck_oo.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_oo.lo `test -f 'chuck_oo.cpp' || echo '$(srcdir)/'`chuck_oo.cpp
+
+libchuck_la-chuck_lang.lo: chuck_lang.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_lang.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_lang.Tpo -c -o libchuck_la-chuck_lang.lo `test -f 'chuck_lang.cpp' || echo '$(srcdir)/'`chuck_lang.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_lang.Tpo $(DEPDIR)/libchuck_la-chuck_lang.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_lang.cpp' object='libchuck_la-chuck_lang.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_lang.lo `test -f 'chuck_lang.cpp' || echo '$(srcdir)/'`chuck_lang.cpp
+
+libchuck_la-chuck_ugen.lo: chuck_ugen.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_ugen.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_ugen.Tpo -c -o libchuck_la-chuck_ugen.lo `test -f 'chuck_ugen.cpp' || echo '$(srcdir)/'`chuck_ugen.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_ugen.Tpo $(DEPDIR)/libchuck_la-chuck_ugen.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_ugen.cpp' object='libchuck_la-chuck_ugen.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_ugen.lo `test -f 'chuck_ugen.cpp' || echo '$(srcdir)/'`chuck_ugen.cpp
+
+libchuck_la-chuck_main.lo: chuck_main.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_main.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_main.Tpo -c -o libchuck_la-chuck_main.lo `test -f 'chuck_main.cpp' || echo '$(srcdir)/'`chuck_main.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_main.Tpo $(DEPDIR)/libchuck_la-chuck_main.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_main.cpp' object='libchuck_la-chuck_main.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_main.lo `test -f 'chuck_main.cpp' || echo '$(srcdir)/'`chuck_main.cpp
+
+libchuck_la-chuck_otf.lo: chuck_otf.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_otf.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_otf.Tpo -c -o libchuck_la-chuck_otf.lo `test -f 'chuck_otf.cpp' || echo '$(srcdir)/'`chuck_otf.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_otf.Tpo $(DEPDIR)/libchuck_la-chuck_otf.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_otf.cpp' object='libchuck_la-chuck_otf.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_otf.lo `test -f 'chuck_otf.cpp' || echo '$(srcdir)/'`chuck_otf.cpp
+
+libchuck_la-chuck_stats.lo: chuck_stats.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_stats.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_stats.Tpo -c -o libchuck_la-chuck_stats.lo `test -f 'chuck_stats.cpp' || echo '$(srcdir)/'`chuck_stats.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_stats.Tpo $(DEPDIR)/libchuck_la-chuck_stats.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_stats.cpp' object='libchuck_la-chuck_stats.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_stats.lo `test -f 'chuck_stats.cpp' || echo '$(srcdir)/'`chuck_stats.cpp
+
+libchuck_la-chuck_bbq.lo: chuck_bbq.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_bbq.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_bbq.Tpo -c -o libchuck_la-chuck_bbq.lo `test -f 'chuck_bbq.cpp' || echo '$(srcdir)/'`chuck_bbq.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_bbq.Tpo $(DEPDIR)/libchuck_la-chuck_bbq.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_bbq.cpp' object='libchuck_la-chuck_bbq.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_bbq.lo `test -f 'chuck_bbq.cpp' || echo '$(srcdir)/'`chuck_bbq.cpp
+
+libchuck_la-chuck_shell.lo: chuck_shell.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_shell.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_shell.Tpo -c -o libchuck_la-chuck_shell.lo `test -f 'chuck_shell.cpp' || echo '$(srcdir)/'`chuck_shell.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_shell.Tpo $(DEPDIR)/libchuck_la-chuck_shell.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_shell.cpp' object='libchuck_la-chuck_shell.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_shell.lo `test -f 'chuck_shell.cpp' || echo '$(srcdir)/'`chuck_shell.cpp
+
+libchuck_la-chuck_console.lo: chuck_console.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_console.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_console.Tpo -c -o libchuck_la-chuck_console.lo `test -f 'chuck_console.cpp' || echo '$(srcdir)/'`chuck_console.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_console.Tpo $(DEPDIR)/libchuck_la-chuck_console.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_console.cpp' object='libchuck_la-chuck_console.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_console.lo `test -f 'chuck_console.cpp' || echo '$(srcdir)/'`chuck_console.cpp
+
+libchuck_la-chuck_globals.lo: chuck_globals.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_globals.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_globals.Tpo -c -o libchuck_la-chuck_globals.lo `test -f 'chuck_globals.cpp' || echo '$(srcdir)/'`chuck_globals.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_globals.Tpo $(DEPDIR)/libchuck_la-chuck_globals.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_globals.cpp' object='libchuck_la-chuck_globals.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_globals.lo `test -f 'chuck_globals.cpp' || echo '$(srcdir)/'`chuck_globals.cpp
+
+libchuck_la-chuck_io.lo: chuck_io.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_io.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_io.Tpo -c -o libchuck_la-chuck_io.lo `test -f 'chuck_io.cpp' || echo '$(srcdir)/'`chuck_io.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_io.Tpo $(DEPDIR)/libchuck_la-chuck_io.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_io.cpp' object='libchuck_la-chuck_io.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_io.lo `test -f 'chuck_io.cpp' || echo '$(srcdir)/'`chuck_io.cpp
+
+libchuck_la-digiio_rtaudio.lo: digiio_rtaudio.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-digiio_rtaudio.lo -MD -MP -MF $(DEPDIR)/libchuck_la-digiio_rtaudio.Tpo -c -o libchuck_la-digiio_rtaudio.lo `test -f 'digiio_rtaudio.cpp' || echo '$(srcdir)/'`digiio_rtaudio.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-digiio_rtaudio.Tpo $(DEPDIR)/libchuck_la-digiio_rtaudio.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='digiio_rtaudio.cpp' object='libchuck_la-digiio_rtaudio.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-digiio_rtaudio.lo `test -f 'digiio_rtaudio.cpp' || echo '$(srcdir)/'`digiio_rtaudio.cpp
+
+libchuck_la-hidio_sdl.lo: hidio_sdl.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-hidio_sdl.lo -MD -MP -MF $(DEPDIR)/libchuck_la-hidio_sdl.Tpo -c -o libchuck_la-hidio_sdl.lo `test -f 'hidio_sdl.cpp' || echo '$(srcdir)/'`hidio_sdl.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-hidio_sdl.Tpo $(DEPDIR)/libchuck_la-hidio_sdl.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='hidio_sdl.cpp' object='libchuck_la-hidio_sdl.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-hidio_sdl.lo `test -f 'hidio_sdl.cpp' || echo '$(srcdir)/'`hidio_sdl.cpp
+
+libchuck_la-midiio_rtmidi.lo: midiio_rtmidi.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-midiio_rtmidi.lo -MD -MP -MF $(DEPDIR)/libchuck_la-midiio_rtmidi.Tpo -c -o libchuck_la-midiio_rtmidi.lo `test -f 'midiio_rtmidi.cpp' || echo '$(srcdir)/'`midiio_rtmidi.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-midiio_rtmidi.Tpo $(DEPDIR)/libchuck_la-midiio_rtmidi.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='midiio_rtmidi.cpp' object='libchuck_la-midiio_rtmidi.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-midiio_rtmidi.lo `test -f 'midiio_rtmidi.cpp' || echo '$(srcdir)/'`midiio_rtmidi.cpp
+
+libchuck_la-RtAudio.lo: RtAudio/RtAudio.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-RtAudio.lo -MD -MP -MF $(DEPDIR)/libchuck_la-RtAudio.Tpo -c -o libchuck_la-RtAudio.lo `test -f 'RtAudio/RtAudio.cpp' || echo '$(srcdir)/'`RtAudio/RtAudio.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-RtAudio.Tpo $(DEPDIR)/libchuck_la-RtAudio.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='RtAudio/RtAudio.cpp' object='libchuck_la-RtAudio.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-RtAudio.lo `test -f 'RtAudio/RtAudio.cpp' || echo '$(srcdir)/'`RtAudio/RtAudio.cpp
+
+libchuck_la-rtmidi.lo: rtmidi.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-rtmidi.lo -MD -MP -MF $(DEPDIR)/libchuck_la-rtmidi.Tpo -c -o libchuck_la-rtmidi.lo `test -f 'rtmidi.cpp' || echo '$(srcdir)/'`rtmidi.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-rtmidi.Tpo $(DEPDIR)/libchuck_la-rtmidi.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='rtmidi.cpp' object='libchuck_la-rtmidi.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-rtmidi.lo `test -f 'rtmidi.cpp' || echo '$(srcdir)/'`rtmidi.cpp
+
+libchuck_la-ugen_osc.lo: ugen_osc.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-ugen_osc.lo -MD -MP -MF $(DEPDIR)/libchuck_la-ugen_osc.Tpo -c -o libchuck_la-ugen_osc.lo `test -f 'ugen_osc.cpp' || echo '$(srcdir)/'`ugen_osc.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-ugen_osc.Tpo $(DEPDIR)/libchuck_la-ugen_osc.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ugen_osc.cpp' object='libchuck_la-ugen_osc.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-ugen_osc.lo `test -f 'ugen_osc.cpp' || echo '$(srcdir)/'`ugen_osc.cpp
+
+libchuck_la-ugen_filter.lo: ugen_filter.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-ugen_filter.lo -MD -MP -MF $(DEPDIR)/libchuck_la-ugen_filter.Tpo -c -o libchuck_la-ugen_filter.lo `test -f 'ugen_filter.cpp' || echo '$(srcdir)/'`ugen_filter.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-ugen_filter.Tpo $(DEPDIR)/libchuck_la-ugen_filter.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ugen_filter.cpp' object='libchuck_la-ugen_filter.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-ugen_filter.lo `test -f 'ugen_filter.cpp' || echo '$(srcdir)/'`ugen_filter.cpp
+
+libchuck_la-ugen_stk.lo: ugen_stk.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-ugen_stk.lo -MD -MP -MF $(DEPDIR)/libchuck_la-ugen_stk.Tpo -c -o libchuck_la-ugen_stk.lo `test -f 'ugen_stk.cpp' || echo '$(srcdir)/'`ugen_stk.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-ugen_stk.Tpo $(DEPDIR)/libchuck_la-ugen_stk.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ugen_stk.cpp' object='libchuck_la-ugen_stk.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-ugen_stk.lo `test -f 'ugen_stk.cpp' || echo '$(srcdir)/'`ugen_stk.cpp
+
+libchuck_la-ugen_xxx.lo: ugen_xxx.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-ugen_xxx.lo -MD -MP -MF $(DEPDIR)/libchuck_la-ugen_xxx.Tpo -c -o libchuck_la-ugen_xxx.lo `test -f 'ugen_xxx.cpp' || echo '$(srcdir)/'`ugen_xxx.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-ugen_xxx.Tpo $(DEPDIR)/libchuck_la-ugen_xxx.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ugen_xxx.cpp' object='libchuck_la-ugen_xxx.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-ugen_xxx.lo `test -f 'ugen_xxx.cpp' || echo '$(srcdir)/'`ugen_xxx.cpp
+
+libchuck_la-ulib_machine.lo: ulib_machine.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-ulib_machine.lo -MD -MP -MF $(DEPDIR)/libchuck_la-ulib_machine.Tpo -c -o libchuck_la-ulib_machine.lo `test -f 'ulib_machine.cpp' || echo '$(srcdir)/'`ulib_machine.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-ulib_machine.Tpo $(DEPDIR)/libchuck_la-ulib_machine.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ulib_machine.cpp' object='libchuck_la-ulib_machine.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-ulib_machine.lo `test -f 'ulib_machine.cpp' || echo '$(srcdir)/'`ulib_machine.cpp
+
+libchuck_la-ulib_math.lo: ulib_math.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-ulib_math.lo -MD -MP -MF $(DEPDIR)/libchuck_la-ulib_math.Tpo -c -o libchuck_la-ulib_math.lo `test -f 'ulib_math.cpp' || echo '$(srcdir)/'`ulib_math.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-ulib_math.Tpo $(DEPDIR)/libchuck_la-ulib_math.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ulib_math.cpp' object='libchuck_la-ulib_math.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-ulib_math.lo `test -f 'ulib_math.cpp' || echo '$(srcdir)/'`ulib_math.cpp
+
+libchuck_la-ulib_std.lo: ulib_std.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-ulib_std.lo -MD -MP -MF $(DEPDIR)/libchuck_la-ulib_std.Tpo -c -o libchuck_la-ulib_std.lo `test -f 'ulib_std.cpp' || echo '$(srcdir)/'`ulib_std.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-ulib_std.Tpo $(DEPDIR)/libchuck_la-ulib_std.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ulib_std.cpp' object='libchuck_la-ulib_std.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-ulib_std.lo `test -f 'ulib_std.cpp' || echo '$(srcdir)/'`ulib_std.cpp
+
+libchuck_la-ulib_opsc.lo: ulib_opsc.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-ulib_opsc.lo -MD -MP -MF $(DEPDIR)/libchuck_la-ulib_opsc.Tpo -c -o libchuck_la-ulib_opsc.lo `test -f 'ulib_opsc.cpp' || echo '$(srcdir)/'`ulib_opsc.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-ulib_opsc.Tpo $(DEPDIR)/libchuck_la-ulib_opsc.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ulib_opsc.cpp' object='libchuck_la-ulib_opsc.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-ulib_opsc.lo `test -f 'ulib_opsc.cpp' || echo '$(srcdir)/'`ulib_opsc.cpp
+
+libchuck_la-ulib_regex.lo: ulib_regex.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-ulib_regex.lo -MD -MP -MF $(DEPDIR)/libchuck_la-ulib_regex.Tpo -c -o libchuck_la-ulib_regex.lo `test -f 'ulib_regex.cpp' || echo '$(srcdir)/'`ulib_regex.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-ulib_regex.Tpo $(DEPDIR)/libchuck_la-ulib_regex.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ulib_regex.cpp' object='libchuck_la-ulib_regex.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-ulib_regex.lo `test -f 'ulib_regex.cpp' || echo '$(srcdir)/'`ulib_regex.cpp
+
+libchuck_la-util_buffers.lo: util_buffers.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-util_buffers.lo -MD -MP -MF $(DEPDIR)/libchuck_la-util_buffers.Tpo -c -o libchuck_la-util_buffers.lo `test -f 'util_buffers.cpp' || echo '$(srcdir)/'`util_buffers.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-util_buffers.Tpo $(DEPDIR)/libchuck_la-util_buffers.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='util_buffers.cpp' object='libchuck_la-util_buffers.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-util_buffers.lo `test -f 'util_buffers.cpp' || echo '$(srcdir)/'`util_buffers.cpp
+
+libchuck_la-util_console.lo: util_console.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-util_console.lo -MD -MP -MF $(DEPDIR)/libchuck_la-util_console.Tpo -c -o libchuck_la-util_console.lo `test -f 'util_console.cpp' || echo '$(srcdir)/'`util_console.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-util_console.Tpo $(DEPDIR)/libchuck_la-util_console.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='util_console.cpp' object='libchuck_la-util_console.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-util_console.lo `test -f 'util_console.cpp' || echo '$(srcdir)/'`util_console.cpp
+
+libchuck_la-util_string.lo: util_string.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-util_string.lo -MD -MP -MF $(DEPDIR)/libchuck_la-util_string.Tpo -c -o libchuck_la-util_string.lo `test -f 'util_string.cpp' || echo '$(srcdir)/'`util_string.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-util_string.Tpo $(DEPDIR)/libchuck_la-util_string.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='util_string.cpp' object='libchuck_la-util_string.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-util_string.lo `test -f 'util_string.cpp' || echo '$(srcdir)/'`util_string.cpp
+
+libchuck_la-util_thread.lo: util_thread.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-util_thread.lo -MD -MP -MF $(DEPDIR)/libchuck_la-util_thread.Tpo -c -o libchuck_la-util_thread.lo `test -f 'util_thread.cpp' || echo '$(srcdir)/'`util_thread.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-util_thread.Tpo $(DEPDIR)/libchuck_la-util_thread.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='util_thread.cpp' object='libchuck_la-util_thread.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-util_thread.lo `test -f 'util_thread.cpp' || echo '$(srcdir)/'`util_thread.cpp
+
+libchuck_la-util_opsc.lo: util_opsc.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-util_opsc.lo -MD -MP -MF $(DEPDIR)/libchuck_la-util_opsc.Tpo -c -o libchuck_la-util_opsc.lo `test -f 'util_opsc.cpp' || echo '$(srcdir)/'`util_opsc.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-util_opsc.Tpo $(DEPDIR)/libchuck_la-util_opsc.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='util_opsc.cpp' object='libchuck_la-util_opsc.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-util_opsc.lo `test -f 'util_opsc.cpp' || echo '$(srcdir)/'`util_opsc.cpp
+
+libchuck_la-util_serial.lo: util_serial.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-util_serial.lo -MD -MP -MF $(DEPDIR)/libchuck_la-util_serial.Tpo -c -o libchuck_la-util_serial.lo `test -f 'util_serial.cpp' || echo '$(srcdir)/'`util_serial.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-util_serial.Tpo $(DEPDIR)/libchuck_la-util_serial.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='util_serial.cpp' object='libchuck_la-util_serial.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-util_serial.lo `test -f 'util_serial.cpp' || echo '$(srcdir)/'`util_serial.cpp
+
+libchuck_la-util_hid.lo: util_hid.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-util_hid.lo -MD -MP -MF $(DEPDIR)/libchuck_la-util_hid.Tpo -c -o libchuck_la-util_hid.lo `test -f 'util_hid.cpp' || echo '$(srcdir)/'`util_hid.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-util_hid.Tpo $(DEPDIR)/libchuck_la-util_hid.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='util_hid.cpp' object='libchuck_la-util_hid.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-util_hid.lo `test -f 'util_hid.cpp' || echo '$(srcdir)/'`util_hid.cpp
+
+libchuck_la-uana_xform.lo: uana_xform.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-uana_xform.lo -MD -MP -MF $(DEPDIR)/libchuck_la-uana_xform.Tpo -c -o libchuck_la-uana_xform.lo `test -f 'uana_xform.cpp' || echo '$(srcdir)/'`uana_xform.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-uana_xform.Tpo $(DEPDIR)/libchuck_la-uana_xform.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='uana_xform.cpp' object='libchuck_la-uana_xform.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-uana_xform.lo `test -f 'uana_xform.cpp' || echo '$(srcdir)/'`uana_xform.cpp
+
+libchuck_la-uana_extract.lo: uana_extract.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-uana_extract.lo -MD -MP -MF $(DEPDIR)/libchuck_la-uana_extract.Tpo -c -o libchuck_la-uana_extract.lo `test -f 'uana_extract.cpp' || echo '$(srcdir)/'`uana_extract.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-uana_extract.Tpo $(DEPDIR)/libchuck_la-uana_extract.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='uana_extract.cpp' object='libchuck_la-uana_extract.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-uana_extract.lo `test -f 'uana_extract.cpp' || echo '$(srcdir)/'`uana_extract.cpp
+
+libchuck_la-util_events.lo: util_events.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-util_events.lo -MD -MP -MF $(DEPDIR)/libchuck_la-util_events.Tpo -c -o libchuck_la-util_events.lo `test -f 'util_events.cpp' || echo '$(srcdir)/'`util_events.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-util_events.Tpo $(DEPDIR)/libchuck_la-util_events.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='util_events.cpp' object='libchuck_la-util_events.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-util_events.lo `test -f 'util_events.cpp' || echo '$(srcdir)/'`util_events.cpp
+
+libchuck_la-ulib_events.lo: ulib_events.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-ulib_events.lo -MD -MP -MF $(DEPDIR)/libchuck_la-ulib_events.Tpo -c -o libchuck_la-ulib_events.lo `test -f 'ulib_events.cpp' || echo '$(srcdir)/'`ulib_events.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-ulib_events.Tpo $(DEPDIR)/libchuck_la-ulib_events.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ulib_events.cpp' object='libchuck_la-ulib_events.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-ulib_events.lo `test -f 'ulib_events.cpp' || echo '$(srcdir)/'`ulib_events.cpp
+
+libchuck_la-chuck.lo: chuck.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck.Tpo -c -o libchuck_la-chuck.lo `test -f 'chuck.cpp' || echo '$(srcdir)/'`chuck.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck.Tpo $(DEPDIR)/libchuck_la-chuck.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck.cpp' object='libchuck_la-chuck.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck.lo `test -f 'chuck.cpp' || echo '$(srcdir)/'`chuck.cpp
 
 mostlyclean-libtool:
 	-rm -f *.lo

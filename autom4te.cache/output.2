@@ -770,6 +770,7 @@ enable_fast_install
 with_gnu_ld
 with_sysroot
 enable_libtool_lock
+enable_java
 enable_threads
 '
       ac_precious_vars='build_alias
@@ -1412,7 +1413,8 @@ Optional Features:
   --enable-fast-install@<:@=PKGS@:>@ 
                           optimize for fast installation @<:@default=yes@:>@
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --enable-threads        Enable server threads
+  --enable-java           Enable java bindings
+  --enable-threads        Enable server threads (liblo)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -16022,11 +16024,32 @@ _ACEOF
 
 
 #
-# cribbed from liblo -- bps
+# Java
+#
+@%:@ Check whether --enable-java was given.
+if test "${enable_java+set}" = set; then :
+  enableval=$enable_java; want_java=$enableval
+else
+  want_java=no
+fi
+
+
+#
+# TODO: check for java system libraries and headers
+#
+if test "x$want_java" = "xyes"; then
+   
+$as_echo "@%:@define ENABLE_JAVA 1" >>confdefs.h
+
+fi
+
+#
+# cribbed from liblo [bps]
 #
 # Since we don't require C99, format code for long long int can vary
 # in some compilers.  (In particular, MingW seems to require "I64"
 # instead of "ll")
+#
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking how to print long long int" >&5
 $as_echo_n "checking how to print long long int... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -16071,7 +16094,7 @@ _ACEOF
 
 
 #
-# cribbed from liblo -- bps
+# cribbed from liblo [bps]
 #
 # Check if threads are wanted
 @%:@ Check whether --enable-threads was given.
