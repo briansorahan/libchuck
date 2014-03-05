@@ -22,12 +22,12 @@ public class Jchuck {
     private native synchronized void initialize();
 
     /**
-     * Spork some chuck files.
+     * Spork some chuck files and run them in a new thread.
      */
     public native synchronized boolean spork(String[] files);
 
     /**
-     * Run the chuck vm in a separate thread.
+     * Wait for the chuck vm thread.
      */
     public native synchronized boolean run();
 

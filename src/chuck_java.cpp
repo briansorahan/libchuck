@@ -6,9 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#if HAVE_CONFIG_H
 #include "../config.h"
-#endif
 
 #include "chuck_def.h"
 #include "chuck_java.h"
@@ -41,15 +39,14 @@ namespace chuck {
         class ChuckJavaImpl : public ChuckJava {
         private:
             Chuck * m_ck;
+            JNIEnv * m_jenv;
+
             // run chuck in a separate thread that attaches itself to the JVM
             // and detaches when its done
             VMThreadImpl vmThread;
 
         public:
             ChuckJavaImpl(Chuck * ck, JNIEnv * jenv) : m_ck(ck), m_jenv(jenv) {}
-
-            // Make the JNIEnv public so it can be accessed from vmThread
-            JNIEnv * m_jenv;
 
             bool SporkFile(const char * file) {
                 return m_ck->SporkFile(file);
@@ -73,7 +70,8 @@ namespace chuck {
             // yield the current thread to the chuck vm
             bool RunVM() {
                 assert(m_ck);
-                return m_ck->RunVM();
+                bool ranVM = m_ck->RunVM();
+                return ranVM;
             }
 
             // kill the chuck vm and compiler
@@ -84,7 +82,8 @@ namespace chuck {
 
             // wait for the chuck vm thread to finish
             bool Wait() {
-                return vmThread.Wait();
+                bool success = vmThread.Wait();
+                return success;
             }
         };
 
@@ -96,10 +95,25 @@ namespace chuck {
             return createdChuck;
         }
 
+        /*
+         * Note that for the java Receiver classes, we cannot invoke a
+         * java callback (i.e. the "receive" method) from a native thread.
+         * (You get 'FATAL ERROR in native method: Using JNIEnv in non-Java thread')
+         * I have been unable to find a way to reliably attach/detach the current
+         * native thread to the jvm outside of the receive methods below.
+         * Supposedly the way I am doing it below is a big performance drain, but
+         * if this is proven in the wild then we can pursue optimization.
+         *
+         * Another thing to consider is that attaching/detaching the native thread
+         * invoking the receive callbacks may require knowledge of the internal
+         * threading of chuck. If this is the case, then this optimization could be
+         * difficult to implement correctly.
+         */
+
         class JIntReceiverImpl : public JIntReceiver {
         private:
             // cached reference to the JNINativeInterface
-            JNIEnv * m_env;
+            JNIEnv * m_jenv;
             // cached reference to the JavaVM
             JavaVM * m_jvm;
             // cached reference to the object used to invoke the given receive method
@@ -108,18 +122,31 @@ namespace chuck {
             jmethodID m_receive;
 
             virtual ~JIntReceiverImpl() {
-                assert(m_env);
-                m_env->DeleteGlobalRef(m_obj);
+                assert(m_jenv);
+                m_jenv->DeleteGlobalRef(m_obj);
             }
         public:
             JIntReceiverImpl(JNIEnv * env, jobject obj, jmethodID receive)
-                : m_env(env), m_receive(receive) {
-                m_env->GetJavaVM(&m_jvm);
-                m_obj = m_env->NewGlobalRef(obj);
+                : m_jenv(env), m_receive(receive) {
+                m_jenv->GetJavaVM(&m_jvm);
+                m_obj = m_jenv->NewGlobalRef(obj);
             }
             // receive value from chuck and relay to java
             void receive(long val) {
-                m_env->CallVoidMethod(m_obj, m_receive, (jlong) val);
+                assert(m_jvm);
+
+                if (JNI_OK != m_jvm->AttachCurrentThread((void **) &m_jenv, NULL)) {
+                    fprintf(stderr, "could not attach chuck thread to jvm\n");
+                    exit(EXIT_FAILURE);
+                }
+
+                m_jenv->CallVoidMethod(m_obj, m_receive, (jlong) val);
+
+                assert(m_jvm);
+                if (JNI_OK != m_jvm->DetachCurrentThread()) {
+                    fprintf(stderr, "could not detach chuck thread from jvm\n");
+                    exit(EXIT_FAILURE);
+                }
             }
         };
 
@@ -143,7 +170,7 @@ namespace chuck {
         class JFloatReceiverImpl : public JFloatReceiver {
         private:
             // cached reference to the JNINativeInterface
-            JNIEnv * m_env;
+            JNIEnv * m_jenv;
             // cached reference to the JavaVM
             JavaVM * m_jvm;
             // cached reference to the object used to invoke the given receive method
@@ -152,19 +179,32 @@ namespace chuck {
             jmethodID m_receive;
 
             virtual ~JFloatReceiverImpl() {
-                assert(m_env);
-                m_env->DeleteGlobalRef(m_obj);
+                assert(m_jenv);
+                m_jenv->DeleteGlobalRef(m_obj);
             }
 
         public:
             JFloatReceiverImpl(JNIEnv * env, jobject obj, jmethodID receive)
-                : m_env(env), m_receive(receive) {
-                m_env->GetJavaVM(&m_jvm);
-                m_obj = m_env->NewGlobalRef(obj);
+                : m_jenv(env), m_receive(receive) {
+                m_jenv->GetJavaVM(&m_jvm);
+                m_obj = m_jenv->NewGlobalRef(obj);
             }
             // receive value from chuck and relay to java
             void receive(double val) {
-                m_env->CallVoidMethod(m_obj, m_receive, (jdouble) val);
+                assert(m_jvm);
+
+                if (JNI_OK != m_jvm->AttachCurrentThread((void **) &m_jenv, NULL)) {
+                    fprintf(stderr, "could not attach chuck thread to jvm\n");
+                    exit(EXIT_FAILURE);
+                }
+
+                m_jenv->CallVoidMethod(m_obj, m_receive, (jdouble) val);
+
+                assert(m_jvm);
+                if (JNI_OK != m_jvm->DetachCurrentThread()) {
+                    fprintf(stderr, "could not detach chuck thread from jvm\n");
+                    exit(EXIT_FAILURE);
+                }
             }
         };
 
@@ -177,7 +217,7 @@ namespace chuck {
         class JStringReceiverImpl : public JStringReceiver {
         private:
             // cached reference to the JNINativeInterface
-            JNIEnv * m_env;
+            JNIEnv * m_jenv;
             // cached reference to the JavaVM
             JavaVM * m_jvm;
             // cached reference to the object used to invoke the given receive method
@@ -186,20 +226,33 @@ namespace chuck {
             jmethodID m_receive;
 
             virtual ~JStringReceiverImpl() {
-                assert(m_env);
-                m_env->DeleteGlobalRef(m_obj);
+                assert(m_jenv);
+                m_jenv->DeleteGlobalRef(m_obj);
             }
 
         public:
             JStringReceiverImpl(JNIEnv * env, jobject obj, jmethodID receive)
-                : m_env(env), m_receive(receive) {
-                m_env->GetJavaVM(&m_jvm);
-                m_obj = m_env->NewGlobalRef(obj);
+                : m_jenv(env), m_receive(receive) {
+                m_jenv->GetJavaVM(&m_jvm);
+                m_obj = m_jenv->NewGlobalRef(obj);
             }
             // receive value from chuck and relay to java
             void receive(const char * val) {
-                jstring str = m_env->NewStringUTF(val);
-                m_env->CallVoidMethod(m_obj, m_receive, str);
+                assert(m_jvm);
+
+                if (JNI_OK != m_jvm->AttachCurrentThread((void **) &m_jenv, NULL)) {
+                    fprintf(stderr, "could not attach chuck thread to jvm\n");
+                    exit(EXIT_FAILURE);
+                }
+
+                jstring str = m_jenv->NewStringUTF(val);
+                m_jenv->CallVoidMethod(m_obj, m_receive, str);
+
+                assert(m_jvm);
+                if (JNI_OK != m_jvm->DetachCurrentThread()) {
+                    fprintf(stderr, "could not detach chuck thread from jvm\n");
+                    exit(EXIT_FAILURE);
+                }
             }
         };
 
@@ -219,17 +272,6 @@ namespace chuck {
             ChuckJavaImpl * chuckj = (ChuckJavaImpl *) arg;
             Events * evs = Events::GetInstance();
 
-            JNIEnv * jenv = chuckj->m_jenv;
-            JavaVM * jvm;
-            jenv->GetJavaVM(&jvm);
-
-            assert(jvm);
-
-            if (JNI_OK != jvm->AttachCurrentThread((void **) &jenv, NULL)) {
-                fprintf(stderr, "could not attach chuck thread to jvm\n");
-                exit(EXIT_FAILURE);
-            }
-
             // blocking call to run the chuck vm
             chuckj->RunVM();
 
@@ -237,11 +279,6 @@ namespace chuck {
 
             // clear all the events
             evs->Clear();
-
-            if (JNI_OK != jvm->DetachCurrentThread()) {
-                fprintf(stderr, "could not detach chuck thread from jvm\n");
-                exit(EXIT_FAILURE);
-            }
 
             return (void *) 1;
         }

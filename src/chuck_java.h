@@ -4,6 +4,8 @@
 #ifndef __INCLUDED_CHUCK_JAVA_H
 #define __INCLUDED_CHUCK_JAVA_H
 
+#include "../config.h"
+
 #if ENABLE_JAVA
 
 #include "chuck.h"

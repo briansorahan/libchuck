@@ -399,7 +399,7 @@ namespace chuck {
         static Events * EVENTS = Events::GetInstance();
         EVENTS->sendTo(channel, val);
     }
-
+.
     // send a string to chuck
     void SendTo(const char * channel, const char * val) {
         static Events * EVENTS = Events::GetInstance();
