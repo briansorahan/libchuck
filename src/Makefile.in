@@ -126,7 +126,8 @@ am_libchuck_la_OBJECTS = libchuck_la-chuck.tab.lo \
 	libchuck_la-message.lo libchuck_la-method.lo \
 	libchuck_la-pattern_match.lo libchuck_la-send.lo \
 	libchuck_la-server.lo libchuck_la-server_thread.lo \
-	libchuck_la-timetag.lo libchuck_la-chuck.lo
+	libchuck_la-timetag.lo libchuck_la-chuck.lo \
+	libchuck_la-chuck_java.lo
 libchuck_la_OBJECTS = $(am_libchuck_la_OBJECTS)
 libchuck_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
@@ -393,7 +394,7 @@ libchuck_la_SOURCES = util_console.h \
                 util_events.cpp ulib_events.cpp \
                 lo/address.c lo/blob.c lo/bundle.c lo/message.c lo/method.c \
                 lo/pattern_match.c lo/send.c lo/server.c lo/server_thread.c lo/timetag.c \
-                chuck.cpp # edu_princeton_cs_chuck_jchuck.h jchuck.cpp
+                chuck.cpp chuck_java.h chuck_java.cpp
 
 libchuck_la_CPPFLAGS = -I$(JAVA_HOME)/include
 libchuck_la_LIBADD = -lasound -lsndfile -lm -lpthread -ldl
@@ -492,6 +493,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_globals.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_instr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_io.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_java.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_lang.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_main.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libchuck_la-chuck_oo.Plo@am__quote@
@@ -1052,6 +1054,13 @@ libchuck_la-chuck.lo: chuck.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck.cpp' object='libchuck_la-chuck.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck.lo `test -f 'chuck.cpp' || echo '$(srcdir)/'`chuck.cpp
+
+libchuck_la-chuck_java.lo: chuck_java.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libchuck_la-chuck_java.lo -MD -MP -MF $(DEPDIR)/libchuck_la-chuck_java.Tpo -c -o libchuck_la-chuck_java.lo `test -f 'chuck_java.cpp' || echo '$(srcdir)/'`chuck_java.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libchuck_la-chuck_java.Tpo $(DEPDIR)/libchuck_la-chuck_java.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='chuck_java.cpp' object='libchuck_la-chuck_java.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libchuck_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libchuck_la-chuck_java.lo `test -f 'chuck_java.cpp' || echo '$(srcdir)/'`chuck_java.cpp
 
 mostlyclean-libtool:
 	-rm -f *.lo

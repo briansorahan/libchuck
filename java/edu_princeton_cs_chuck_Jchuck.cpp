@@ -5,9 +5,13 @@
 
 #include "handle.h"
 #include "../src/chuck.h"
+#include "chuck_java.h"
 #include "edu_princeton_cs_chuck_Jchuck.h"
 
-using chuck::Chuck;
+using chuck::java::ChuckJava;
+using chuck::java::JIntReceiver;
+using chuck::java::JFloatReceiver;
+using chuck::java::JStringReceiver;
 
 /*
  * Class:     edu_princeton_cs_chuck_Chuck
@@ -15,11 +19,10 @@ using chuck::Chuck;
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_edu_princeton_cs_chuck_Jchuck_initialize(JNIEnv * env, jobject obj) {
-    // jchuck = new JChuck();
-    Chuck * ck;
-    chuck::Create(&ck, env);
-    assert(ck);
-    setHandle(env, obj, ck);
+    ChuckJava * ckj;
+    chuck::java::Create(&ckj, env);
+    assert(ckj);
+    setHandle(env, obj, ckj);
 }
 
 /*
@@ -30,8 +33,8 @@ JNIEXPORT void JNICALL Java_edu_princeton_cs_chuck_Jchuck_initialize(JNIEnv * en
 JNIEXPORT jboolean JNICALL Java_edu_princeton_cs_chuck_Jchuck_spork(JNIEnv * env,
                                                                    jobject obj,
                                                                    jobjectArray files) {
-    Chuck * ck = getHandle< Chuck >(env, obj);
-    assert(ck);
+    ChuckJava * ckj = getHandle< ChuckJava >(env, obj);
+    assert(ckj);
 
     jsize numfiles = env->GetArrayLength(files);
 
@@ -49,7 +52,7 @@ JNIEXPORT jboolean JNICALL Java_edu_princeton_cs_chuck_Jchuck_spork(JNIEnv * env
         filenames[i] = f;
     }
 
-    return ck->Spork((unsigned int) numfiles, filenames);
+    return ckj->Spork((unsigned int) numfiles, filenames);
 }
 
 /*
@@ -58,9 +61,9 @@ JNIEXPORT jboolean JNICALL Java_edu_princeton_cs_chuck_Jchuck_spork(JNIEnv * env
  * Signature: ()Z
  */
 JNIEXPORT jboolean JNICALL Java_edu_princeton_cs_chuck_Jchuck_run(JNIEnv * env, jobject obj) {
-    Chuck * ck = getHandle< Chuck >(env, obj);
-    assert(ck);
-    return ck->Run();
+    ChuckJava * ckj = getHandle< ChuckJava >(env, obj);
+    assert(ckj);
+    return ckj->Run();
 }
 
 
@@ -71,156 +74,134 @@ JNIEXPORT jboolean JNICALL Java_edu_princeton_cs_chuck_Jchuck_run(JNIEnv * env, 
  * receive calls must AttachCurrentThread/DetachCurrentThread.
  */
 
-class JIntReceiver : public chuck::IntReceiver {
-private:
-    // cached reference to the JNINativeInterface
-    JNIEnv * m_env;
-    // cached reference to the JavaVM
-    JavaVM * m_jvm;
-    // cached reference to the object used to invoke the given receive method
-    jobject m_obj;
-    // cached reference to the receive method
-    jmethodID m_receive;
-    // private constructor
-    JIntReceiver(JNIEnv * env, jobject obj, jmethodID receive)
-        : m_env(env), m_receive(receive) {
-        m_env->GetJavaVM(&m_jvm);
-        m_obj = m_env->NewGlobalRef(obj);
-    }
+// class JIntReceiver : public chuck::IntReceiver {
+// private:
+//     // cached reference to the JNINativeInterface
+//     JNIEnv * m_env;
+//     // cached reference to the JavaVM
+//     JavaVM * m_jvm;
+//     // cached reference to the object used to invoke the given receive method
+//     jobject m_obj;
+//     // cached reference to the receive method
+//     jmethodID m_receive;
+//     // private constructor
+//     JIntReceiver(JNIEnv * env, jobject obj, jmethodID receive)
+//         : m_env(env), m_receive(receive) {
+//         m_env->GetJavaVM(&m_jvm);
+//         m_obj = m_env->NewGlobalRef(obj);
+//     }
 
-    virtual ~JIntReceiver() {
-        assert(m_env);
-        m_env->DeleteGlobalRef(m_obj);
-    }
+//     virtual ~JIntReceiver() {
+//         assert(m_env);
+//         m_env->DeleteGlobalRef(m_obj);
+//     }
 
-public:
-    // factory method
-    static JIntReceiver * create(JNIEnv * env, jobject obj) {
-        jclass c = env->GetObjectClass(obj);
-        jmethodID receive = env->GetMethodID(c, "receive", "(J)V");
+// public:
+//     // factory method
+//     static JIntReceiver * create(JNIEnv * env, jobject obj) {
+//         jclass c = env->GetObjectClass(obj);
+//         jmethodID receive = env->GetMethodID(c, "receive", "(J)V");
 
-        if (c == NULL) {
-            fprintf(stderr, "could not get class of IntReceiver\n");
-            exit(EXIT_FAILURE);
-        }
+//         if (c == NULL) {
+//             fprintf(stderr, "could not get class of IntReceiver\n");
+//             exit(EXIT_FAILURE);
+//         }
 
-        if (receive == NULL) {
-            fprintf(stderr, "could not find receive method of IntReceiver\n");
-            exit(EXIT_FAILURE);
-        }
+//         if (receive == NULL) {
+//             fprintf(stderr, "could not find receive method of IntReceiver\n");
+//             exit(EXIT_FAILURE);
+//         }
 
-        // TODO: pin obj so JNI won't destroy the local reference and we can use it in receive
-        return new JIntReceiver(env, obj, receive);
-    }
-    // receive value from chuck and relay to java
-    void receive(long val) {
-        // assert(m_jvm);
-        // if (JNI_OK != m_jvm->AttachCurrentThread((void **) &m_env, NULL)) {
-        //     fprintf(stderr, "could not attach chuck thread to jvm\n");
-        //     exit(EXIT_FAILURE);
-        // }
+//         // TODO: pin obj so JNI won't destroy the local reference and we can use it in receive
+//         return new JIntReceiver(env, obj, receive);
+//     }
+//     // receive value from chuck and relay to java
+//     void receive(long val) {
+//         m_env->CallVoidMethod(m_obj, m_receive, (jlong) val);
+//     }
+// };
 
-        m_env->CallVoidMethod(m_obj, m_receive, (jlong) val);
+// class JFloatReceiver : public chuck::FloatReceiver {
+// private:
+//     // cached reference to the JNINativeInterface
+//     JNIEnv * m_env;
+//     // cached reference to the JavaVM
+//     JavaVM * m_jvm;
+//     // cached reference to the object used to invoke the given receive method
+//     jobject m_obj;
+//     // cached reference to the receive method
+//     jmethodID m_receive;
+//     // private constructor
+//     JFloatReceiver(JNIEnv * env, jobject obj, jmethodID receive)
+//         : m_env(env), m_receive(receive) {
+//         m_env->GetJavaVM(&m_jvm);
+//         m_obj = m_env->NewGlobalRef(obj);
+//     }
 
-        // if (JNI_OK != m_jvm->DetachCurrentThread()) {
-        //     fprintf(stderr, "could not detach chuck thread from jvm\n");
-        //     exit(EXIT_FAILURE);
-        // }
-    }
-};
+//     virtual ~JFloatReceiver() {
+//         assert(m_env);
+//         m_env->DeleteGlobalRef(m_obj);
+//     }
 
-class JFloatReceiver : public chuck::FloatReceiver {
-private:
-    // cached reference to the JNINativeInterface
-    JNIEnv * m_env;
-    // cached reference to the JavaVM
-    JavaVM * m_jvm;
-    // cached reference to the object used to invoke the given receive method
-    jobject m_obj;
-    // cached reference to the receive method
-    jmethodID m_receive;
-    // private constructor
-    JFloatReceiver(JNIEnv * env, jobject obj, jmethodID receive)
-        : m_env(env), m_receive(receive) {
-        m_env->GetJavaVM(&m_jvm);
-        m_obj = m_env->NewGlobalRef(obj);
-    }
+// public:
+//     // factory method
+//     static JFloatReceiver * create(JNIEnv * env, jobject obj) {
+//         jclass c = env->GetObjectClass(obj);
+//         jmethodID receive = env->GetMethodID(c, "receive", "(D)V");
+//         return new JFloatReceiver(env, obj, receive);
+//     }
+//     // receive value from chuck and relay to java
+//     void receive(double val) {
+//         m_env->CallVoidMethod(m_obj, m_receive, (jdouble) val);
+//     }
+// };
 
-    virtual ~JFloatReceiver() {
-        assert(m_env);
-        m_env->DeleteGlobalRef(m_obj);
-    }
+// class JStringReceiver : public chuck::StringReceiver {
+// private:
+//     // cached reference to the JNINativeInterface
+//     JNIEnv * m_env;
+//     // cached reference to the JavaVM
+//     JavaVM * m_jvm;
+//     // cached reference to the object used to invoke the given receive method
+//     jobject m_obj;
+//     // cached reference to the receive method
+//     jmethodID m_receive;
+//     // private constructor
+//     JStringReceiver(JNIEnv * env, jobject obj, jmethodID receive)
+//         : m_env(env), m_receive(receive) {
+//         m_env->GetJavaVM(&m_jvm);
+//         m_obj = m_env->NewGlobalRef(obj);
+//     }
 
-public:
-    // factory method
-    static JFloatReceiver * create(JNIEnv * env, jobject obj) {
-        jclass c = env->GetObjectClass(obj);
-        jmethodID receive = env->GetMethodID(c, "receive", "(D)V");
-        return new JFloatReceiver(env, obj, receive);
-    }
-    // receive value from chuck and relay to java
-    void receive(double val) {
-        // assert(m_jvm);
-        // if (JNI_OK != m_jvm->AttachCurrentThread((void **) &m_env, NULL)) {
-        //     fprintf(stderr, "could not attach chuck thread to jvm\n");
-        //     exit(EXIT_FAILURE);
-        // }
+//     virtual ~JStringReceiver() {
+//         assert(m_env);
+//         m_env->DeleteGlobalRef(m_obj);
+//     }
 
-        m_env->CallVoidMethod(m_obj, m_receive, (jdouble) val);
+// public:
+//     // factory method
+//     static JStringReceiver * create(JNIEnv * env, jobject obj) {
+//         jclass c = env->GetObjectClass(obj);
+//         jmethodID receive = env->GetMethodID(c, "receive", "(Ljava/lang/String;)V");
+//         return new JStringReceiver(env, obj, receive);
+//     }
+//     // receive value from chuck and relay to java
+//     void receive(const char * val) {
+//         // assert(m_jvm);
+//         // if (JNI_OK != m_jvm->AttachCurrentThread((void **) &m_env, NULL)) {
+//         //     fprintf(stderr, "could not attach chuck thread to jvm\n");
+//         //     exit(EXIT_FAILURE);
+//         // }
 
-        // if (JNI_OK != m_jvm->DetachCurrentThread()) {
-        //     fprintf(stderr, "could not detach chuck thread from jvm\n");
-        //     exit(EXIT_FAILURE);
-        // }
-    }
-};
+//         jstring str = m_env->NewStringUTF(val);
+//         m_env->CallVoidMethod(m_obj, m_receive, str);
 
-class JStringReceiver : public chuck::StringReceiver {
-private:
-    // cached reference to the JNINativeInterface
-    JNIEnv * m_env;
-    // cached reference to the JavaVM
-    JavaVM * m_jvm;
-    // cached reference to the object used to invoke the given receive method
-    jobject m_obj;
-    // cached reference to the receive method
-    jmethodID m_receive;
-    // private constructor
-    JStringReceiver(JNIEnv * env, jobject obj, jmethodID receive)
-        : m_env(env), m_receive(receive) {
-        m_env->GetJavaVM(&m_jvm);
-        m_obj = m_env->NewGlobalRef(obj);
-    }
-
-    virtual ~JStringReceiver() {
-        assert(m_env);
-        m_env->DeleteGlobalRef(m_obj);
-    }
-
-public:
-    // factory method
-    static JStringReceiver * create(JNIEnv * env, jobject obj) {
-        jclass c = env->GetObjectClass(obj);
-        jmethodID receive = env->GetMethodID(c, "receive", "(Ljava/lang/String;)V");
-        return new JStringReceiver(env, obj, receive);
-    }
-    // receive value from chuck and relay to java
-    void receive(const char * val) {
-        // assert(m_jvm);
-        // if (JNI_OK != m_jvm->AttachCurrentThread((void **) &m_env, NULL)) {
-        //     fprintf(stderr, "could not attach chuck thread to jvm\n");
-        //     exit(EXIT_FAILURE);
-        // }
-
-        jstring str = m_env->NewStringUTF(val);
-        m_env->CallVoidMethod(m_obj, m_receive, str);
-
-        // if (JNI_OK != m_jvm->DetachCurrentThread()) {
-        //     fprintf(stderr, "could not detach chuck thread from jvm\n");
-        //     exit(EXIT_FAILURE);
-        // }
-    }
-};
+//         // if (JNI_OK != m_jvm->DetachCurrentThread()) {
+//         //     fprintf(stderr, "could not detach chuck thread from jvm\n");
+//         //     exit(EXIT_FAILURE);
+//         // }
+//     }
+// };
 
 
 
@@ -282,14 +263,10 @@ Java_edu_princeton_cs_chuck_Jchuck_sendTo__Ljava_lang_String_2Ljava_lang_String_
  */
 JNIEXPORT void JNICALL
 Java_edu_princeton_cs_chuck_Jchuck_receiveFrom__Ljava_lang_String_2Ledu_princeton_cs_chuck_IntReceiver_2(JNIEnv * env, jobject obj, jstring chan, jobject receiver) {
-    // fprintf(stderr, "[libjchuck] registering int receiver\n");
-
     jboolean chanIsCopy;
     const char * ch = env->GetStringUTFChars(chan, &chanIsCopy);
-    JIntReceiver * ir = JIntReceiver::create(env, receiver);
+    JIntReceiver * ir = JIntReceiver::Create(env, receiver);
     chuck::RegisterIntReceiver(ch, ir);
-
-    // fprintf(stderr, "[libjchuck] registered int receiver\n");
 }
 
 /*
@@ -301,7 +278,7 @@ JNIEXPORT void JNICALL
 Java_edu_princeton_cs_chuck_Jchuck_receiveFrom__Ljava_lang_String_2Ledu_princeton_cs_chuck_FloatReceiver_2(JNIEnv * env, jobject obj, jstring chan, jobject receiver) {
     jboolean chanIsCopy;
     const char * ch = env->GetStringUTFChars(chan, &chanIsCopy);
-    JFloatReceiver * fr = JFloatReceiver::create(env, receiver);
+    JFloatReceiver * fr = JFloatReceiver::Create(env, receiver);
     chuck::RegisterFloatReceiver(ch, fr);
 }
 
@@ -314,6 +291,6 @@ JNIEXPORT void JNICALL
 Java_edu_princeton_cs_chuck_Jchuck_receiveFrom__Ljava_lang_String_2Ledu_princeton_cs_chuck_StringReceiver_2(JNIEnv * env, jobject obj, jstring chan, jobject receiver) {
     jboolean chanIsCopy;
     const char * ch = env->GetStringUTFChars(chan, &chanIsCopy);
-    JStringReceiver * sr = JStringReceiver::create(env, receiver);
+    JStringReceiver * sr = JStringReceiver::Create(env, receiver);
     chuck::RegisterStringReceiver(ch, sr);
 }

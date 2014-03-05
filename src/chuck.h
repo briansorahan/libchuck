@@ -17,10 +17,14 @@ namespace chuck {
 
     class Chuck {
     public:
-        // spork some files
+        // spork a single file
+        virtual bool SporkFile(const char * s) = 0;
+        // spork some files and run the chuck vm
         virtual bool Spork(unsigned int files, const char ** filenames) = 0;
-        // yield the current thread to the chuck vm
-        virtual bool Run() = 0;
+        // run the chuck vm
+        virtual bool RunVM() = 0;
+        // wait for the chuck vm thread to finish
+        virtual bool Wait() = 0;
         // kill the chuck vm and compiler
         virtual void Destroy() = 0;
     };
@@ -45,11 +49,7 @@ namespace chuck {
 
     // instantiate the chuck vm and compiler,
     // and initialize the synthesis subsystem
-#if ENABLE_JAVA
-    bool Create(Chuck ** ck, JNIEnv * jenv);
-#else
     bool Create(Chuck ** ck);
-#endif
 
     // send an int to chuck
     void SendTo(const char * channel, long val);
@@ -64,6 +64,14 @@ namespace chuck {
     void RegisterFloatReceiver(const char * s, FloatReceiver * rec);
     // receive strings from a channel
     void RegisterStringReceiver(const char * s, StringReceiver * rec);
+
+    class VMThread {
+    public:
+        // spawns thread
+        virtual void Run(Chuck * ck) = 0;
+        // wait for chuck
+        virtual bool Wait() = 0;
+    };
 
 }
 

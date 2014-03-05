@@ -102,7 +102,7 @@ libchuck_la_SOURCES = util_console.h \
                 util_events.cpp ulib_events.cpp \
                 lo/address.c lo/blob.c lo/bundle.c lo/message.c lo/method.c \
                 lo/pattern_match.c lo/send.c lo/server.c lo/server_thread.c lo/timetag.c \
-                chuck.cpp # edu_princeton_cs_chuck_jchuck.h jchuck.cpp
+                chuck.cpp chuck_java.h chuck_java.cpp
 
 libchuck_la_CPPFLAGS = -I$(JAVA_HOME)/include
 
