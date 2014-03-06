@@ -2,7 +2,7 @@
 # libchuck - java bindings Makefile
 # Brian Sorahan 2014
 #
-.PHONY: all test clean
+.PHONY: all test clean chuck-processing
 
 DEPTH = ..
 SRC = $(DEPTH)/src
@@ -59,6 +59,9 @@ edu_princeton_cs_chuck_%.h: edu/princeton/cs/chuck/%.class
 
 %.class: %.java
 	javac $<
+
+chuck-processing:
+	mkdir -p chuck-processing/library
 
 test: $(JAVA_SO)
 	$(MAKE) -C test
