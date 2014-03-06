@@ -6,7 +6,7 @@ public class Jchuck {
     private Jchuck() {}
 
     static {
-        System.loadLibrary("jchuck");
+        NativeLoader.loadLibrary("jchuck");
     }
 
     public static synchronized Jchuck start() {

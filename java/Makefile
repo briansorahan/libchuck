@@ -7,10 +7,16 @@
 DEPTH = ..
 SRC = $(DEPTH)/src
 LIBS = $(SRC)/.libs
-
+BUILD_DIR=build
+# TODO: support mac and windows
+LIBCHUCK_PLATFORM=linux
+LIBCHUCK_ARCH=$(shell $(CC) -dumpmachine | sed -e 's,-.*,,' -e 's,i[3456]86,x86,' -e 's,amd64,x86_64,')
+LIBCHUCK_JAR := libchuck.jar
 JCHUCK_PKG := edu.princeton.cs.chuck
 JCHUCK_PKG_DIR := $(subst .,/,$(JCHUCK_PKG))
-# JCHUCK_CLASSES := Jchuck IntReceiver FloatReceiver StringReceiver
+BUILD_PKG_DIR=$(BUILD_DIR)/$(JCHUCK_PKG_DIR)
+JAR_NATIVES_DIR=$(BUILD_PKG_DIR)/natives/$(LIBCHUCK_PLATFORM)/$(LIBCHUCK_ARCH)
+
 JCHUCK_CLASSES := Jchuck
 JCHUCK_CLASSES := $(addprefix $(JCHUCK_PKG).,$(JCHUCK_CLASSES))
 JCHUCK_JAVA_SRCS := $(addsuffix .java,$(subst .,/,$(JCHUCK_CLASSES)))
@@ -20,6 +26,8 @@ JCHUCK_OBJS := $(subst .cpp,.o,$(JCHUCK_CXX_SRCS))
 JCHUCK_CLASS_FILES := $(subst .,/,$(JCHUCK_CLASSES))
 JCHUCK_CLASS_FILES := $(addsuffix .class,$(JCHUCK_CLASS_FILES))
 JCHUCK_CLASSES := $(addsuffix .class,$(JCHUCK_CLASSES))
+JCHUCK_JAR_CLASSES := Jchuck IntReceiver FloatReceiver StringReceiver NativeLoader
+JCHUCK_JAR_CLASSES := $(addprefix $(JCHUCK_PKG_DIR),$(JCHUCK_JAR_CLASSES))
 
 CHUCK_LA = $(LIBS)/libchuck.la
 JAVA_SO = libjchuck.so
@@ -38,13 +46,22 @@ LDFLAGS := -Bsymbolic
 # Don't remove class files
 .SECONDARY: $(JCHUCK_CLASS_FILES)
 
-all .DEFAULT: $(JAVA_SO)
+all .DEFAULT: $(JAVA_SO) $(LIBCHUCK_JAR)
 
 $(JAVA_SO): $(JCHUCK_OBJS) $(CHUCK_LA)
 	$(CXX) -pthread -shared -L$(LIBS) $(JCHUCK_OBJS) \
         -Wl,-R$(LIBS) -Wl,-R/usr/local/lib \
         -lchuck -lsndfile -lasound -ldl -lm \
         -o $(JAVA_SO)
+
+$(LIBCHUCK_JAR): $(JAVA_SO) $(LIBCHUCK_JAR_CLASSES) $(BUILD_DIR)
+	cp -R edu $(BUILD_DIR)
+	mkdir -p $(JAR_NATIVES_DIR)
+	cp $(JAVA_SO) $(JAR_NATIVES_DIR)
+	jar -cvf $(LIBCHUCK_JAR) -C $(BUILD_DIR) edu/princeton/cs/chuck
+
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
 
 $(CHUCK_LA):
 	cd .. && ./configure && make
@@ -67,5 +84,6 @@ test: $(JAVA_SO)
 	$(MAKE) -C test
 
 clean:
-	-rm -f $(JAVA_SO) $(JCHUCK_HEADERS) $(JCHUCK_PKG_DIR)/*.class *~ *.o *.class
+	-rm -rf $(JAVA_SO) $(JCHUCK_HEADERS) $(JCHUCK_PKG_DIR)/*.class \
+            $(LIBCHUCK_JAR) *~ *.o *.class $(BUILD_DIR)
 	$(MAKE) -C $(TEST_DIR) clean
