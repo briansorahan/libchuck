@@ -8,8 +8,9 @@ DEPTH = ..
 SRC = $(DEPTH)/src
 LIBS = $(SRC)/.libs
 BUILD_DIR=build
+PROCESSING_LIBRARY=chuck/library
 # TODO: support mac and windows
-LIBCHUCK_PLATFORM=linux
+LIBCHUCK_PLATFORM=$(shell uname | tr '[:upper:]' '[:lower:]')
 LIBCHUCK_ARCH=$(shell $(CC) -dumpmachine | sed -e 's,-.*,,' -e 's,i[3456]86,x86,' -e 's,amd64,x86_64,')
 LIBCHUCK_JAR := libchuck.jar
 JCHUCK_PKG := edu.princeton.cs.chuck
@@ -77,13 +78,14 @@ edu_princeton_cs_chuck_%.h: edu/princeton/cs/chuck/%.class
 %.class: %.java
 	javac $<
 
-chuck-processing:
-	mkdir -p chuck-processing/library
+processing-library: $(LIBCHUCK_JAR)
+	cp $(LIBCHUCK_JAR) $(PROCESSING_LIBRARY)
 
 test: $(JAVA_SO)
 	$(MAKE) -C test
 
 clean:
 	-rm -rf $(JAVA_SO) $(JCHUCK_HEADERS) $(JCHUCK_PKG_DIR)/*.class \
-            $(LIBCHUCK_JAR) *~ *.o *.class $(BUILD_DIR)
+            $(LIBCHUCK_JAR) *~ *.o *.class $(BUILD_DIR) \
+            $(PROCESSING_LIBRARY)/$(LIBCHUCK_JAR)
 	$(MAKE) -C $(TEST_DIR) clean

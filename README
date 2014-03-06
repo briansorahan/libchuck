@@ -2,14 +2,19 @@ libchuck - Embed chuck[1] in your C++/Java/Python apps
 
 Installation
 ------------
-Read INSTALL, included with the libchuck distribution.
+Read INSTALL, included with the libchuck distribution
 
 Usage
 -----
-See README.md, or http://github.com/briansorahan/libchuck.
+todo
 
-Reporting Bugs
---------------
-email <bsorahan@gmail.com>
+Contributing
+------------
+Bugs can be emailed to <bsorahan@gmail.com> or just open a gh issue.
+Open gh issues for feature requests.
+
+Todo
+----
+Support mac and windows. Help needed here!
 
 [1] http://chuck.cs.princeton.edu
