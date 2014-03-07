@@ -2,7 +2,7 @@
 # libchuck - java bindings Makefile
 # Brian Sorahan 2014
 #
-.PHONY: all test clean chuck-processing
+.PHONY: all test distclean clean chuck-processing
 
 DEPTH = ..
 SRC = $(DEPTH)/src
@@ -84,7 +84,7 @@ processing-library: $(LIBCHUCK_JAR)
 test: $(JAVA_SO)
 	$(MAKE) -C test
 
-clean:
+distclean clean:
 	-rm -rf $(JAVA_SO) $(JCHUCK_HEADERS) $(JCHUCK_PKG_DIR)/*.class \
             $(LIBCHUCK_JAR) *~ *.o *.class $(BUILD_DIR) \
             $(PROCESSING_LIBRARY)/$(LIBCHUCK_JAR)
