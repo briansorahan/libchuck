@@ -1,6 +1,6 @@
 language: cpp
 before_script:
   - sudo apt-get update -qq
-  - sudo apt-get install -qq libsndfile1-dev bison flex libasound2-dev default-jdk
+  - sudo apt-get install -qq libsndfile1-dev bison flex libasound2-dev openjdk-7-jdk
 script:
-  ./configure --enable-java && ls -l /usr/lib/jvm/java-7-oracle/include && make && make test
+  ls -l /usr/lib/jvm/* && ./configure --enable-java && ls -l /usr/lib/jvm/java-7-oracle/include && make && make test
