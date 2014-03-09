@@ -1,4 +1,6 @@
+language: cpp
 before_script:
   - sudo apt-get update -qq
   - sudo apt-get install -qq libsndfile1-dev bison flex libasound2-dev
-language: cpp
+script:
+  ./configure --enable-java && make && make test
