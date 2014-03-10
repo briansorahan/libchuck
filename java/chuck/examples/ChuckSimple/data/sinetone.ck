@@ -11,7 +11,8 @@ function void playTone(float freq, float gain) {
 	10::ms => now;
 }
 
+// infinite loop
 while (1) {
 	trig => now;
-	spork ~ playTone(Math.random2f(110.0, 880.0), Math.random2f(0.1, 0.7));
+	spork ~ playTone(Math.random2f(300.0, 500.0), 0.2);
 }
