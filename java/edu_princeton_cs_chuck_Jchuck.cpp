@@ -81,7 +81,7 @@ Java_edu_princeton_cs_chuck_Jchuck_sendTo__Ljava_lang_String_2J(JNIEnv * env,
                                                                 jlong val) {
     jboolean isCopy;
     const char * ch = env->GetStringUTFChars(chan, &isCopy);
-    chuck::SendTo(ch, val);
+    chuck::SendTo(ch, (long) val);
 }
 
 /*

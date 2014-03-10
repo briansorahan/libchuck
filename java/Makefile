@@ -2,7 +2,7 @@
 # libchuck - java bindings Makefile
 # Brian Sorahan 2014
 #
-.PHONY: all test distclean clean chuck-processing
+.PHONY: all test distclean clean chuck-processing install
 
 DEPTH = ..
 SRC = $(DEPTH)/src
@@ -12,7 +12,7 @@ PROCESSING_LIBRARY=chuck/library
 # TODO: support mac and windows
 LIBCHUCK_PLATFORM=$(shell uname | tr '[:upper:]' '[:lower:]')
 LIBCHUCK_ARCH=$(shell $(CC) -dumpmachine | sed -e 's,-.*,,' -e 's,i[3456]86,x86,' -e 's,amd64,x86_64,')
-LIBCHUCK_JAR := libchuck.jar
+LIBCHUCK_JAR := chuck.jar
 JCHUCK_PKG := edu.princeton.cs.chuck
 JCHUCK_PKG_DIR := $(subst .,/,$(JCHUCK_PKG))
 BUILD_PKG_DIR=$(BUILD_DIR)/$(JCHUCK_PKG_DIR)
@@ -49,6 +49,9 @@ LDFLAGS := -Bsymbolic
 
 all .DEFAULT: $(JAVA_SO) $(LIBCHUCK_JAR)
 
+install:
+	@echo todo
+
 $(JAVA_SO): $(JCHUCK_OBJS) $(CHUCK_LA)
 	$(CXX) -pthread -shared -L$(LIBS) $(JCHUCK_OBJS) \
         -Wl,-R$(LIBS) -Wl,-R/usr/local/lib \
@@ -79,6 +82,7 @@ edu_princeton_cs_chuck_%.h: edu/princeton/cs/chuck/%.class
 	javac $<
 
 processing-library: $(LIBCHUCK_JAR)
+	mkdir -p $(PROCESSING_LIBRARY)
 	cp $(LIBCHUCK_JAR) $(PROCESSING_LIBRARY)
 
 test: $(JAVA_SO)
@@ -87,5 +91,5 @@ test: $(JAVA_SO)
 distclean clean:
 	-rm -rf $(JAVA_SO) $(JCHUCK_HEADERS) $(JCHUCK_PKG_DIR)/*.class \
             $(LIBCHUCK_JAR) *~ *.o *.class $(BUILD_DIR) \
-            $(PROCESSING_LIBRARY)/$(LIBCHUCK_JAR)
+            $(PROCESSING_LIBRARY)
 	$(MAKE) -C $(TEST_DIR) clean
