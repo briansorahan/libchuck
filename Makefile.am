@@ -1,1 +1,1 @@
-SUBDIRS = src java
+SUBDIRS = src
