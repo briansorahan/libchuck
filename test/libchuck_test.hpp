@@ -18,7 +18,12 @@ protected:
     }
 
     bool Run() {
-        return chuck->Run();
+        chuck->RunVM();
+        return chuck->Wait();
+    }
+
+    void TearDown() {
+        chuck->Destroy();
     }
 };
 
