@@ -4,7 +4,9 @@
 #ifndef __INCLUDED_CHUCK_JAVA_H
 #define __INCLUDED_CHUCK_JAVA_H
 
+#ifdef HAVE_CONFIG_H
 #include "../config.h"
+#endif
 
 #if ENABLE_JAVA
 
@@ -37,6 +39,5 @@ namespace chuck {
     }
 }
 
-#endif
-
-#endif
+#endif // ENABLE_JAVA
+#endif // __INCLUDED_CHUCK_JAVA_H
