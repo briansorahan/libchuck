@@ -3,4 +3,4 @@ before_script:
   - sudo apt-get update -qq
   - sudo apt-get install -qq libsndfile1-dev bison flex libasound2-dev openjdk-7-jdk
 script:
-  export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 && ./configure --enable-java && make && make test
+  export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 && autoreconf -fi && ./configure --enable-java && make && make test
